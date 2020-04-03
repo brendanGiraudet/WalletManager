@@ -12,10 +12,10 @@ namespace WalletManagerTestProject
         {
             // Arrange
             ISerializer serializer = new TransactionSerializer();
-            var csvString = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\serialize.csv";
+            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\serialize.csv";
 
             // Act
-            var transactionList = serializer.Deserialize(csvString);
+            var transactionList = serializer.Deserialize(csvPath);
 
             // Assert
             Assert.True(transactionList.Any());
