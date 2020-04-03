@@ -10,3 +10,5 @@
 /Sources/WalletManagerSite/obj
 /Sources/WalletManagerTestProject/bin/Debug/netcoreapp2.1
 /Sources/WalletManagerTestProject/obj
+/Sources/WalletManagerDTO/obj
+/Sources/WalletManagerServices/obj

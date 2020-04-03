@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletManagerSite", "WalletManagerSite\WalletManagerSite.csproj", "{249B943D-1702-423F-9452-88AE113D5DDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletManagerSite", "WalletManagerSite\WalletManagerSite.csproj", "{249B943D-1702-423F-9452-88AE113D5DDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletManagerTestProject", "WalletManagerTestProject\WalletManagerTestProject.csproj", "{701D91E0-9961-471F-AA7F-F10FFC05FD63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletManagerTestProject", "WalletManagerTestProject\WalletManagerTestProject.csproj", "{701D91E0-9961-471F-AA7F-F10FFC05FD63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletManagerServices", "WalletManagerServices\WalletManagerServices.csproj", "{E836FF96-5452-4ED0-98CD-6CF6A9F4A94C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletManagerDTO", "WalletManagerDTO\WalletManagerDTO.csproj", "{D5F4C3B3-8330-4541-8054-C11B32417614}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{701D91E0-9961-471F-AA7F-F10FFC05FD63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{701D91E0-9961-471F-AA7F-F10FFC05FD63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{701D91E0-9961-471F-AA7F-F10FFC05FD63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E836FF96-5452-4ED0-98CD-6CF6A9F4A94C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E836FF96-5452-4ED0-98CD-6CF6A9F4A94C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E836FF96-5452-4ED0-98CD-6CF6A9F4A94C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E836FF96-5452-4ED0-98CD-6CF6A9F4A94C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5F4C3B3-8330-4541-8054-C11B32417614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5F4C3B3-8330-4541-8054-C11B32417614}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5F4C3B3-8330-4541-8054-C11B32417614}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5F4C3B3-8330-4541-8054-C11B32417614}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
