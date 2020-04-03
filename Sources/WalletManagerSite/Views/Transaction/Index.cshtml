@@ -1,0 +1,97 @@
+﻿@model IEnumerable<WalletManagerSite.Models.TransactionViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OperationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Label)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OperationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Label)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>Use this area to provide additional information.</p>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<div id="chart_div"></div>
+<script type="text/javascript">
+
+
+    google.charts.load('current', {
+        packages: ['corechart', 'bar']
+    });
+    google.charts.setOnLoadCallback(LoadData);
+
+    function LoadData() {
+        $.ajax({
+
+            url: 'transaction/TransactionChart',
+            dataType: "json",
+            type: "GET",
+            error: function(xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                toastr.error(err.message);
+            },
+            success: function(data) {
+                TransactionChart(data);
+                return false;
+            }
+        });
+        return false;
+    }
+
+    function TransactionChart(data) {
+        var dataArray = [
+            ['OperationDate', 'Amount']
+        ];
+        $.each(data, function(i, item) {
+            dataArray.push([item.operationDate, item.amount]);
+        });
+        var data = google.visualization.arrayToDataTable(dataArray);
+        var options = {
+            title: 'Credit by day',
+            chartArea: {
+                width: '50%'
+            },
+            colors: ['#b0120a', '#7b1fa2', '#ffab91', '#d95f02'],
+            hAxis: {
+                title: 'amount',
+                minValue: 0
+            },
+            vAxis: {
+                title: 'Date'
+            }
+        };
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+        return false;
+    }
+</script>
