@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace WalletManagerServices
+namespace WalletManagerServices.Transaction
 {
-    public class TransactionServices
+    public class TransactionServices : ITransactionServices
     {
+        public IEnumerable<WalletManagerDTO.Transaction> GetTransactions()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

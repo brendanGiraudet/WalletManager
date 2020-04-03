@@ -4,8 +4,8 @@ using System.Text;
 
 namespace WalletManagerServices.Transaction
 {
-    interface ITransactionServices
+    public interface ITransactionServices
     {
-        
+        IEnumerable<WalletManagerDTO.Transaction> GetTransactions();
     }
 }
