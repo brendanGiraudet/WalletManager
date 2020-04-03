@@ -26,13 +26,13 @@ namespace WalletManagerServices.Serializer
                         Label = values[3],
                         Reference = values[4],
                         ValueDate = Convert.ToDateTime(values[5]),
-                        Amount = Convert.ToDouble(values[6])
+                        Amount = Convert.ToDouble(values[6].Replace(',','.'))
                     });
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error : impossible to deserialize the vsc file in path { csvPath } due to " + ex.Message);
+                Console.WriteLine($"Error : impossible to deserialize the csv file in path { csvPath } due to " + ex.Message);
             }
 
             return transactions;
