@@ -5,6 +5,8 @@ namespace WalletManagerServices.Serializer
 {
     public interface ISerializer
     {
-        List<WalletManagerDTO.Transaction> Serialize(string csvString);
+        void Serialize(List<WalletManagerDTO.Transaction> transactions);
+
+        List<WalletManagerDTO.Transaction> Deserialize(string csvPath);
     }
 }

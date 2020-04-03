@@ -8,14 +8,14 @@ namespace WalletManagerTestProject
     public class SerializerTests
     {
         [Fact]
-        public void ShouldHaveListOfTransactionWhenISerializeACsvString()
+        public void ShouldHaveListOfTransactionWhenIDeserializeACsvString()
         {
             // Arrange
             ISerializer serializer = new TransactionSerializer();
-            var csvString = "31419185918;31/03/2020;31/03/2020;300320 CB****1526 ALLDEBRID.COM  92MONTROUGE;475QGS0;31/03/2020;-15\n31419185918; 31 / 03 / 2020; 31 / 03 / 2020; VIR M BRENDAN GIRAUDET Virement vers BRENDAN GIRAUDET; 6681107; 31 / 03 / 2020; -1000";
+            var csvString = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\serialize.csv";
 
             // Act
-            var transactionList = serializer.Serialize(csvString);
+            var transactionList = serializer.Deserialize(csvString);
 
             // Assert
             Assert.True(transactionList.Any());
