@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/WalletManager/.vs/WalletManager
+/Sources/.vs/WalletManager
+/Sources/.idea/.idea.WalletManager
+/Sources/WalletManagerSite/bin/Debug/netcoreapp2.1
+/Sources/WalletManagerSite/obj
+/Sources/WalletManagerTestProject/bin/Debug/netcoreapp2.1
+/Sources/WalletManagerTestProject/obj
