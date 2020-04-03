@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using WalletManager.Models;
+using WalletManagerSite.Models;
 
-namespace WalletManager.Controllers
+namespace WalletManagerSite.Controllers
 {
     public class HomeController : Controller
     {

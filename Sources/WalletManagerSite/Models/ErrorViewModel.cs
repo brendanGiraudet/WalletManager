@@ -1,6 +1,6 @@
 using System;
 
-namespace WalletManager.Models
+namespace WalletManagerSite.Models
 {
     public class ErrorViewModel
     {
