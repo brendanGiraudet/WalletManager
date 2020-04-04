@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WalletManagerServices.Serializer;
+using WalletManagerServices.Transaction;
 
 namespace WalletManagerSite.Controllers
 {
     public class TransactionController : Controller
     {
-        readonly ISerializer _transactionSerializer;
-        public TransactionController(ISerializer transactionSerializer)
+        readonly ITransactionServices _transactionServices;
+        public TransactionController(ITransactionServices transactionServices)
         {
-            _transactionSerializer = transactionSerializer;
+            _transactionServices = transactionServices;
         }
         // GET: Transaction
         public ActionResult Index()
@@ -23,8 +21,7 @@ namespace WalletManagerSite.Controllers
 
         private List<Models.TransactionViewModel> GetTransactions()
         {
-            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\serialize.csv";
-            var transactions = _transactionSerializer.Deserialize(csvPath);
+            var transactions = _transactionServices.GetTransactions();
             if(transactions != null && transactions.Any())
             {
                 return transactions.Select(transaction => new Models.TransactionViewModel
@@ -44,8 +41,7 @@ namespace WalletManagerSite.Controllers
         [HttpGet]
         public JsonResult TransactionChart()
         {
-            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\serialize.csv";
-            var transactions = _transactionSerializer.Deserialize(csvPath);
+            var transactions = _transactionServices.GetTransactions();
             
             return Json(transactions);
         }
