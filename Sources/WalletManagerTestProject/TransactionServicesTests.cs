@@ -1,4 +1,4 @@
-using System;
+using System.Linq;
 using Xunit;
 
 namespace WalletManagerTestProject
@@ -8,7 +8,15 @@ namespace WalletManagerTestProject
         [Fact]
         public void ShouldHaveListOfTransactionWhenIGetTransactions()
         {
-            throw new NotImplementedException();
+            // Arrange
+            var transactionSerializer = new WalletManagerServices.Serializer.TransactionSerializer();
+            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
+
+            // Act
+            var transactions = transactionServices.GetTransactions();
+
+            // Assert
+            Assert.True(transactions.Any());
         }
     }
 }
