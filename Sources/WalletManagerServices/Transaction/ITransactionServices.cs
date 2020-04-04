@@ -6,6 +6,6 @@ namespace WalletManagerServices.Transaction
 {
     public interface ITransactionServices
     {
-        IEnumerable<WalletManagerDTO.Transaction> GetTransactions();
+        List<WalletManagerDTO.Transaction> GetTransactions();
     }
 }
