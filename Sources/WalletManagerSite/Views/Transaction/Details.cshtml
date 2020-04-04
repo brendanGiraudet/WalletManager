@@ -1,0 +1,60 @@
+﻿@model WalletManagerSite.Models.TransactionViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TransactionViewModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Compte)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Compte)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ComptabilisationDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ComptabilisationDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OperationDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OperationDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Label)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Label)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Reference)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Reference)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ValueDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ValueDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

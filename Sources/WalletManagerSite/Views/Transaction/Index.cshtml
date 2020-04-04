@@ -16,6 +16,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Amount)
             </th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -30,6 +31,11 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Reference }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Reference }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Reference })
                 </td>
             </tr>
         }

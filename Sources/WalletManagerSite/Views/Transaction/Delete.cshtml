@@ -1,0 +1,62 @@
+﻿@model WalletManagerSite.Models.TransactionViewModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>TransactionViewModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Compte)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Compte)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ComptabilisationDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ComptabilisationDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OperationDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OperationDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Label)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Label)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Reference)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Reference)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ValueDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ValueDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
