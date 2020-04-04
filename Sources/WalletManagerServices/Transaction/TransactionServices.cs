@@ -5,9 +5,17 @@ namespace WalletManagerServices.Transaction
 {
     public class TransactionServices : ITransactionServices
     {
-        public IEnumerable<WalletManagerDTO.Transaction> GetTransactions()
+        readonly Serializer.ISerializer _transactionSerializer;
+
+        public TransactionServices(Serializer.ISerializer transactionSerializer)
         {
-            throw new NotImplementedException();
+            _transactionSerializer = transactionSerializer;
+        }
+
+        public List<WalletManagerDTO.Transaction> GetTransactions()
+        {
+            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\serialize.csv";
+            return _transactionSerializer.Deserialize(csvPath);
         }
     }
 }
