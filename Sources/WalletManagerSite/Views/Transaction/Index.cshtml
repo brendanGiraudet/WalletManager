@@ -16,28 +16,34 @@
             <th>
                 @Html.DisplayNameFor(model => model.Amount)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
             <th>Action</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OperationDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Label)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Amount)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { reference = item.Reference }) |
-                    @Html.ActionLink("Details", "Details", new { reference = item.Reference }) |
-                    @Html.ActionLink("Delete", "Delete", new { reference = item.Reference })
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OperationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Label)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { reference = item.Reference }) |
+                @Html.ActionLink("Details", "Details", new { reference = item.Reference }) |
+                @Html.ActionLink("Delete", "Delete", new { reference = item.Reference })
+            </td>
+        </tr>
         }
     </tbody>
 </table>
