@@ -12,7 +12,7 @@ namespace WalletManagerDTO.Enumerations
         Taxe,
         Internet,
         Telephone,
-        Electrecite,
+        Electricite,
         Gaz
     }
 }
