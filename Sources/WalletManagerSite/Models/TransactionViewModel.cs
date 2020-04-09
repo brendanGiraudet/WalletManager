@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using WalletManagerDTO.Enumerations;
 
 namespace WalletManagerSite.Models
 {
@@ -20,5 +18,7 @@ namespace WalletManagerSite.Models
         public DateTime ValueDate { get; set; }
 
         public double Amount { get; set; }
+
+        public TransactionCategory Category { get; set; } = TransactionCategory.NA;
     }
 }
