@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace WalletManagerDTO.Enumerations
 {
     public enum TransactionCategory
     {
+        NA,
         Courses,
         Voiture,
         Sante,
@@ -14,7 +12,7 @@ namespace WalletManagerDTO.Enumerations
         Taxe,
         Internet,
         Telephone,
-        electrecite,
-        gaz
+        Electrecite,
+        Gaz
     }
 }
