@@ -7,5 +7,7 @@ namespace WalletManagerServices.Transaction
     public interface ITransactionServices
     {
         List<WalletManagerDTO.Transaction> GetTransactions();
+
+        WalletManagerDTO.Transaction GetTransaction(string reference);
     }
 }
