@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Configuration\Configuration.csproj" />
     <ProjectReference Include="..\WalletManagerDTO\WalletManagerDTO.csproj" />
   </ItemGroup>
 
