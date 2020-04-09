@@ -32,7 +32,8 @@ namespace WalletManagerSite.Controllers
                     Label = transaction.Label,
                     OperationDate = transaction.OperationDate,
                     Reference = transaction.Reference,
-                    ValueDate = transaction.ValueDate
+                    ValueDate = transaction.ValueDate,
+                    Category = transaction.Category
                 }).ToList();
             }
             return new List<Models.TransactionViewModel>();
@@ -93,7 +94,8 @@ namespace WalletManagerSite.Controllers
                     Label = transaction.Label,
                     OperationDate = transaction.OperationDate,
                     Reference = transaction.Reference,
-                    ValueDate = transaction.ValueDate
+                    ValueDate = transaction.ValueDate,
+                    Category = transaction.Category
                 };
             }
             return new Models.TransactionViewModel();
