@@ -17,5 +17,7 @@ namespace WalletManagerDTO
         public DateTime ValueDate { get; set; }
 
         public double Amount { get; set; }
+
+        public Enumerations.TransactionCategory Category { get; set; }
     }
 }
