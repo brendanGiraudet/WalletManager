@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Configuration\Configuration.csproj" />
     <ProjectReference Include="..\WalletManagerServices\WalletManagerServices.csproj" />
   </ItemGroup>
 
