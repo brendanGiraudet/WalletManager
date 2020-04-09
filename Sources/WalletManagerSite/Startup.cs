@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Configuration;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,7 @@ namespace WalletManagerSite
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddScoped<IConfigurator, Configurator>();
             services.AddScoped<WalletManagerServices.Serializer.ISerializer, WalletManagerServices.Serializer.TransactionSerializer>();
             services.AddScoped<WalletManagerServices.Transaction.ITransactionServices, WalletManagerServices.Transaction.TransactionServices>();
 

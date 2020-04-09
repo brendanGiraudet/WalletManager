@@ -75,10 +75,28 @@ namespace WalletManagerSite.Controllers
             }
         }
 
-        // GET: Transaction/Edit/5
-        public ActionResult Edit(int id)
+        // GET: Transaction/Edit/5GX5
+        public ActionResult Edit(string reference)
         {
-            return View();
+            return View(GetTransaction(reference));
+        }
+        private Models.TransactionViewModel GetTransaction(string reference)
+        {
+            var transaction = _transactionServices.GetTransaction(reference);
+            if (transaction != null)
+            {
+                return new Models.TransactionViewModel
+                {
+                    Amount = transaction.Amount,
+                    ComptabilisationDate = transaction.ComptabilisationDate,
+                    Compte = transaction.Compte,
+                    Label = transaction.Label,
+                    OperationDate = transaction.OperationDate,
+                    Reference = transaction.Reference,
+                    ValueDate = transaction.ValueDate
+                };
+            }
+            return new Models.TransactionViewModel();
         }
 
         // POST: Transaction/Edit/5

@@ -33,9 +33,9 @@
                     @Html.DisplayFor(modelItem => item.Amount)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Reference }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Reference }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Reference })
+                    @Html.ActionLink("Edit", "Edit", new { reference = item.Reference }) |
+                    @Html.ActionLink("Details", "Details", new { reference = item.Reference }) |
+                    @Html.ActionLink("Delete", "Delete", new { reference = item.Reference })
                 </td>
             </tr>
         }
