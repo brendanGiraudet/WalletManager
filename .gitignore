@@ -17,3 +17,5 @@
 /Sources/WalletManagerSite/WalletManagerSite.csproj.user
 /Sources/Configuration/bin/Debug/netcoreapp2.1
 /Sources/Configuration/obj
+/Sources/WalletManagerDAL/obj
+/Sources/WalletManagerDAL/bin/Debug/netcoreapp2.1

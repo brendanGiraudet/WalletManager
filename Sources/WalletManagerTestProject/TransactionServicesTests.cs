@@ -11,7 +11,7 @@ namespace WalletManagerTestProject
         {
             // Arrange
             var configurator = new Configurator();
-            var transactionSerializer = new WalletManagerServices.Serializer.TransactionSerializer();
+            var transactionSerializer = new WalletManagerDAL.Serializer.TransactionSerializer();
             var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer, configurator);
 
             // Act
@@ -26,7 +26,7 @@ namespace WalletManagerTestProject
         {
             // Arrange
             var configurator = new Configurator();
-            var transactionSerializer = new WalletManagerServices.Serializer.TransactionSerializer();
+            var transactionSerializer = new WalletManagerDAL.Serializer.TransactionSerializer();
             var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer, configurator);
             const string expectedReference = "2V7926X";
 

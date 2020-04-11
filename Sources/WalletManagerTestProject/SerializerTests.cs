@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using WalletManagerServices.Serializer;
+using WalletManagerDAL.Serializer;
 using Xunit;
 
 

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace WalletManagerServices.Serializer
+namespace WalletManagerDAL.Serializer
 {
     public interface ISerializer
     {

@@ -1,15 +1,14 @@
 ﻿using Configuration;
-using System;
 using System.Collections.Generic;
 
 namespace WalletManagerServices.Transaction
 {
     public class TransactionServices : ITransactionServices
     {
-        readonly Serializer.ISerializer _transactionSerializer;
+        readonly WalletManagerDAL.Serializer.ISerializer _transactionSerializer;
         readonly IConfigurator _configurator;
 
-        public TransactionServices(Serializer.ISerializer transactionSerializer, IConfigurator configurator)
+        public TransactionServices(WalletManagerDAL.Serializer.ISerializer transactionSerializer, IConfigurator configurator)
         {
             _transactionSerializer = transactionSerializer;
             _configurator = configurator;

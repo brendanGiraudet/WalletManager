@@ -4,13 +4,13 @@ using System.IO;
 using System.Linq;
 using WalletManagerDTO;
 
-namespace WalletManagerServices.Serializer
+namespace WalletManagerDAL.Serializer
 {
     public class TransactionSerializer : ISerializer
     {
-        public List<WalletManagerDTO.Transaction> Deserialize(string csvPath)
+        public List<Transaction> Deserialize(string csvPath)
         {
-            var transactions = new List<WalletManagerDTO.Transaction>();
+            var transactions = new List<Transaction>();
             try
             {
                 var csvLines = File.ReadAllLines(csvPath).Skip(1);
@@ -18,7 +18,7 @@ namespace WalletManagerServices.Serializer
                 foreach (var csvLine in csvLines)
                 {
                     string[] values = csvLine.Split(';');
-                    transactions.Add(new WalletManagerDTO.Transaction
+                    transactions.Add(new Transaction
                     {
                         Compte = values[0],
                         ComptabilisationDate = Convert.ToDateTime(values[1]),
@@ -38,7 +38,7 @@ namespace WalletManagerServices.Serializer
             return transactions;
         }
 
-        public void Serialize(List<WalletManagerDTO.Transaction> transactions)
+        public void Serialize(List<Transaction> transactions)
         {
             throw new NotImplementedException();
         }
