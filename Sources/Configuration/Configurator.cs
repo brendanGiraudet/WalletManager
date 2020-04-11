@@ -5,7 +5,7 @@ namespace Configuration
     {
         public string GetCsvPath()
         {
-            return @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\serialize.csv";
+            return @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserialize.csv";
         }
     }
 }

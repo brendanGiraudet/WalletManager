@@ -28,7 +28,7 @@ namespace WalletManagerSite
             });
 
             services.AddScoped<IConfigurator, Configurator>();
-            services.AddScoped<WalletManagerDAL.Serializer.ISerializer, WalletManagerDAL.Serializer.TransactionSerializer>();
+            services.AddScoped<WalletManagerDAL.Serializer.ISerializer, WalletManagerDAL.Serializer.CsvSerializer>();
             services.AddScoped<WalletManagerServices.Transaction.ITransactionServices, WalletManagerServices.Transaction.TransactionServices>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

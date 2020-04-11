@@ -6,7 +6,7 @@ using WalletManagerDTO;
 
 namespace WalletManagerDAL.Serializer
 {
-    public class TransactionSerializer : ISerializer
+    public class CsvSerializer : ISerializer
     {
         public List<Transaction> Deserialize(string csvPath)
         {
@@ -38,7 +38,7 @@ namespace WalletManagerDAL.Serializer
             return transactions;
         }
 
-        public void Serialize(List<Transaction> transactions, string path)
+        public void Serialize(List<Transaction> transactions, string csvPath)
         {
             StringWriter stringWriter = new StringWriter();
             var delimiter = ";";
@@ -58,11 +58,11 @@ namespace WalletManagerDAL.Serializer
 
             try
             {
-                File.WriteAllText(path, stringWriter.ToString());
+                File.WriteAllText(csvPath, stringWriter.ToString());
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error : impossible to serialize the csv file in path { path } due to " + ex.Message);
+                Console.WriteLine($"Error : impossible to serialize the csv file in path { csvPath } due to " + ex.Message);
             }
         }
     }

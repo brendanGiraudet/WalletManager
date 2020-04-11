@@ -12,7 +12,7 @@ namespace WalletManagerTestProject
         public void ShouldHaveListOfTransactionWhenIDeserializeACsvString()
         {
             // Arrange
-            ISerializer serializer = new TransactionSerializer();
+            ISerializer serializer = new CsvSerializer();
             var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserialize.csv";
 
             // Act
@@ -26,7 +26,7 @@ namespace WalletManagerTestProject
         public void ShouldHaveACsvFileWhenISerializeTransactionList()
         {
             // Arrange
-            ISerializer serializer = new TransactionSerializer();
+            ISerializer serializer = new CsvSerializer();
             var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\serialize.csv";
             var transactions = new List<WalletManagerDTO.Transaction>
             {
