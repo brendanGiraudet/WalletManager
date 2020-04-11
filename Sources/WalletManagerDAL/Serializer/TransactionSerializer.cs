@@ -38,9 +38,32 @@ namespace WalletManagerDAL.Serializer
             return transactions;
         }
 
-        public void Serialize(List<Transaction> transactions)
+        public void Serialize(List<Transaction> transactions, string path)
         {
-            throw new NotImplementedException();
+            StringWriter stringWriter = new StringWriter();
+            var delimiter = ";";
+
+            foreach (var transaction in transactions)
+            {
+                stringWriter.Write(transaction.Compte + delimiter);
+                stringWriter.Write(transaction.ComptabilisationDate + delimiter);
+                stringWriter.Write(transaction.OperationDate + delimiter);
+                stringWriter.Write(transaction.Label + delimiter);
+                stringWriter.Write(transaction.Reference + delimiter);
+                stringWriter.Write(transaction.ValueDate + delimiter);
+                stringWriter.Write(transaction.Amount + delimiter);
+                stringWriter.Write(transaction.Category + delimiter);
+                stringWriter.Write(stringWriter.NewLine);
+            }
+
+            try
+            {
+                File.WriteAllText(path, stringWriter.ToString());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error : impossible to serialize the csv file in path { path } due to " + ex.Message);
+            }
         }
     }
 }
