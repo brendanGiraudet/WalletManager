@@ -8,12 +8,13 @@ namespace WalletManagerTestProject
 {
     public class SerializerTests
     {
-        [Fact]
-        public void ShouldHaveListOfTransactionWhenIDeserializeACsvString()
+        [Theory]
+        [InlineData(@"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserialize.csv")]
+        [InlineData(@"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserializeWithCategory.csv")]
+        public void ShouldHaveListOfTransactionWhenIDeserializeACsvString(string csvPath)
         {
             // Arrange
             ISerializer serializer = new CsvSerializer();
-            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserialize.csv";
 
             // Act
             var transactionList = serializer.Deserialize(csvPath);

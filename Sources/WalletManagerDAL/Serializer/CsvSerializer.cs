@@ -17,8 +17,8 @@ namespace WalletManagerDAL.Serializer
 
                 foreach (var csvLine in csvLines)
                 {
-                    string[] values = csvLine.Split(';');
-                    transactions.Add(new Transaction
+                    var values = csvLine.Split(';').ToArray();
+                    var transaction = new Transaction
                     {
                         Compte = values[0],
                         ComptabilisationDate = Convert.ToDateTime(values[1]),
@@ -26,8 +26,23 @@ namespace WalletManagerDAL.Serializer
                         Label = values[3],
                         Reference = values[4],
                         ValueDate = Convert.ToDateTime(values[5]),
-                        Amount = Convert.ToDouble(values[6].Replace(',','.'))
-                    });
+                        Amount = Convert.ToDouble(values[6].Replace(',', '.'))
+                    };
+                    try
+                    {
+                        Enum.TryParse(values.GetValue(7).ToString(), out WalletManagerDTO.Enumerations.TransactionCategory category);
+
+                        transaction.Category = category;
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        transaction.Category = WalletManagerDTO.Enumerations.TransactionCategory.NA;
+                    }
+                    catch (ArgumentException)
+                    {
+                        transaction.Category = WalletManagerDTO.Enumerations.TransactionCategory.NA;
+                    }
+                    transactions.Add(transaction);
                 }
             }
             catch (Exception ex)
@@ -41,6 +56,7 @@ namespace WalletManagerDAL.Serializer
         public void Serialize(List<Transaction> transactions, string csvPath)
         {
             StringWriter stringWriter = new StringWriter();
+            stringWriter.Write("Compte;Date de comptabilisation;Date opération;Libellé;Référence;Date valeur;Montant;Category");
             var delimiter = ";";
 
             foreach (var transaction in transactions)
