@@ -1,31 +1,30 @@
-﻿using Configuration;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace WalletManagerServices.Transaction
 {
     public class TransactionServices : ITransactionServices
     {
         readonly WalletManagerDAL.Serializer.ISerializer _transactionSerializer;
-        readonly IConfigurator _configurator;
+        private List<WalletManagerDTO.Transaction> _transactions;
 
-        public TransactionServices(WalletManagerDAL.Serializer.ISerializer transactionSerializer, IConfigurator configurator)
+        public TransactionServices(WalletManagerDAL.Serializer.ISerializer transactionSerializer)
         {
             _transactionSerializer = transactionSerializer;
-            _configurator = configurator;
+        }
+
+        public void LoadTransactions(string csvPath)
+        {
+            _transactions = _transactionSerializer.Deserialize(csvPath);
         }
 
         public WalletManagerDTO.Transaction GetTransaction(string reference)
         {
-            var csvPath = _configurator.GetCsvPath();
-            var transactions = _transactionSerializer.Deserialize(csvPath);
-
-            return transactions.Find(transaction => transaction.Reference.Equals(reference));
+            return _transactions.Find(transaction => transaction.Reference.Equals(reference));
         }
 
         public List<WalletManagerDTO.Transaction> GetTransactions()
         {
-            var csvPath = _configurator.GetCsvPath();
-            return _transactionSerializer.Deserialize(csvPath);
+            return _transactions;
         }
     }
 }
