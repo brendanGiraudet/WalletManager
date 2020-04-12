@@ -4,106 +4,146 @@
 }
 <h2>@ViewData["Title"]</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.OperationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Label)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OperationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Label)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { reference = item.Reference }) |
-                @Html.ActionLink("Details", "Details", new { reference = item.Reference }) |
-                @Html.ActionLink("Delete", "Delete", new { reference = item.Reference })
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+<form method="post" enctype="multipart/form-data">
+    <div id="dropZone" class="dropZone">
+        Drag-n-Drop files here.
+    </div>
+    <br />
+    <img id="progress" src="~/images/progress.gif" />
+</form>
 
-<p>Use this area to provide additional information.</p>
+<style>
+    #dropZone {
+        background: #0094ff;
+    }
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    .active-drop {
+        background: #4cff00
+    }
+</style>
 
 <div id="chart_div"></div>
-<script type="text/javascript">
 
-
-    google.charts.load('current', {
-        packages: ['corechart', 'bar']
-    });
-    google.charts.setOnLoadCallback(LoadData);
-
-    function LoadData() {
-        $.ajax({
-
-            url: 'transaction/TransactionChart',
-            dataType: "json",
-            type: "GET",
-            error: function(xhr, status, error) {
-                var err = eval("(" + xhr.responseText + ")");
-                toastr.error(err.message);
-            },
-            success: function(data) {
-                TransactionChart(data);
-                return false;
-            }
-        });
-        return false;
+<div id="transactionsTable">
+    @{
+        Html.RenderPartial("TransactionsTablePartialView", Model);
     }
+</div>
 
-    function TransactionChart(data) {
-        var dataArray = [
-            ['OperationDate', 'Amount']
-        ];
-        $.each(data, function(i, item) {
-            dataArray.push([item.operationDate, item.amount]);
+@section Scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {
+            packages: ['corechart', 'bar']
         });
-        var data = google.visualization.arrayToDataTable(dataArray);
-        var options = {
-            title: 'Credit by day',
-            chartArea: {
-                width: '50%'
-            },
-            colors: ['#b0120a', '#7b1fa2', '#ffab91', '#d95f02'],
-            hAxis: {
-                title: 'amount',
-                minValue: 0
-            },
-            vAxis: {
-                title: 'Date'
-            }
-        };
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        google.charts.setOnLoadCallback(LoadTransactionsChart);
 
-        chart.draw(data, options);
-        return false;
-    }
-</script>
+        function LoadTransactionsChart() {
+            $.ajax({
+                url: 'transaction/TransactionChart',
+                dataType: "json",
+                type: "GET",
+                error: function (xhr, status, error) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    toastr.error(err.message);
+                },
+                success: function (data) {
+                    TransactionsChart(data);
+                    return false;
+                }
+            });
+            return false;
+        }
+
+        function LoadTransactionsTable() {
+            $("#transactionsTable").load('@Url.Action("LoadTransactionsTable")');
+            return false;
+        }
+
+        function TransactionsChart(data) {
+            var dataArray = [
+                ['OperationDate', 'Amount']
+            ];
+            $.each(data, function (i, item) {
+                dataArray.push([item.operationDate, item.amount]);
+            });
+            var data = google.visualization.arrayToDataTable(dataArray);
+            var options = {
+                title: 'Credit by day',
+                chartArea: {
+                    width: '50%'
+                },
+                colors: ['#b0120a', '#7b1fa2', '#ffab91', '#d95f02'],
+                hAxis: {
+                    title: 'amount',
+                    minValue: 0
+                },
+                vAxis: {
+                    title: 'Date'
+                }
+            };
+            var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+
+            chart.draw(data, options);
+            return false;
+        }
+
+        $(document).ready(function () {
+
+            $("#progress").hide();
+
+            $("#dropZone").on("dragenter", function (evt) {
+                $("#dropZone").addClass("active-drop");
+                evt.preventDefault();
+                evt.stopPropagation();
+            });
+
+            $("#dropZone").on("dragover", function (evt) {
+                $("#dropZone").removeClass("active-drop");
+                evt.preventDefault();
+                evt.stopPropagation();
+            });
+
+            $("#dropZone").on("drop", function (evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+                var files = evt.originalEvent.dataTransfer.files;
+                var fileNames = "";
+                if (files.length > 0) {
+                    fileNames += "Uploading <br/>"
+                    for (var i = 0; i < files.length; i++) {
+                        fileNames += files[i].name + "<br />";
+                    }
+                }
+                $("#dropZone").html(fileNames)
+
+                var data = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    data.append(files[i].name, files[i]);
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("LoadTransactions")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (message) {
+                        $("#dropZone").html(message);
+                    },
+                    error: function () {
+                        $("#dropZone").html
+                            ("There was error uploading files!");
+                    },
+                    beforeSend: function () {
+                        $("#progress").show();
+                    },
+                    complete: function () {
+                        $("#progress").hide();
+                        LoadTransactionsChart();
+                        LoadTransactionsTable();
+                    }
+                });
+            });
+        });
+    </script>
+}

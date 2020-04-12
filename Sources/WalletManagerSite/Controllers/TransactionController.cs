@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ namespace WalletManagerSite.Controllers
     public class TransactionController : Controller
     {
         readonly ITransactionServices _transactionServices;
+
         public TransactionController(ITransactionServices transactionServices)
         {
             _transactionServices = transactionServices;
@@ -19,10 +21,15 @@ namespace WalletManagerSite.Controllers
             return View(GetTransactions());
         }
 
+        public ActionResult LoadTransactionsTable()
+        {
+            return PartialView("TransactionsTablePartialView", GetTransactions());
+        }
+
         private List<Models.TransactionViewModel> GetTransactions()
         {
             var transactions = _transactionServices.GetTransactions();
-            if(transactions != null && transactions.Any())
+            if (transactions != null && transactions.Any())
             {
                 return transactions.Select(transaction => new Models.TransactionViewModel
                 {
@@ -39,11 +46,41 @@ namespace WalletManagerSite.Controllers
             return new List<Models.TransactionViewModel>();
         }
 
+        [HttpPost]
+        public IActionResult LoadTransactions()
+        {
+            var files = Request.Form.Files;
+            var file = files.First();
+            string filePath = Path.Combine(Path.GetTempPath(), file.FileName);
+            string message = $"{filePath} uploaded successfully!";
+
+            try
+            {
+                CopyContentInTempFile(file, filePath);
+                _transactionServices.LoadTransactions(filePath);
+            }
+            catch (System.Exception ex)
+            {
+                return Json(ex.Message);
+            }
+
+            return Json(message);
+        }
+
+        private static void CopyContentInTempFile(IFormFile file, string filePath)
+        {
+            using (FileStream fs = System.IO.File.Create(filePath))
+            {
+                file.CopyTo(fs);
+                fs.Flush();
+            }
+        }
+
         [HttpGet]
         public JsonResult TransactionChart()
         {
             var transactions = _transactionServices.GetTransactions();
-            
+
             return Json(transactions);
         }
 
