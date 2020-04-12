@@ -10,6 +10,7 @@ namespace WalletManagerServices.Transaction
         public TransactionServices(WalletManagerDAL.Serializer.ISerializer transactionSerializer)
         {
             _transactionSerializer = transactionSerializer;
+            _transactions = new List<WalletManagerDTO.Transaction>();
         }
 
         public void LoadTransactions(string csvPath)
