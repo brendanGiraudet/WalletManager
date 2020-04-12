@@ -65,6 +65,8 @@ namespace WalletManagerDAL.Serializer
 
         public void Serialize(List<Transaction> transactions, string csvPath)
         {
+            if (transactions == null || !transactions.Any()) throw new WalletManagerDTO.Exceptions.SerializerException("Impossible to serialize an empty transaction list");
+
             StringWriter stringWriter = new StringWriter();
             stringWriter.Write("Compte;Date de comptabilisation;Date opération;Libellé;Référence;Date valeur;Montant;Category");
             stringWriter.Write(stringWriter.NewLine);
@@ -89,7 +91,7 @@ namespace WalletManagerDAL.Serializer
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error : impossible to serialize the csv file in path { csvPath } due to " + ex.Message);
+                throw new WalletManagerDTO.Exceptions.SerializerException($"Error : impossible to serialize into csv file in path { csvPath } due to " + ex.Message, ex);
             }
         }
     }

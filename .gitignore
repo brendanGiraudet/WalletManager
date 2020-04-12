@@ -19,3 +19,4 @@
 /Sources/Configuration/obj
 /Sources/WalletManagerDAL/obj
 /Sources/WalletManagerDAL/bin/Debug/netcoreapp2.1
+/Sources/WalletManagerTestProject/WalletManagerTestProject.csproj.user

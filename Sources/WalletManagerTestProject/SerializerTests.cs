@@ -76,5 +76,60 @@ namespace WalletManagerTestProject
             // Assert
             Assert.True(true);
         }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("Z://bad/csv/path/file")]
+        public void ShouldThrowExceptionWhenISerializeWithWrongCsvPath(string csvPath)
+        {
+            // Arrange
+            ISerializer serializer = new CsvSerializer();
+            var transactions = new List<WalletManagerDTO.Transaction>
+            {
+                new WalletManagerDTO.Transaction
+                {
+                    Compte = "31419185918",
+                    ComptabilisationDate = new DateTime(2020,03,31),
+                    OperationDate = new DateTime(2020,03,31),
+                    Label = "300320 CB****1526 ALLDEBRID.COM  92MONTROUGE",
+                    Reference = "475QGS0",
+                    ValueDate = new DateTime(2020,03,31),
+                    Amount = -15.99,
+                    Category = WalletManagerDTO.Enumerations.TransactionCategory.Internet
+                },
+                new WalletManagerDTO.Transaction
+                {
+                    Compte = "31419185918",
+                    ComptabilisationDate = new DateTime(2020,03,31),
+                    OperationDate = new DateTime(2020,03,31),
+                    Label = "VIR M BRENDAN GIRAUDET Virement vers BRENDAN GIRAUDET",
+                    Reference = "6681107",
+                    ValueDate = new DateTime(2020,03,31),
+                    Amount = -1000,
+                    Category = WalletManagerDTO.Enumerations.TransactionCategory.Courses
+                }
+            };
+
+            // Act
+            Action serializeAction = () => serializer.Serialize(transactions, csvPath);
+
+            // Assert
+            Assert.Throws<WalletManagerDTO.Exceptions.SerializerException>(serializeAction);
+        }
+
+        [Fact]
+        public void ShouldThrowExceptionWhenISerializeEmptyTransactionList()
+        {
+            // Arrange
+            ISerializer serializer = new CsvSerializer();
+            var emptyTransactionList = new List<WalletManagerDTO.Transaction>();
+            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\serialize.csv";
+
+            // Act
+            Action serializeAction = () => serializer.Serialize(emptyTransactionList, csvPath);
+
+            // Assert
+            Assert.Throws<WalletManagerDTO.Exceptions.SerializerException>(serializeAction);
+        }
     }
 }
