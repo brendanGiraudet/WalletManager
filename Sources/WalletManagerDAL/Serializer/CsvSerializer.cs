@@ -11,10 +11,10 @@ namespace WalletManagerDAL.Serializer
         public List<Transaction> Deserialize(string csvPath)
         {
             var transactions = new List<Transaction>();
+
             try
             {
                 var csvLines = File.ReadAllLines(csvPath).Skip(1);
-
                 foreach (var csvLine in csvLines)
                 {
                     var values = csvLine.Split(';').ToArray();
@@ -26,37 +26,48 @@ namespace WalletManagerDAL.Serializer
                         Label = values[3],
                         Reference = values[4],
                         ValueDate = Convert.ToDateTime(values[5]),
-                        Amount = Convert.ToDouble(values[6].Replace(',', '.'))
+                        Amount = Convert.ToDouble(values[6].Replace(',', '.')),
+                        Category = GetCategory(values)
                     };
-                    try
-                    {
-                        Enum.TryParse(values.GetValue(7).ToString(), out WalletManagerDTO.Enumerations.TransactionCategory category);
 
-                        transaction.Category = category;
-                    }
-                    catch (ArgumentOutOfRangeException)
-                    {
-                        transaction.Category = WalletManagerDTO.Enumerations.TransactionCategory.NA;
-                    }
-                    catch (ArgumentException)
-                    {
-                        transaction.Category = WalletManagerDTO.Enumerations.TransactionCategory.NA;
-                    }
                     transactions.Add(transaction);
                 }
             }
+            catch (IndexOutOfRangeException ex)
+            {
+                throw new WalletManagerDTO.Exceptions.SerializerException($"Wrong csv format in {csvPath}", ex);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new WalletManagerDTO.Exceptions.SerializerException($"Wrong csv path : {csvPath}", ex);
+            }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error : impossible to deserialize the csv file in path { csvPath } due to " + ex.Message);
+                Console.WriteLine($"Error : impossible to deserialize the csv file in { csvPath } due to " + ex.Message);
             }
 
             return transactions;
+        }
+
+        private static WalletManagerDTO.Enumerations.TransactionCategory GetCategory(string[] values)
+        {
+            try
+            {
+                Enum.TryParse(values.GetValue(7).ToString(), out WalletManagerDTO.Enumerations.TransactionCategory category);
+
+                return category;
+            }
+            catch (ArgumentException)
+            {
+                return WalletManagerDTO.Enumerations.TransactionCategory.NA;
+            }
         }
 
         public void Serialize(List<Transaction> transactions, string csvPath)
         {
             StringWriter stringWriter = new StringWriter();
             stringWriter.Write("Compte;Date de comptabilisation;Date opération;Libellé;Référence;Date valeur;Montant;Category");
+            stringWriter.Write(stringWriter.NewLine);
             var delimiter = ";";
 
             foreach (var transaction in transactions)

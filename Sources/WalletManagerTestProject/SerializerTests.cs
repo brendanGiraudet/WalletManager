@@ -23,6 +23,21 @@ namespace WalletManagerTestProject
             Assert.True(transactionList.Any());
         }
 
+        [Theory]
+        [InlineData("")]
+        [InlineData(@"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\wrong.csv")]
+        public void ShouldThrowExceptionWhenIDeserializeAWrongCsvFile(string csvPath)
+        {
+            // Arrange
+            ISerializer serializer = new CsvSerializer();
+
+            // Act
+            Action deserializeAction = () => serializer.Deserialize(csvPath);
+
+            // Assert
+            Assert.Throws<WalletManagerDTO.Exceptions.SerializerException>(deserializeAction);
+        }
+
         [Fact]
         public void ShouldHaveACsvFileWhenISerializeTransactionList()
         {
