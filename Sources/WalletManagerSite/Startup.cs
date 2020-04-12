@@ -26,8 +26,8 @@ namespace WalletManagerSite
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddScoped<WalletManagerDAL.Serializer.ISerializer, WalletManagerDAL.Serializer.CsvSerializer>();
-            services.AddScoped<WalletManagerServices.Transaction.ITransactionServices, WalletManagerServices.Transaction.TransactionServices>();
+            services.AddSingleton<WalletManagerDAL.Serializer.ISerializer, WalletManagerDAL.Serializer.CsvSerializer>();
+            services.AddSingleton<WalletManagerServices.Transaction.ITransactionServices, WalletManagerServices.Transaction.TransactionServices>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
