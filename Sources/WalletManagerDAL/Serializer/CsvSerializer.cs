@@ -43,7 +43,7 @@ namespace WalletManagerDAL.Serializer
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error : impossible to deserialize the csv file in { csvPath } due to " + ex.Message);
+                throw new WalletManagerDTO.Exceptions.SerializerException($"Error : impossible to deserialize the csv file in { csvPath } due to " + ex.Message, ex);
             }
 
             return transactions;
