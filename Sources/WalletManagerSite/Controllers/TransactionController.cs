@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WalletManagerServices.Transaction;
+using WalletManagerSite.Models;
 
 namespace WalletManagerSite.Controllers
 {
@@ -116,7 +118,17 @@ namespace WalletManagerSite.Controllers
         // GET: Transaction/Edit/5GX5
         public ActionResult Edit(string reference)
         {
-            return View(GetTransaction(reference));
+            if(string.IsNullOrWhiteSpace(reference))
+            {
+                return new NotFoundResult();
+            }
+            var transaction = GetTransaction(reference);
+            if(transaction == null)
+            {
+                return new NotFoundResult();
+            }
+
+            return View(transaction);
         }
         private Models.TransactionViewModel GetTransaction(string reference)
         {
@@ -135,24 +147,45 @@ namespace WalletManagerSite.Controllers
                     Category = transaction.Category
                 };
             }
-            return new Models.TransactionViewModel();
+            return null;
         }
 
         // POST: Transaction/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit([Bind("Compte", "ComptabilisationDate", "OperationDate", "Label", "Reference", "ValueDate", "Amount", "Category")] TransactionViewModel transaction)
         {
             try
             {
-                // TODO: Add update logic here
+                if(ModelState.IsValid)
+                {
+                    UpdateTransaction(transaction);
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View();
             }
             catch
             {
                 return View();
             }
+        }
+
+        private void UpdateTransaction(TransactionViewModel transactionViewModel)
+        {
+            var transaction = new WalletManagerDTO.Transaction
+            {
+                Amount = transactionViewModel.Amount,
+                Category = transactionViewModel.Category,
+                ComptabilisationDate = transactionViewModel.ComptabilisationDate,
+                Compte = transactionViewModel.Compte,
+                Label = transactionViewModel.Label,
+                OperationDate = transactionViewModel.OperationDate,
+                Reference = transactionViewModel.Reference,
+                ValueDate = transactionViewModel.ValueDate
+            };
+            _transactionServices.UpdateTransaction(transaction);
         }
 
         // GET: Transaction/Delete/5

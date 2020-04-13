@@ -35,9 +35,10 @@
                     @Html.DisplayFor(modelItem => item.Category)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { reference = item.Reference }) |
+                    @Html.ActionLink("Edit", "Edit", new { reference = item.Reference })
+                    <!--|
                     @Html.ActionLink("Details", "Details", new { reference = item.Reference }) |
-                    @Html.ActionLink("Delete", "Delete", new { reference = item.Reference })
+    @Html.ActionLink("Delete", "Delete", new { reference = item.Reference })-->
                 </td>
             </tr>
         }
