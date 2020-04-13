@@ -9,5 +9,7 @@ namespace WalletManagerServices.Transaction
         List<WalletManagerDTO.Transaction> GetTransactions();
 
         WalletManagerDTO.Transaction GetTransaction(string reference);
+
+        void UpdateTransaction(WalletManagerDTO.Transaction updatedTransaction);
     }
 }

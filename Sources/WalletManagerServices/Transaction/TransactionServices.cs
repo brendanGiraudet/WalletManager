@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WalletManagerServices.Transaction
 {
@@ -26,6 +27,12 @@ namespace WalletManagerServices.Transaction
         public List<WalletManagerDTO.Transaction> GetTransactions()
         {
             return _transactions;
+        }
+
+        public void UpdateTransaction(WalletManagerDTO.Transaction updatedTransaction)
+        {
+            var findedTransaction = _transactions.Find(t => t.Reference.Equals(updatedTransaction.Reference));
+            findedTransaction.Category = updatedTransaction.Category;
         }
     }
 }
