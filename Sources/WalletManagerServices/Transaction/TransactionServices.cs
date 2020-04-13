@@ -31,7 +31,18 @@ namespace WalletManagerServices.Transaction
 
         public void UpdateTransaction(WalletManagerDTO.Transaction updatedTransaction)
         {
-            var findedTransaction = _transactions.Find(t => t.Reference.Equals(updatedTransaction.Reference));
+            WalletManagerDTO.Transaction findedTransaction;
+            try
+            {
+                findedTransaction = _transactions.Find(t => t.Reference.Equals(updatedTransaction.Reference));
+            }
+            catch (Exception ex)
+            {
+                throw new WalletManagerDTO.Exceptions.TransactionServiceException($"Impossible to update this transaction : {updatedTransaction} due to {ex.Message}");
+            }
+
+            if(findedTransaction == null) throw new WalletManagerDTO.Exceptions.TransactionServiceException($"Impossible to update transaction with this reference : {updatedTransaction.Reference}");
+
             findedTransaction.Category = updatedTransaction.Category;
         }
     }

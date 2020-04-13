@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Xunit;
 
@@ -80,6 +81,25 @@ namespace WalletManagerTestProject
 
             // Assert
             Assert.Equal(updatedTransaction.Category, transaction.Category);
+        }
+
+        [Fact]
+        public void ShouldThrownExceptionWhenUpdateCategoryTransaction()
+        {
+            // Arrange
+            var transactionSerializer = new WalletManagerDAL.Serializer.CsvSerializer();
+            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
+            var updatedTransaction = new WalletManagerDTO.Transaction
+            {
+                Reference = "doesntExist",
+                Category = WalletManagerDTO.Enumerations.TransactionCategory.Courses
+            };
+
+            // Act
+            Action updateTransactionAction = () => transactionServices.UpdateTransaction(updatedTransaction);
+
+            // Assert
+            Assert.Throws<WalletManagerDTO.Exceptions.TransactionServiceException>(updateTransactionAction);
         }
     }
 }

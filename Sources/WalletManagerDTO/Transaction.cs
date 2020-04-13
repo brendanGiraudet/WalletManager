@@ -19,5 +19,11 @@ namespace WalletManagerDTO
         public double Amount { get; set; }
 
         public Enumerations.TransactionCategory Category { get; set; }
+
+        public override string ToString()
+        {
+            return $"Compte : {Compte}, Comptabilisation Date : {ComptabilisationDate}, Operation Date : {OperationDate}, Label : {Label}, Reference : {Reference}, Value Date : {ValueDate}, Amount : {Amount}, Category : {Category}";
+
+        }
     }
 }
