@@ -101,5 +101,23 @@ namespace WalletManagerTestProject
             // Assert
             Assert.Throws<WalletManagerDTO.Exceptions.TransactionServiceException>(updateTransactionAction);
         }
+
+        [Fact]
+        public void ShouldHaveListOfRegroupedTransactionWhenIGetTransactions()
+        {
+            // Arrange
+            var transactionSerializer = new WalletManagerDAL.Serializer.CsvSerializer();
+            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
+            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\regroup.csv";
+            transactionServices.LoadTransactions(csvPath);
+            const double expectedGroupedPaypalAmount = -86.30;
+
+            // Act
+            var transactions = transactionServices.GetTransactions();
+            var paypalTransaction = transactions.Find(t => t.Label.Contains("PAYPAL"));
+
+            // Assert
+            Assert.Equal(Math.Round(paypalTransaction.Amount,2), expectedGroupedPaypalAmount);
+        }
     }
 }
