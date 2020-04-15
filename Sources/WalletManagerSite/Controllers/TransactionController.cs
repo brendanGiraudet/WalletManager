@@ -30,7 +30,7 @@ namespace WalletManagerSite.Controllers
 
         private List<Models.TransactionViewModel> GetTransactions()
         {
-            var transactions = _transactionServices.GetTransactions();
+            var transactions = _transactionServices.GetGroupedTransactions();
             if (transactions != null && transactions.Any())
             {
                 return transactions.Select(transaction => new Models.TransactionViewModel

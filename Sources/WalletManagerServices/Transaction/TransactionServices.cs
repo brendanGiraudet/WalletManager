@@ -33,14 +33,14 @@ namespace WalletManagerServices.Transaction
         public List<WalletManagerDTO.Transaction> GetGroupedTransactions()
         {
             var groupedTransactions = new List<WalletManagerDTO.Transaction>();
-            var maxLetterTochangePourcent = 0.30;
+            var maxLetterTochangePourcent = 0.20;
 
             foreach (var transactionToMerge in _transactions)
             {
                 var transactionToMergeLabelLenght = transactionToMerge.Label.Length;
                 var numberOfMaxLetterToChange = transactionToMergeLabelLenght * maxLetterTochangePourcent;
 
-                var isAlreadyGrouped = groupedTransactions.Any(t => LevenshteinDistanceCompute(RemoveParasiteString(t.Label), RemoveParasiteString(transactionToMerge.Label)) <= numberOfMaxLetterToChange);
+                var isAlreadyGrouped = groupedTransactions.Any(t => LevenshteinDistanceCompute(RemoveParasiteString(t.Label.ToLower()), RemoveParasiteString(transactionToMerge.Label.ToLower())) <= numberOfMaxLetterToChange);
                 if(isAlreadyGrouped)
                 {
                     continue;

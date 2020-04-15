@@ -110,11 +110,11 @@ namespace WalletManagerTestProject
             var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
             var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\regroup.csv";
             transactionServices.LoadTransactions(csvPath);
-            const double expectedGroupedPaypalAmount = -383.29;
+            const double expectedGroupedPaypalAmount = -288.69;
 
             // Act
             var transactions = transactionServices.GetGroupedTransactions();
-            var paypalTransaction = transactions.Find(t => t.Label.Contains("PAYPAL"));
+            var paypalTransaction = transactions.Find(t => t.Label.Contains("PAYPAL         750800"));
 
             // Assert
             Assert.Equal(expectedGroupedPaypalAmount, Math.Round(paypalTransaction.Amount, 2));
