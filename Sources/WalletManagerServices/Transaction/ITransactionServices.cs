@@ -11,5 +11,7 @@ namespace WalletManagerServices.Transaction
         WalletManagerDTO.Transaction GetTransaction(string reference);
 
         void UpdateTransaction(WalletManagerDTO.Transaction updatedTransaction);
+
+        List<WalletManagerDTO.Transaction> GetGroupedTransactions();
     }
 }

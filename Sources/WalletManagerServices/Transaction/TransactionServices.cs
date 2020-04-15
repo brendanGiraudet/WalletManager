@@ -27,23 +27,47 @@ namespace WalletManagerServices.Transaction
 
         public List<WalletManagerDTO.Transaction> GetTransactions()
         {
+            return _transactions;
+        }
+
+        public List<WalletManagerDTO.Transaction> GetGroupedTransactions()
+        {
             var groupedTransactions = new List<WalletManagerDTO.Transaction>();
+            var maxLetterTochangePourcent = 0.30;
+
             foreach (var transactionToMerge in _transactions)
             {
                 var transactionToMergeLabelLenght = transactionToMerge.Label.Length;
-                var maxLetterTochangePourcent = 0.45;
                 var numberOfMaxLetterToChange = transactionToMergeLabelLenght * maxLetterTochangePourcent;
-                var findedTransaction = groupedTransactions.Find(t => LevenshteinDistanceCompute(t.Label,transactionToMerge.Label) <= numberOfMaxLetterToChange);
-                if (findedTransaction == null)
+
+                var isAlreadyGrouped = groupedTransactions.Any(t => LevenshteinDistanceCompute(RemoveParasiteString(t.Label), RemoveParasiteString(transactionToMerge.Label)) <= numberOfMaxLetterToChange);
+                if(isAlreadyGrouped)
                 {
-                    groupedTransactions.Add(transactionToMerge);
+                    continue;
                 }
-                else
+
+                var similarTransactions = _transactions.Where(t => LevenshteinDistanceCompute(RemoveParasiteString(t.Label), RemoveParasiteString(transactionToMerge.Label)) <= numberOfMaxLetterToChange).ToList();
+
+                var groupedAmout = 0.0;
+                similarTransactions.ForEach(t =>
                 {
-                    findedTransaction.Amount += transactionToMerge.Amount;
-                }
+                    groupedAmout += t.Amount;
+                });
+
+                transactionToMerge.Amount = groupedAmout;
+
+                groupedTransactions.Add(transactionToMerge);
             }
+
             return groupedTransactions;
+        }
+
+        private string RemoveParasiteString(string label)
+        {
+            if(label.Contains("CB****1526"))
+                return label.Remove(0, 10);
+
+            return label;
         }
 
         /// <summary>
