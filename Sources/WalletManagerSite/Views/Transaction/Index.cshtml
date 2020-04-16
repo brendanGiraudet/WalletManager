@@ -1,40 +1,46 @@
 ﻿@model IEnumerable<WalletManagerSite.Models.TransactionViewModel>
-@{
-    ViewData["Title"] = "Index";
-}
-<h2>@ViewData["Title"]</h2>
-
-<form method="post" enctype="multipart/form-data">
-    <div id="dropZone" class="dropZone">
-        Drag-n-Drop files here.
-    </div>
-    <br />
-    <img id="progress" src="~/images/progress.gif" />
-</form>
-
-<style>
-    #dropZone {
-        background: #0094ff;
-    }
-
-    .active-drop {
-        background: #4cff00
-    }
-</style>
-
-<div id="chart_div"></div>
-
-<div id="transactionsTable">
     @{
-        Html.RenderPartial("TransactionsTablePartialView", Model);
+    ViewData["Title"] = "Index";
     }
-</div>
+    <h2>@ViewData["Title"]</h2>
+    <div class="container">
+        <form method="post" enctype="multipart/form-data">
+            <div id="dropZone" class="dropZone">
+                Drag-n-Drop files here.
+            </div>
+            <br />
+            <img id="progress" src="~/images/progress.gif" />
+        </form>
+    </div>
+    <style>
+        #dropZone {
+            background: #0094ff;
+            height: 100px;
+        }
 
-@section Scripts{
+        .active-drop {
+            background: #4cff00
+        }
+        #chart_div{
+            height: 300px;
+        }
+    </style>
+
+    <div class="container">
+        <div id="chart_div"</div>
+    </div>
+
+    <div id="transactionsTable">
+        @{
+        Html.RenderPartial("TransactionsTablePartialView", Model);
+        }
+    </div>
+
+    @section Scripts{
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         google.charts.load('current', {
-            packages: ['corechart', 'bar']
+            packages: ['corechart']
         });
         google.charts.setOnLoadCallback(LoadTransactionsChart);
 
@@ -55,36 +61,26 @@
             return false;
         }
 
-        function LoadTransactionsTable() {
-            $("#transactionsTable").load('@Url.Action("LoadTransactionsTable")');
-            return false;
-        }
-
         function TransactionsChart(data) {
             var dataArray = [
-                ['OperationDate', 'Amount']
+                ['Category', 'Amount']
             ];
             $.each(data, function (i, item) {
-                dataArray.push([item.operationDate, item.amount]);
+                dataArray.push([item.category, item.amount]);
             });
             var data = google.visualization.arrayToDataTable(dataArray);
             var options = {
-                title: 'Credit by day',
-                chartArea: {
-                    width: '50%'
-                },
-                colors: ['#b0120a', '#7b1fa2', '#ffab91', '#d95f02'],
-                hAxis: {
-                    title: 'amount',
-                    minValue: 0
-                },
-                vAxis: {
-                    title: 'Date'
-                }
-            };
-            var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+              title: 'Repartition par catégorie',
+              pieHole: 0.4,
+            }
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
 
             chart.draw(data, options);
+            return false;
+        }
+
+        function LoadTransactionsTable() {
+            $("#transactionsTable").load('@Url.Action("LoadTransactionsTable")');
             return false;
         }
 
@@ -146,4 +142,4 @@
             });
         });
     </script>
-}
+    }

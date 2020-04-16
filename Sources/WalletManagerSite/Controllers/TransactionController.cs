@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -30,7 +29,7 @@ namespace WalletManagerSite.Controllers
 
         private List<Models.TransactionViewModel> GetTransactions()
         {
-            var transactions = _transactionServices.GetGroupedTransactions();
+            var transactions = _transactionServices.GetGroupedTransactionsByLabel();
             if (transactions != null && transactions.Any())
             {
                 return transactions.Select(transaction => new Models.TransactionViewModel
@@ -81,9 +80,18 @@ namespace WalletManagerSite.Controllers
         [HttpGet]
         public JsonResult TransactionChart()
         {
-            var transactions = _transactionServices.GetTransactions();
+            return Json(GetTransactionsChart());
+        }
 
-            return Json(transactions);
+        private object GetTransactionsChart()
+        {
+            var debitTransactions = _transactionServices.GetDebitTransactions();
+            var groupedTransactionsByCategory = _transactionServices.GetGroupedTransactionsByCategory(debitTransactions);
+            return groupedTransactionsByCategory.Select(transaction => new TransactionChartViewModel
+            {
+                Amount = transaction.Amount * -1, // google piechart should only have positif amount
+                Category = transaction.Category.ToString()
+            }).ToList();
         }
 
         // GET: Transaction/Details/5
