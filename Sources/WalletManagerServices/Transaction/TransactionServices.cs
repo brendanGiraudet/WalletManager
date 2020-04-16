@@ -32,29 +32,25 @@ namespace WalletManagerServices.Transaction
 
         public List<WalletManagerDTO.Transaction> GetGroupedTransactions()
         {
-            var groupedTransactions = new List<WalletManagerDTO.Transaction>();
             var maxLetterTochangePourcent = 0.20;
+            List<WalletManagerDTO.Transaction> copiedTransactions = GetTransactionsCopy();
+            var groupedTransactions = new List<WalletManagerDTO.Transaction>();
 
-            foreach (var transactionToMerge in _transactions)
+            foreach (var transactionToMerge in copiedTransactions)
             {
                 var transactionToMergeLabelLenght = transactionToMerge.Label.Length;
                 var numberOfMaxLetterToChange = transactionToMergeLabelLenght * maxLetterTochangePourcent;
 
-                var isAlreadyGrouped = groupedTransactions.Any(t => LevenshteinDistanceCompute(RemoveParasiteString(t.Label.ToLower()), RemoveParasiteString(transactionToMerge.Label.ToLower())) <= numberOfMaxLetterToChange);
-                if(isAlreadyGrouped)
-                {
-                    continue;
-                }
+                var isAlreadyMerge = groupedTransactions.Any(t => LevenshteinDistanceCompute(RemoveParasiteString(t.Label), RemoveParasiteString(transactionToMerge.Label)) <= numberOfMaxLetterToChange);
 
-                var similarTransactions = _transactions.Where(t => LevenshteinDistanceCompute(RemoveParasiteString(t.Label), RemoveParasiteString(transactionToMerge.Label)) <= numberOfMaxLetterToChange).ToList();
+                if (isAlreadyMerge) continue;
 
-                var groupedAmout = 0.0;
+                var similarTransactions = copiedTransactions.Where(t => LevenshteinDistanceCompute(RemoveParasiteString(t.Label), RemoveParasiteString(transactionToMerge.Label)) <= numberOfMaxLetterToChange && t.Reference != transactionToMerge.Reference).ToList();
+
                 similarTransactions.ForEach(t =>
                 {
-                    groupedAmout += t.Amount;
+                    transactionToMerge.Amount += t.Amount;
                 });
-
-                transactionToMerge.Amount = groupedAmout;
 
                 groupedTransactions.Add(transactionToMerge);
             }
@@ -62,9 +58,24 @@ namespace WalletManagerServices.Transaction
             return groupedTransactions;
         }
 
+        private List<WalletManagerDTO.Transaction> GetTransactionsCopy()
+        {
+            return _transactions.Select(t => new WalletManagerDTO.Transaction
+            {
+                Amount = t.Amount,
+                Category = t.Category,
+                ComptabilisationDate = t.ComptabilisationDate,
+                Compte = t.Compte,
+                Label = t.Label,
+                OperationDate = t.OperationDate,
+                Reference = t.Reference,
+                ValueDate = t.ValueDate 
+            }).ToList();
+        }
+
         private string RemoveParasiteString(string label)
         {
-            if(label.Contains("CB****1526"))
+            if (label.Contains("CB****1526"))
                 return label.Remove(0, 10);
 
             return label;
