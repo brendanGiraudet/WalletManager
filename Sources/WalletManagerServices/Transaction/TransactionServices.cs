@@ -30,10 +30,10 @@ namespace WalletManagerServices.Transaction
             return _transactions;
         }
 
-        public List<WalletManagerDTO.Transaction> GetGroupedTransactions()
+        public List<WalletManagerDTO.Transaction> GetGroupedTransactionsByLabel()
         {
             var maxLetterTochangePourcent = 0.20;
-            List<WalletManagerDTO.Transaction> copiedTransactions = GetTransactionsCopy();
+            List<WalletManagerDTO.Transaction> copiedTransactions = GetTransactionsCopy(_transactions);
             var groupedTransactions = new List<WalletManagerDTO.Transaction>();
 
             foreach (var transactionToMerge in copiedTransactions)
@@ -58,9 +58,9 @@ namespace WalletManagerServices.Transaction
             return groupedTransactions;
         }
 
-        private List<WalletManagerDTO.Transaction> GetTransactionsCopy()
+        private List<WalletManagerDTO.Transaction> GetTransactionsCopy(List<WalletManagerDTO.Transaction> transactions)
         {
-            return _transactions.Select(t => new WalletManagerDTO.Transaction
+            return transactions.Select(t => new WalletManagerDTO.Transaction
             {
                 Amount = t.Amount,
                 Category = t.Category,
@@ -144,6 +144,39 @@ namespace WalletManagerServices.Transaction
             if (findedTransaction == null) throw new WalletManagerDTO.Exceptions.TransactionServiceException($"Impossible to update transaction with this reference : {updatedTransaction.Reference}");
 
             findedTransaction.Category = updatedTransaction.Category;
+        }
+
+        public List<WalletManagerDTO.Transaction> GetDebitTransactions()
+        {
+            return _transactions.Where(t => t.Amount < 0).ToList();
+        }
+
+        public List<WalletManagerDTO.Transaction> GetGroupedTransactionsByCategory(List<WalletManagerDTO.Transaction> transactions)
+        {
+            var maxLetterTochangePourcent = 0.20;
+            List<WalletManagerDTO.Transaction> copiedTransactions = GetTransactionsCopy(transactions);
+            var groupedTransactions = new List<WalletManagerDTO.Transaction>();
+
+            foreach (var transactionToMerge in copiedTransactions)
+            {
+                var transactionToMergeLabelLenght = transactionToMerge.Label.Length;
+                var numberOfMaxLetterToChange = transactionToMergeLabelLenght * maxLetterTochangePourcent;
+
+                var isAlreadyMerge = groupedTransactions.Any(t => t.Category.Equals(transactionToMerge.Category));
+
+                if (isAlreadyMerge) continue;
+
+                var similarTransactions = copiedTransactions.Where(t => t.Category.Equals(transactionToMerge.Category) && t.Reference != transactionToMerge.Reference).ToList();
+
+                similarTransactions.ForEach(t =>
+                {
+                    transactionToMerge.Amount += t.Amount;
+                });
+
+                groupedTransactions.Add(transactionToMerge);
+            }
+
+            return groupedTransactions;
         }
     }
 }

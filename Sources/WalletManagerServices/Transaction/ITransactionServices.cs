@@ -12,6 +12,10 @@ namespace WalletManagerServices.Transaction
 
         void UpdateTransaction(WalletManagerDTO.Transaction updatedTransaction);
 
-        List<WalletManagerDTO.Transaction> GetGroupedTransactions();
+        List<WalletManagerDTO.Transaction> GetGroupedTransactionsByLabel();
+
+        List<WalletManagerDTO.Transaction> GetDebitTransactions();
+
+        List<WalletManagerDTO.Transaction> GetGroupedTransactionsByCategory(List<WalletManagerDTO.Transaction> transactions);
     }
 }

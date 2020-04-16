@@ -113,11 +113,45 @@ namespace WalletManagerTestProject
             const double expectedGroupedPaypalAmount = -288.69;
 
             // Act
-            var transactions = transactionServices.GetGroupedTransactions();
+            var transactions = transactionServices.GetGroupedTransactionsByLabel();
             var paypalTransaction = transactions.Find(t => t.Label.Contains("PAYPAL         750800"));
 
             // Assert
             Assert.Equal(expectedGroupedPaypalAmount, Math.Round(paypalTransaction.Amount, 2));
+        }
+
+        [Fact]
+        public void ShouldHaveOnlyDebitTransactionsWhenGetDebitTransactions()
+        {
+            // Arrange
+            var transactionSerializer = new WalletManagerDAL.Serializer.CsvSerializer();
+            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
+            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserialize.csv";
+            transactionServices.LoadTransactions(csvPath);
+
+            // Act
+            var debitTransactions = transactionServices.GetDebitTransactions();
+
+            // Assert
+            Assert.DoesNotContain(debitTransactions, t => t.Amount >= 0);
+        }
+
+        [Fact]
+        public void ShouldHaveListOfRegroupedTransactionByCategory()
+        {
+            // Arrange
+            var transactionSerializer = new WalletManagerDAL.Serializer.CsvSerializer();
+            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
+            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\regroupByCategory.csv";
+            transactionServices.LoadTransactions(csvPath);
+            const double expectedGroupedNAAmount = -2000;
+
+            // Act
+            var transactions = transactionServices.GetGroupedTransactionsByCategory(transactionServices.GetDebitTransactions());
+            var NATransaction = transactions.Find(t => t.Category.Equals(WalletManagerDTO.Enumerations.TransactionCategory.NA));
+
+            // Assert
+            Assert.Equal(expectedGroupedNAAmount, Math.Round(NATransaction.Amount, 2));
         }
     }
 }
