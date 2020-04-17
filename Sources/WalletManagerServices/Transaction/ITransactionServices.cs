@@ -19,5 +19,7 @@ namespace WalletManagerServices.Transaction
         List<WalletManagerDTO.Transaction> GetGroupedTransactionsByCategory(List<WalletManagerDTO.Transaction> transactions);
 
         void SaveTransactionsIntoCsvFile(string csvPath, List<WalletManagerDTO.Transaction> transactionsToSave);
+
+        void SaveTransactionsIntoCsvFile(string csvPath);
     }
 }

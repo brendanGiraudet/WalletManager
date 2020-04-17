@@ -190,5 +190,10 @@ namespace WalletManagerServices.Transaction
                 throw new WalletManagerDTO.Exceptions.TransactionServiceException($"Impossible to save transactions due to {ex.Message}", ex);
             }
         }
+
+        public void SaveTransactionsIntoCsvFile(string csvPath)
+        {
+            SaveTransactionsIntoCsvFile(csvPath, _transactions);
+        }
     }
 }

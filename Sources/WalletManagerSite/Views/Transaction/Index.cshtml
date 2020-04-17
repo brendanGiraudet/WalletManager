@@ -1,42 +1,47 @@
 ﻿@model IEnumerable<WalletManagerSite.Models.TransactionViewModel>
-    @{
+@{
     ViewData["Title"] = "Index";
+}
+<h2>@ViewData["Title"]</h2>
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        <div id="dropZone" class="dropZone">
+            Drag-n-Drop files here.
+        </div>
+        <br />
+        <img id="progress" src="~/images/progress.gif" />
+    </form>
+</div>
+<style>
+    #dropZone {
+        background: #0094ff;
+        height: 100px;
     }
-    <h2>@ViewData["Title"]</h2>
-    <div class="container">
-        <form method="post" enctype="multipart/form-data">
-            <div id="dropZone" class="dropZone">
-                Drag-n-Drop files here.
-            </div>
-            <br />
-            <img id="progress" src="~/images/progress.gif" />
-        </form>
-    </div>
-    <style>
-        #dropZone {
-            background: #0094ff;
-            height: 100px;
-        }
 
-        .active-drop {
-            background: #4cff00
-        }
-        #chart_div{
-            height: 300px;
-        }
-    </style>
+    .active-drop {
+        background: #4cff00
+    }
 
-    <div class="container">
-        <div id="chart_div"</div>
-    </div>
+    #chart_div {
+        height: 300px;
+    }
+</style>
 
-    <div id="transactionsTable">
-        @{
+<div class="container">
+    <div id="chart_div"</div>
+</div>
+
+@Html.ActionLink("Save", "Save", "Transaction", null, new { @class = "btn btn-primary" })
+
+<div id="transactionsTable">
+    @{
         Html.RenderPartial("TransactionsTablePartialView", Model);
-        }
-    </div>
+    }
+</div>
 
-    @section Scripts{
+@Html.ActionLink("Save", "Save", "Transaction", null, new { @class = "btn btn-primary" })
+
+@section Scripts{
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         google.charts.load('current', {
@@ -142,4 +147,4 @@
             });
         });
     </script>
-    }
+}

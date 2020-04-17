@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
 
@@ -11,10 +12,12 @@ namespace WalletManagerSite.Controllers
     public class TransactionController : Controller
     {
         readonly ITransactionServices _transactionServices;
+        readonly IConfiguration _configuration;
 
-        public TransactionController(ITransactionServices transactionServices)
+        public TransactionController(ITransactionServices transactionServices, IConfiguration configuration)
         {
             _transactionServices = transactionServices;
+            _configuration = configuration;
         }
         // GET: Transaction
         public ActionResult Index()
@@ -126,12 +129,12 @@ namespace WalletManagerSite.Controllers
         // GET: Transaction/Edit/5GX5
         public ActionResult Edit(string reference)
         {
-            if(string.IsNullOrWhiteSpace(reference))
+            if (string.IsNullOrWhiteSpace(reference))
             {
                 return new NotFoundResult();
             }
             var transaction = GetTransaction(reference);
-            if(transaction == null)
+            if (transaction == null)
             {
                 return new NotFoundResult();
             }
@@ -165,7 +168,7 @@ namespace WalletManagerSite.Controllers
         {
             try
             {
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     UpdateTransaction(transaction);
 
@@ -217,6 +220,42 @@ namespace WalletManagerSite.Controllers
             {
                 return View();
             }
+        }
+
+        // GET: Transaction/Save
+        public ActionResult Save()
+        {
+            return View();
+        }
+
+        // POST: Transaction/Save
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Save([Bind("FileName")] SaveTransactionsViewModel saveTransactionsViewModel)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    string filePath = GetFullFilePath(saveTransactionsViewModel.FileName);
+                    _transactionServices.SaveTransactionsIntoCsvFile(filePath);
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        private string GetFullFilePath(string filename)
+        {
+            var directoryName = _configuration.GetValue<string>("CsvDirectoryName");
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), directoryName, filename);
+            return filePath;
         }
     }
 }
