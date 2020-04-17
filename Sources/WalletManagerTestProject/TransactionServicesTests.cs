@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -152,6 +153,102 @@ namespace WalletManagerTestProject
 
             // Assert
             Assert.Equal(expectedGroupedNAAmount, Math.Round(NATransaction.Amount, 2));
+        }
+
+        [Fact]
+        public void ShouldSaveTransactionsIntoCsvFile()
+        {
+            // Arrange
+            var transactionSerializer = new WalletManagerDAL.Serializer.CsvSerializer();
+            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
+            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\save.csv";
+            var transactionsToSave = new List<WalletManagerDTO.Transaction>
+            {
+                new WalletManagerDTO.Transaction
+                {
+                    Amount = 10,
+                    Category = WalletManagerDTO.Enumerations.TransactionCategory.Courses,
+                    Reference = "ref1",
+                    ComptabilisationDate = DateTime.Now,
+                    OperationDate = DateTime.Now,
+                    ValueDate = DateTime.Now,
+                    Compte = "Compte1",
+                    Label = "Label1"
+                },
+                new WalletManagerDTO.Transaction
+                {
+                    Amount = 20,
+                    Category = WalletManagerDTO.Enumerations.TransactionCategory.Internet,
+                    Reference = "ref2",
+                    ComptabilisationDate = DateTime.Now,
+                    OperationDate = DateTime.Now,
+                    ValueDate = DateTime.Now,
+                    Compte = "Compte2",
+                    Label = "Label2"
+                }
+            };
+
+            // Act
+            transactionServices.SaveTransactionsIntoCsvFile(csvPath, transactionsToSave);
+
+            // Assert
+            Assert.True(true);
+        }
+
+        [Fact]
+        public void ShouldThrownExceptionWhenITryToSaveTransactionsIntoCsvFileWithEmptyTransactionList()
+        {
+            // Arrange
+            var transactionSerializer = new WalletManagerDAL.Serializer.CsvSerializer();
+            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
+            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\save.csv";
+            var transactionsToSave = new List<WalletManagerDTO.Transaction>();
+
+            // Act
+            Action saveTransactionsIntoCsvFileAction = () => transactionServices.SaveTransactionsIntoCsvFile(csvPath, transactionsToSave);
+
+            // Assert
+            Assert.Throws<WalletManagerDTO.Exceptions.TransactionServiceException>(saveTransactionsIntoCsvFileAction);
+        }
+
+        [Fact]
+        public void ShouldThrownExceptionWhenITryToSaveTransactionsIntoCsvFileWithEmptyCsvPath()
+        {
+            // Arrange
+            var transactionSerializer = new WalletManagerDAL.Serializer.CsvSerializer();
+            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
+            var csvPath = "";
+            var transactionsToSave = new List<WalletManagerDTO.Transaction>
+            {
+                new WalletManagerDTO.Transaction
+                {
+                    Amount = 10,
+                    Category = WalletManagerDTO.Enumerations.TransactionCategory.Courses,
+                    Reference = "ref1",
+                    ComptabilisationDate = DateTime.Now,
+                    OperationDate = DateTime.Now,
+                    ValueDate = DateTime.Now,
+                    Compte = "Compte1",
+                    Label = "Label1"
+                },
+                new WalletManagerDTO.Transaction
+                {
+                    Amount = 20,
+                    Category = WalletManagerDTO.Enumerations.TransactionCategory.Internet,
+                    Reference = "ref2",
+                    ComptabilisationDate = DateTime.Now,
+                    OperationDate = DateTime.Now,
+                    ValueDate = DateTime.Now,
+                    Compte = "Compte2",
+                    Label = "Label2"
+                }
+            };
+
+            // Act
+            Action saveTransactionsIntoCsvFileAction = () => transactionServices.SaveTransactionsIntoCsvFile(csvPath, transactionsToSave);
+
+            // Assert
+            Assert.Throws<WalletManagerDTO.Exceptions.TransactionServiceException>(saveTransactionsIntoCsvFileAction);
         }
     }
 }

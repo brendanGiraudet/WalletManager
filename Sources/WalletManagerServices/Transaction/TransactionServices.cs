@@ -178,5 +178,17 @@ namespace WalletManagerServices.Transaction
 
             return groupedTransactions;
         }
+
+        public void SaveTransactionsIntoCsvFile(string csvPath, List<WalletManagerDTO.Transaction> transactionsToSave)
+        {
+            try
+            {
+                _transactionSerializer.Serialize(transactionsToSave, csvPath);
+            }
+            catch (Exception ex)
+            {
+                throw new WalletManagerDTO.Exceptions.TransactionServiceException($"Impossible to save transactions due to {ex.Message}", ex);
+            }
+        }
     }
 }
