@@ -54,5 +54,53 @@ namespace WalletManagerSite.Controllers
             var directoryName = _configuration.GetValue<string>("CsvDirectoryName");
             return Path.Combine(Directory.GetCurrentDirectory(), directoryName);
         }
+
+        // GET: Transaction/Delete/fileName
+        [HttpGet]
+        public ActionResult Delete(string fileName)
+        {
+            var fullFilePath = Path.Combine(GetCsvDirectoryPath(), fileName);
+            if (string.IsNullOrWhiteSpace(fullFilePath))
+                return new NotFoundResult();
+
+            var csvFile = GetCsvFile(fullFilePath);
+            return View(csvFile);
+        }
+
+        private CsvFileViewModel GetCsvFile(string fullFilePath)
+        {
+            var fileInfo = new FileInfo(fullFilePath);
+            return new CsvFileViewModel
+            {
+                CreatedDate = fileInfo.CreationTime,
+                FileName = fileInfo.Name,
+                FullPath = fileInfo.FullName,
+                UpdateDate = fileInfo.LastWriteTime
+            };
+        }
+
+        // POST: Transaction/Delete/fileName
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(string fileName)
+        {
+            try
+            {
+                var fullFilePath = Path.Combine(GetCsvDirectoryPath(), fileName);
+                if (string.IsNullOrWhiteSpace(fullFilePath))
+                    return new NotFoundResult();
+
+                var csvFile = GetCsvFile(fullFilePath);
+                DeleteFile(csvFile.FullPath);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        private void DeleteFile(string fullPath) => System.IO.File.Delete(fullPath);
     }
 }
