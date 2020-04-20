@@ -15,6 +15,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Views\Home\AboutPartialView.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Home\AboutTransactionIndex.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Home\AboutTransactionEdit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Transaction\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

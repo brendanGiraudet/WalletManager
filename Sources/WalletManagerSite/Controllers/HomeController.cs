@@ -13,8 +13,19 @@ namespace WalletManagerSite.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Liste des explications sur comment fonctionne l'application.";
+            ViewData["Title"] = "About";
 
+            return View();
+        }
+
+        public IActionResult AboutTransactionIndex()
+        {
+            return View();
+        }
+
+        public IActionResult AboutTransactionEdit()
+        {
             return View();
         }
 
