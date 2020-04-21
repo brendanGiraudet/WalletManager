@@ -46,7 +46,14 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2020 - WalletManager</p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p>&copy; 2020 - WalletManager</p>
+                </div>
+                <div class="col-sm-6 text-right">
+                    @await Html.PartialAsync("SelectLanguagePartialView")
+                </div>
+            </div>
         </footer>
     </div>
 

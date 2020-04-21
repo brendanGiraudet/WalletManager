@@ -1,7 +1,10 @@
-﻿<div class="container">
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<div class="container">
     <h2>How to</h2>
     <ul>
-        <li>@Html.ActionLink("Lister des transactions", "AboutTransactionIndex")</li>
-        <li>@Html.ActionLink("Editer une transaction", "AboutTransactionEdit")</li>
+        <li>@Html.ActionLink(Localizer["TransactionsList"].Value, "AboutTransactionIndex")</li>
+        <li>@Html.ActionLink(Localizer["TransactionEdit"].Value, "AboutTransactionEdit")</li>
     </ul>
 </div>

@@ -1,21 +1,20 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <div class="jumbotron">
-    <h1 class="display-4">Wallet Manager</h1>
-    <p class="lead">This is a simple web application to manage your wallet.</p>
+    <h1 class="display-4">@Localizer["Title"]</h1>
+    <p class="lead">@Localizer["Description"]</p>
     <hr class="my-4">
-    <p>If you want to learn how to use this web application.</p>
-    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+    <p>@Localizer["IfYouWantLearn"]</p>
+    <a class="btn btn-primary btn-lg" href="#" role="button">@Localizer["LearnMore"]</a>
 </div>
 
 <div class="row">
     <div class="col-md-6">
         <h2>Features</h2>
         <ul>
-            <li>@Html.ActionLink("Display, Add, Edit, Remove transaction", "Index", "Transaction")</li>
-            <li>@Html.ActionLink("List of saved csv", "Index", "Compare")</li>
+            <li>@Html.ActionLink(Localizer["IndexTransactionInfo"].Value, "Index", "Transaction")</li>
+            <li>@Html.ActionLink(Localizer["IndexTransactionInfo"].Value, "Index", "Compare")</li>
         </ul>
     </div>
     <div class="col-md-6">
