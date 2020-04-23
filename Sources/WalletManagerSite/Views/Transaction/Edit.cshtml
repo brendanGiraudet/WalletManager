@@ -1,10 +1,9 @@
 ﻿@model WalletManagerSite.Models.TransactionViewModel
 
-@{
-    ViewData["Title"] = "Edit";
-}
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
-<h2>Edit</h2>
+<h2>@Localizer["Title"]</h2>
 
 <h4>TransactionViewModel</h4>
 <hr />

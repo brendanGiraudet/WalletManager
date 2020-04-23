@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<WalletManagerSite.Models.TransactionViewModel>
-@{
-    ViewData["Title"] = "Index";
-}
-<h2>@ViewData["Title"]</h2>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<h2>@Localizer["Title"]</h2>
 <div class="container">
     <form method="post" enctype="multipart/form-data">
         <div id="dropZone" class="dropZone">
@@ -31,7 +31,7 @@
     <div id="chart_div"</div>
 </div>
 
-@Html.ActionLink("Save", "Save", "Transaction", null, new { @class = "btn btn-primary" })
+@Html.ActionLink(Localizer["Save"].Value, "Save", "Transaction", null, new { @class = "btn btn-primary" })
 
 <div id="transactionsTable">
     @{
@@ -39,7 +39,7 @@
     }
 </div>
 
-@Html.ActionLink("Save", "Save", "Transaction", null, new { @class = "btn btn-primary" })
+@Html.ActionLink(Localizer["Save"].Value, "Save", "Transaction", null, new { @class = "btn btn-primary" })
 
 @section Scripts{
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
