@@ -38,6 +38,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resource\Views.Compare.Index.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resource\Views.Compare.Index.fr.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resource\Views.Home.About.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
