@@ -65,9 +65,15 @@ namespace WalletManagerSite.Controllers
             if (string.IsNullOrWhiteSpace(fullFilePath))
                 return new NotFoundResult();
 
-            _transactionServices.LoadTransactions(fullFilePath);
-
-            return RedirectToAction("Index", "Transaction");
+            try
+            {
+                _transactionServices.LoadTransactions(fullFilePath);
+                return RedirectToAction("Index", "Transaction");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         // GET: Transaction/Delete/fileName
