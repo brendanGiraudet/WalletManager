@@ -13,10 +13,12 @@ namespace WalletManagerSite.Controllers
     public class CompareController : Controller
     {
         readonly IConfiguration _configuration;
+        readonly ITransactionServices _transactionServices;
 
-        public CompareController(IConfiguration configuration)
+        public CompareController(IConfiguration configuration, ITransactionServices transactionServices)
         {
             _configuration = configuration;
+            _transactionServices = transactionServices;
         }
         // GET: Compare
         public ActionResult Index()
@@ -53,6 +55,19 @@ namespace WalletManagerSite.Controllers
         {
             var directoryName = _configuration.GetValue<string>("CsvDirectoryName");
             return Path.Combine(Directory.GetCurrentDirectory(), directoryName);
+        }
+
+        // GET: Transaction/Edit/fileName
+        [HttpGet]
+        public ActionResult Edit(string fileName)
+        {
+            var fullFilePath = Path.Combine(GetCsvDirectoryPath(), fileName);
+            if (string.IsNullOrWhiteSpace(fullFilePath))
+                return new NotFoundResult();
+
+            _transactionServices.LoadTransactions(fullFilePath);
+
+            return RedirectToAction("Index", "Transaction");
         }
 
         // GET: Transaction/Delete/fileName
