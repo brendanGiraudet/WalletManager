@@ -231,7 +231,7 @@ namespace WalletManagerSite.Controllers
         }
 
         // POST: Transaction/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeletedConfirmed(string reference)
         {

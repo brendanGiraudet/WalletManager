@@ -38,9 +38,8 @@
                 </td>
                 <td>
                     @Html.ActionLink(Localizer["Edit"].Value, "Edit", new { reference = item.Reference }) |
-                    @Html.ActionLink(Localizer["Details"].Value, "Details", new { reference = item.Reference })
-                    <!--||
-                    @Html.ActionLink(Localizer["Delete"].Value, "Delete", new { reference = item.Reference })-->
+                    @Html.ActionLink(Localizer["Details"].Value, "Details", new { reference = item.Reference }) |
+                    @Html.ActionLink(Localizer["Delete"].Value, "Delete", new { reference = item.Reference })
                 </td>
             </tr>
         }
