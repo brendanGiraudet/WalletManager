@@ -62,6 +62,7 @@ namespace WalletManagerSite.Controllers
             {
                 CopyContentInTempFile(file, filePath);
                 _transactionServices.LoadTransactions(filePath);
+                DeleteTempFile(filePath);
             }
             catch (System.Exception ex)
             {
@@ -78,6 +79,11 @@ namespace WalletManagerSite.Controllers
                 file.CopyTo(fs);
                 fs.Flush();
             }
+        }
+
+        private static void DeleteTempFile(string filePath)
+        {
+            System.IO.File.Delete(filePath);
         }
 
         [HttpGet]
@@ -98,9 +104,20 @@ namespace WalletManagerSite.Controllers
         }
 
         // GET: Transaction/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(string reference)
         {
-            return View();
+            if (string.IsNullOrWhiteSpace(reference))
+            {
+                return new NotFoundResult();
+            }
+
+            var transaction = GetTransaction(reference);
+            if (transaction == null)
+            {
+                return new NotFoundResult();
+            }
+
+            return View(transaction);
         }
 
         // GET: Transaction/Create
