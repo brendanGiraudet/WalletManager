@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<WalletManagerSite.Models.TransactionViewModel>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <table class="table">
     <thead>
@@ -35,10 +37,10 @@
                     @Html.DisplayFor(modelItem => item.Category)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { reference = item.Reference })
-                    <!--|
-                    @Html.ActionLink("Details", "Details", new { reference = item.Reference }) |
-    @Html.ActionLink("Delete", "Delete", new { reference = item.Reference })-->
+                    @Html.ActionLink(Localizer["Edit"].Value, "Edit", new { reference = item.Reference }) |
+                    @Html.ActionLink(Localizer["Details"].Value, "Details", new { reference = item.Reference })
+                    <!--||
+                    @Html.ActionLink(Localizer["Delete"].Value, "Delete", new { reference = item.Reference })-->
                 </td>
             </tr>
         }
