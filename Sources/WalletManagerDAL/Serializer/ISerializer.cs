@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace WalletManagerDAL.Serializer
 {
@@ -7,5 +8,7 @@ namespace WalletManagerDAL.Serializer
         void Serialize(List<WalletManagerDTO.Transaction> transactions, string path);
 
         List<WalletManagerDTO.Transaction> Deserialize(string csvPath);
+
+        List<WalletManagerDTO.Transaction> Deserialize(Stream stream);
     }
 }

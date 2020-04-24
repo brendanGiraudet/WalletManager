@@ -60,9 +60,7 @@ namespace WalletManagerSite.Controllers
 
             try
             {
-                CopyContentInTempFile(file, filePath);
-                _transactionServices.LoadTransactions(filePath);
-                DeleteTempFile(filePath);
+                _transactionServices.LoadTransactions(file.OpenReadStream());
             }
             catch (System.Exception ex)
             {
@@ -217,25 +215,35 @@ namespace WalletManagerSite.Controllers
         }
 
         // GET: Transaction/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string reference)
         {
-            return View();
+            if (string.IsNullOrWhiteSpace(reference))
+            {
+                return new NotFoundResult();
+            }
+            var transaction = GetTransaction(reference);
+            if (transaction == null)
+            {
+                return new NotFoundResult();
+            }
+
+            return View(transaction);
         }
 
         // POST: Transaction/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeletedConfirmed(string reference)
         {
             try
             {
-                // TODO: Add delete logic here
+                _transactionServices.Delete(reference);
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Delete), "Transaction", new { @reference = reference });
             }
         }
 

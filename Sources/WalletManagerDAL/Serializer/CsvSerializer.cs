@@ -10,11 +10,34 @@ namespace WalletManagerDAL.Serializer
     {
         public List<Transaction> Deserialize(string csvPath)
         {
+            IEnumerable<string> csvLines;
+            try
+            {
+                csvLines = File.ReadAllLines(csvPath).Skip(1);
+            }
+            catch (Exception ex)
+            {
+                throw new WalletManagerDTO.Exceptions.SerializerException($"Wrong csv path : {csvPath}", ex);
+            }
+            return Deserialize(csvLines);
+        }
+
+        public List<Transaction> Deserialize(Stream stream)
+        {
+            if (stream == null) return new List<Transaction>();
+
+            var streamReader = new StreamReader(stream);
+            var contentFile = streamReader.ReadToEnd();
+            var csvLines = contentFile.Trim().Split("\n").Skip(1);
+            return Deserialize(csvLines);
+        }
+
+        public List<Transaction> Deserialize(IEnumerable<string> csvLines)
+        {
             var transactions = new List<Transaction>();
 
             try
             {
-                var csvLines = File.ReadAllLines(csvPath).Skip(1);
                 foreach (var csvLine in csvLines)
                 {
                     var values = csvLine.Split(';').ToArray();
@@ -35,15 +58,11 @@ namespace WalletManagerDAL.Serializer
             }
             catch (IndexOutOfRangeException ex)
             {
-                throw new WalletManagerDTO.Exceptions.SerializerException($"Wrong csv format in {csvPath}", ex);
-            }
-            catch (ArgumentException ex)
-            {
-                throw new WalletManagerDTO.Exceptions.SerializerException($"Wrong csv path : {csvPath}", ex);
+                throw new WalletManagerDTO.Exceptions.SerializerException($"Wrong csv format", ex);
             }
             catch (Exception ex)
             {
-                throw new WalletManagerDTO.Exceptions.SerializerException($"Error : impossible to deserialize the csv file in { csvPath } due to " + ex.Message, ex);
+                throw new WalletManagerDTO.Exceptions.SerializerException($"Error : impossible to deserialize the csv file due to " + ex.Message, ex);
             }
 
             return transactions;

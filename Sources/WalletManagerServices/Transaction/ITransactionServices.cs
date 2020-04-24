@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace WalletManagerServices.Transaction
 {
     public interface ITransactionServices
     {
         void LoadTransactions(string csvPath);
+
+        void LoadTransactions(Stream stream);
 
         List<WalletManagerDTO.Transaction> GetTransactions();
 
@@ -21,5 +24,7 @@ namespace WalletManagerServices.Transaction
         void SaveTransactionsIntoCsvFile(string csvPath, List<WalletManagerDTO.Transaction> transactionsToSave);
 
         void SaveTransactionsIntoCsvFile(string csvPath);
+
+        void Delete(string reference);
     }
 }

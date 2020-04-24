@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace WalletManagerServices.Transaction
@@ -18,6 +19,11 @@ namespace WalletManagerServices.Transaction
         public void LoadTransactions(string csvPath)
         {
             _transactions = _transactionSerializer.Deserialize(csvPath);
+        }
+
+        public void LoadTransactions(Stream stream)
+        {
+            _transactions = _transactionSerializer.Deserialize(stream);
         }
 
         public WalletManagerDTO.Transaction GetTransaction(string reference)
@@ -194,6 +200,13 @@ namespace WalletManagerServices.Transaction
         public void SaveTransactionsIntoCsvFile(string csvPath)
         {
             SaveTransactionsIntoCsvFile(csvPath, _transactions);
+        }
+
+        public void Delete(string reference)
+        {
+            var transactionToDelete = GetTransaction(reference);
+
+            if (transactionToDelete != null) _transactions.Remove(transactionToDelete);
         }
     }
 }

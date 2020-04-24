@@ -3,6 +3,8 @@ using WalletManagerDAL.Serializer;
 using Xunit;
 using System.Collections.Generic;
 using System;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace WalletManagerTestProject
 {
@@ -18,6 +20,22 @@ namespace WalletManagerTestProject
 
             // Act
             var transactionList = serializer.Deserialize(csvPath);
+
+            // Assert
+            Assert.True(transactionList.Any());
+        }
+
+        [Theory]
+        [InlineData(@"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserialize.csv")]
+        [InlineData(@"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserializeWithCategory.csv")]
+        public void ShouldHaveListOfTransactionWhenIDeserializeAstream(string csvPath)
+        {
+            // Arrange
+            ISerializer serializer = new CsvSerializer();
+            var expectedStream = File.OpenRead(csvPath);
+
+            // Act
+            var transactionList = serializer.Deserialize(expectedStream);
 
             // Assert
             Assert.True(transactionList.Any());

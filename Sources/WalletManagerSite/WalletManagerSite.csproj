@@ -38,6 +38,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resource\Views.Transaction.Delete.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resource\Views.Transaction.Delete.fr.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resource\Views.Transaction.Details.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>

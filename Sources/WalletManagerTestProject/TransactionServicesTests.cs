@@ -250,5 +250,23 @@ namespace WalletManagerTestProject
             // Assert
             Assert.Throws<WalletManagerDTO.Exceptions.TransactionServiceException>(saveTransactionsIntoCsvFileAction);
         }
+
+        [Fact]
+        public void ShouldDeleteTransaction()
+        {
+            // Arrange
+            var transactionSerializer = new WalletManagerDAL.Serializer.CsvSerializer();
+            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
+            var filePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\save.csv";
+            var expectedReference = "ref2";
+            transactionServices.LoadTransactions(filePath);
+
+            // Act
+            transactionServices.Delete(expectedReference);
+            var deletedTransaction = transactionServices.GetTransaction(expectedReference);
+
+            // Assert
+            Assert.Null(deletedTransaction);
+        }
     }
 }
