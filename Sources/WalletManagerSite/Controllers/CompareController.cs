@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using WalletManagerDTO;
 using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
 
@@ -26,12 +27,68 @@ namespace WalletManagerSite.Controllers
             return View(GetCsvList());
         }
 
+        public ActionResult Compare(string expectedCsvFileName, string actualCsvFileName)
+        {
+            if (string.IsNullOrWhiteSpace(expectedCsvFileName) || string.IsNullOrWhiteSpace(actualCsvFileName)) return new NotFoundResult();
+
+            string expectedFilePath = GetFullFilePath(expectedCsvFileName);
+            string actualFilePath = GetFullFilePath(actualCsvFileName);
+
+            IEnumerable<Transaction> expectedTransactions;
+            IEnumerable<Transaction> actualTransactions;
+
+            try
+            {
+                expectedTransactions = _transactionServices.GetTransactions(expectedFilePath);
+                actualTransactions = _transactionServices.GetTransactions(actualFilePath);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestResult();
+            }
+
+            if (expectedTransactions == null || actualTransactions == null) return new NotFoundResult();
+
+            return View(GetCompareViewModel(expectedTransactions, actualTransactions));
+        }
+
+        private string GetFullFilePath(string filename)
+        {
+            var directoryName = _configuration.GetValue<string>("CsvDirectoryName");
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), directoryName, filename);
+            return filePath;
+        }
+
+        private CompareViewModel GetCompareViewModel(IEnumerable<Transaction> expectedTransactions, IEnumerable<Transaction> actualTransactions)
+        {
+            return new CompareViewModel
+            {
+                ActualTransactions = GetTransactionViewModel(actualTransactions),
+                ExpectedTransactions = GetTransactionViewModel(expectedTransactions)
+            };
+        }
+
+        private IEnumerable<TransactionViewModel> GetTransactionViewModel(IEnumerable<Transaction> transactions)
+        {
+            return transactions.Select(transaction => new Models.TransactionViewModel
+            {
+                Amount = transaction.Amount,
+                ComptabilisationDate = transaction.ComptabilisationDate,
+                Compte = transaction.Compte,
+                Label = transaction.Label,
+                OperationDate = transaction.OperationDate,
+                Reference = transaction.Reference,
+                ValueDate = transaction.ValueDate,
+                Category = transaction.Category
+            }).ToList();
+        }
+
         private List<CsvFileViewModel> GetCsvList()
         {
             var directoryPath = GetCsvDirectoryPath();
             var csvFilesName = Directory.GetFiles(directoryPath, "*.csv");
 
-            if(csvFilesName != null && csvFilesName.Any())
+            if (csvFilesName != null && csvFilesName.Any())
             {
                 var csvFiles = new List<CsvFileViewModel>();
                 foreach (var fileName in csvFilesName)

@@ -1,0 +1,21 @@
+﻿@model WalletManagerSite.Models.CompareViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["Title"];
+}
+
+<h2>@Localizer["Title"]</h2>
+
+<div class="container">
+    <div class="col-md-6">
+        @{
+            Html.RenderPartial("../Transaction/TransactionsTablePartialView", Model.ExpectedTransactions);
+        }
+    </div>
+    <div class="col-md-6">
+        @{
+            Html.RenderPartial("../Transaction/TransactionsTablePartialView", Model.ActualTransactions);
+        }
+    </div>
+</div>
