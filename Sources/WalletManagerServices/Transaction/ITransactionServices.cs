@@ -26,5 +26,6 @@ namespace WalletManagerServices.Transaction
         void SaveTransactionsIntoCsvFile(string csvPath);
 
         void Delete(string reference);
+        List<WalletManagerDTO.Transaction> GetTransactions(string csvPath);
     }
 }

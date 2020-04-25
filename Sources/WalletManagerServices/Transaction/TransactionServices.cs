@@ -208,5 +208,10 @@ namespace WalletManagerServices.Transaction
 
             if (transactionToDelete != null) _transactions.Remove(transactionToDelete);
         }
+
+        public List<WalletManagerDTO.Transaction> GetTransactions(string csvPath)
+        {
+            return _transactionSerializer.Deserialize(csvPath);
+        }
     }
 }
