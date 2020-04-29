@@ -9,13 +9,9 @@
 
 <div class="container">
     <div class="col-md-6">
-        @{
-            Html.RenderPartial("../Transaction/TransactionsTablePartialView", Model.ExpectedTransactions);
-        }
+        <partial name="CompareTransactionsTablePartialView" model="Model.ExpectedTransactions"/>
     </div>
     <div class="col-md-6">
-        @{
-            Html.RenderPartial("../Transaction/TransactionsTablePartialView", Model.ActualTransactions);
-        }
+        <partial name="CompareTransactionsTablePartialView" model="Model.ActualTransactions" />
     </div>
 </div>
