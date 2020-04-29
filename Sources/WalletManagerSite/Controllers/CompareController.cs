@@ -27,12 +27,15 @@ namespace WalletManagerSite.Controllers
             return View(GetCsvList());
         }
 
-        public ActionResult Compare(string expectedCsvFileName, string actualCsvFileName)
+        public ActionResult Compare(List<CsvFileViewModel> csvFiles)
         {
-            if (string.IsNullOrWhiteSpace(expectedCsvFileName) || string.IsNullOrWhiteSpace(actualCsvFileName)) return new NotFoundResult();
+            var selectedCsvFiles = csvFiles.Where(c => c.IsChecked).ToList();
+            if (selectedCsvFiles == null) return new NotFoundResult();
 
-            string expectedFilePath = GetFullFilePath(expectedCsvFileName);
-            string actualFilePath = GetFullFilePath(actualCsvFileName);
+            if (selectedCsvFiles.Count != 2) return new BadRequestResult();
+
+            string expectedFilePath = GetFullFilePath(selectedCsvFiles.First().FileName);
+            string actualFilePath = GetFullFilePath(selectedCsvFiles.Last().FileName);
 
             IEnumerable<Transaction> expectedTransactions;
             IEnumerable<Transaction> actualTransactions;
@@ -42,7 +45,7 @@ namespace WalletManagerSite.Controllers
                 expectedTransactions = _transactionServices.GetTransactions(expectedFilePath);
                 actualTransactions = _transactionServices.GetTransactions(actualFilePath);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new BadRequestResult();
             }
