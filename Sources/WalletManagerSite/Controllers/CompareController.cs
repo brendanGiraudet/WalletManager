@@ -42,8 +42,8 @@ namespace WalletManagerSite.Controllers
 
             try
             {
-                expectedTransactions = _transactionServices.GetTransactions(expectedFilePath);
-                actualTransactions = _transactionServices.GetTransactions(actualFilePath);
+                expectedTransactions = _transactionServices.GetTransactions(expectedFilePath).OrderBy(t => t.Category);
+                actualTransactions = _transactionServices.GetTransactions(actualFilePath).OrderBy(t => t.Category);
             }
             catch (Exception)
             {
