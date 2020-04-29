@@ -1,3 +1,5 @@
 Compte;Date de comptabilisation;Date opération;Libellé;Référence;Date valeur;Montant;Category
 Compte1;24/04/2020 23:58:53;24/04/2020 23:58:53;Label1;ref1;24/04/2020 23:58:53;10;Courses;
 Compte2;24/04/2020 23:58:53;24/04/2020 23:58:53;Label2;ref2;24/04/2020 23:58:53;20;Internet;
+Compte2;24/04/2020 23:58:53;24/04/2020 23:58:53;Label3;ref3;24/04/2020 23:58:53;40;Sante;
+Compte2;24/04/2020 23:58:53;24/04/2020 23:58:53;Label3;ref3;24/04/2020 23:58:53;40;Electricite;
