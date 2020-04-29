@@ -5,14 +5,14 @@ namespace WalletManagerDTO.Enumerations
     {
         NA,
         Courses,
-        Voiture,
-        Sante,
-        MalBouffe,
-        Loyer,
-        Taxe,
-        Internet,
-        Telephone,
         Electricite,
-        Gaz
+        Gaz,
+        Internet,
+        Loyer,
+        MalBouffe,
+        Sante,
+        Taxe,
+        Telephone,
+        Voiture
     }
 }
