@@ -37,13 +37,15 @@ namespace WalletManagerSite.Controllers
             string expectedFilePath = GetFullFilePath(selectedCsvFiles.First().FileName);
             string actualFilePath = GetFullFilePath(selectedCsvFiles.Last().FileName);
 
-            IEnumerable<Transaction> expectedTransactions;
-            IEnumerable<Transaction> actualTransactions;
+            List<TransactionViewModel> expectedTransactions;
+            List<TransactionViewModel> actualTransactions;
 
             try
             {
-                expectedTransactions = _transactionServices.GetTransactions(expectedFilePath).OrderBy(t => t.Category);
-                actualTransactions = _transactionServices.GetTransactions(actualFilePath).OrderBy(t => t.Category);
+                var transactions = _transactionServices.GetTransactions(expectedFilePath);
+                expectedTransactions = GetTransactionViewModel(transactions).OrderBy(t => t.Category.ToString()).ToList();
+                transactions = _transactionServices.GetTransactions(actualFilePath);
+                actualTransactions = GetTransactionViewModel(transactions).OrderBy(t => t.Category.ToString()).ToList();
             }
             catch (Exception)
             {
@@ -52,7 +54,36 @@ namespace WalletManagerSite.Controllers
 
             if (expectedTransactions == null || actualTransactions == null) return new NotFoundResult();
 
+            CompareToAdjustTransactionColor(expectedTransactions, actualTransactions);
+
             return View(GetCompareViewModel(expectedTransactions, actualTransactions));
+        }
+
+        private void CompareToAdjustTransactionColor(List<TransactionViewModel> expectedTransactions, List<TransactionViewModel> actualTransactions)
+        {
+            expectedTransactions.ForEach(transactionToCompared =>
+            {
+                var comparedTransaction = actualTransactions.FirstOrDefault(t => t.Category.Equals(transactionToCompared.Category));
+                
+                if (comparedTransaction != null)
+                {
+                    if (comparedTransaction.Amount == transactionToCompared.Amount)
+                    {
+                        comparedTransaction.Color = "info";
+                        transactionToCompared.Color = "info";
+                    }
+                    else if (comparedTransaction.Amount < transactionToCompared.Amount)
+                    {
+                        comparedTransaction.Color = "success";
+                        transactionToCompared.Color = "danger";
+                    }
+                    else
+                    {
+                        comparedTransaction.Color = "danger";
+                        transactionToCompared.Color = "success";
+                    }
+                }
+            });
         }
 
         private string GetFullFilePath(string filename)
@@ -62,16 +93,16 @@ namespace WalletManagerSite.Controllers
             return filePath;
         }
 
-        private CompareViewModel GetCompareViewModel(IEnumerable<Transaction> expectedTransactions, IEnumerable<Transaction> actualTransactions)
+        private CompareViewModel GetCompareViewModel(List<TransactionViewModel> expectedTransactions, List<TransactionViewModel> actualTransactions)
         {
             return new CompareViewModel
             {
-                ActualTransactions = GetTransactionViewModel(actualTransactions),
-                ExpectedTransactions = GetTransactionViewModel(expectedTransactions)
+                ActualTransactions = actualTransactions,
+                ExpectedTransactions = expectedTransactions
             };
         }
 
-        private IEnumerable<TransactionViewModel> GetTransactionViewModel(IEnumerable<Transaction> transactions)
+        private List<TransactionViewModel> GetTransactionViewModel(List<Transaction> transactions)
         {
             return transactions.Select(transaction => new Models.TransactionViewModel
             {
