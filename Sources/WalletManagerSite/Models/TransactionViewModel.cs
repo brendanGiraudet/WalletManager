@@ -20,5 +20,7 @@ namespace WalletManagerSite.Models
         public double Amount { get; set; }
 
         public TransactionCategory Category { get; set; } = TransactionCategory.NA;
+
+        public string Color { get; set; }
     }
 }
