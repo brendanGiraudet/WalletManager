@@ -2,6 +2,8 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 
+<h3>@Model?.FirstOrDefault()?.OperationDate.ToString("MMMM yyyy")</h3>
+
 <table class="table">
     <thead>
         <tr>
@@ -16,7 +18,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr class="@item.Color">
                 <td>
                     @Html.DisplayFor(modelItem => item.Category)
                 </td>
