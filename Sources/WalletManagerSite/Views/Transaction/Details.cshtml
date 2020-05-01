@@ -4,61 +4,72 @@
 
 <h2>@Localizer["Title"]</h2>
 
-<div>
-    <h4>TransactionViewModel</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Compte)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Compte)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ComptabilisationDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ComptabilisationDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.OperationDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.OperationDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Label)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Label)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Reference)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Reference)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ValueDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ValueDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Amount)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Amount)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink(Localizer["Edit"].Value, "Edit", new { reference = Model.Reference }) |
-    <a asp-action="Index">Back to List</a>
-</div>
+@{
+    if (!string.IsNullOrWhiteSpace(ViewBag.Error))
+    {
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.Error
+        </div>
+    }
+    else
+    {
+        <div>
+            <h4>TransactionViewModel</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Compte)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Compte)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.ComptabilisationDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.ComptabilisationDate)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.OperationDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.OperationDate)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Label)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Label)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Reference)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Reference)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.ValueDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.ValueDate)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Amount)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Category)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Category)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            @Html.ActionLink(Localizer["Edit"].Value, "Edit", new { reference = Model.Reference }) |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    }
+}

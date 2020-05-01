@@ -137,15 +137,19 @@ namespace WalletManagerSite.Controllers
         // GET: Transaction/Details/5
         public ActionResult Details(string reference)
         {
+            var transaction = new TransactionViewModel();
+
             if (string.IsNullOrWhiteSpace(reference))
             {
-                return new NotFoundResult();
+                ViewBag.Error = _localizer["EmptyReference"];
+                return View(transaction);
             }
 
-            var transaction = GetTransaction(reference);
+            transaction = GetTransaction(reference);
             if (transaction == null)
             {
-                return new NotFoundResult();
+                ViewBag.Error = _localizer["TransactionNotFound"];
+                return View(transaction);
             }
 
             return View(transaction);
@@ -177,14 +181,19 @@ namespace WalletManagerSite.Controllers
         // GET: Transaction/Edit/5GX5
         public ActionResult Edit(string reference)
         {
+            var transaction = new TransactionViewModel();
+
             if (string.IsNullOrWhiteSpace(reference))
             {
-                return new NotFoundResult();
+                ViewBag.Error = _localizer["EmptyReference"];
+                return View(transaction);
             }
-            var transaction = GetTransaction(reference);
+
+            transaction = GetTransaction(reference);
             if (transaction == null)
             {
-                return new NotFoundResult();
+                ViewBag.Error = _localizer["TransactionNotFound"];
+                return View(transaction);
             }
 
             return View(transaction);
