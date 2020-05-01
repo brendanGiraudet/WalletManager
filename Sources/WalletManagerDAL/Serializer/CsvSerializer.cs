@@ -49,7 +49,7 @@ namespace WalletManagerDAL.Serializer
                         Label = values[3],
                         Reference = values[4],
                         ValueDate = Convert.ToDateTime(values[5]),
-                        Amount = Convert.ToDouble(values[6].Replace(',', '.')),
+                        Amount = Convert.ToDouble(values[6].Replace('.', ',')),
                         Category = GetCategory(values)
                     };
 
