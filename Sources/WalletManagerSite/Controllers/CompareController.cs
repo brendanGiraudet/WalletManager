@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using WalletManagerDTO;
+using WalletManagerDTO.Enumerations;
 using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
 
@@ -54,9 +55,42 @@ namespace WalletManagerSite.Controllers
 
             if (expectedTransactions == null || actualTransactions == null) return new NotFoundResult();
 
+            AppendMissingCategoryTransactions(expectedTransactions);
+
+            AppendMissingCategoryTransactions(actualTransactions);
+
             CompareToAdjustTransactionColor(expectedTransactions, actualTransactions);
 
             return View(GetCompareViewModel(expectedTransactions, actualTransactions));
+        }
+
+        private void AppendMissingCategoryTransactions(List<TransactionViewModel> transactions)
+        {
+            List<TransactionCategory> categories = GetCategories();
+            
+            foreach (var category in categories)
+            {
+                if(!transactions.Any(t => t.Category.Equals(category)))
+                {
+                    transactions.Add(new TransactionViewModel
+                    {
+                        Category = category,
+                        Amount = 0
+                    });
+                }
+            }
+        }
+
+        private List<TransactionCategory> GetCategories()
+        {
+            var categories = new List<TransactionCategory>();
+            var categoriesName = Enum.GetNames(typeof(TransactionCategory));
+            foreach (var categoryName in categoriesName)
+            {
+                categories.Add((TransactionCategory)Enum.Parse(typeof(TransactionCategory), categoryName));
+            }
+
+            return categories;
         }
 
         private void CompareToAdjustTransactionColor(List<TransactionViewModel> expectedTransactions, List<TransactionViewModel> actualTransactions)
