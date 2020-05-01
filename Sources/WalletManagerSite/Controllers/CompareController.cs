@@ -203,11 +203,17 @@ namespace WalletManagerSite.Controllers
         [HttpGet]
         public ActionResult Delete(string fileName)
         {
-            var fullFilePath = Path.Combine(GetCsvDirectoryPath(), fileName);
-            if (string.IsNullOrWhiteSpace(fullFilePath))
-                return new NotFoundResult();
+            var csvFile = new CsvFileViewModel();
+            
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                ViewBag.Error = _localizer["EmptyFileName"];
+                return View(csvFile);
+            }
 
-            var csvFile = GetCsvFile(fullFilePath);
+            var fullFilePath = Path.Combine(GetCsvDirectoryPath(), fileName);
+            csvFile = GetCsvFile(fullFilePath);
+
             return View(csvFile);
         }
 
