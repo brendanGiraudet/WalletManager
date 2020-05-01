@@ -125,7 +125,7 @@ namespace WalletManagerSite.Controllers
 
         private object GetTransactionsChart()
         {
-            var debitTransactions = _transactionServices.GetDebitTransactions();
+            var debitTransactions = _transactionServices.GetTransactions();
             var groupedTransactionsByCategory = _transactionServices.GetGroupedTransactionsByCategory(debitTransactions);
             return groupedTransactionsByCategory.Select(transaction => new TransactionChartViewModel
             {
