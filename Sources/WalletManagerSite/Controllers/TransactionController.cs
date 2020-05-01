@@ -250,14 +250,19 @@ namespace WalletManagerSite.Controllers
         // GET: Transaction/Delete/5
         public ActionResult Delete(string reference)
         {
+            var transaction = new TransactionViewModel();
+
             if (string.IsNullOrWhiteSpace(reference))
             {
-                return new NotFoundResult();
+                ViewBag.Error = _localizer["EmptyReference"];
+                return View(transaction);
             }
-            var transaction = GetTransaction(reference);
+
+            transaction = GetTransaction(reference);
             if (transaction == null)
             {
-                return new NotFoundResult();
+                ViewBag.Error = _localizer["TransactionNotFound"];
+                return View(new TransactionViewModel());
             }
 
             return View(transaction);

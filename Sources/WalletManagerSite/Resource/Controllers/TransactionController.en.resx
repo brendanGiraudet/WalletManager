@@ -120,4 +120,10 @@
   <data name="EmptyFilePath" xml:space="preserve">
     <value>File path is empty</value>
   </data>
+  <data name="EmptyReference" xml:space="preserve">
+    <value>Reference is empty</value>
+  </data>
+  <data name="TransactionNotFound" xml:space="preserve">
+    <value>Transaction not found</value>
+  </data>
 </root>
