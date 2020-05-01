@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Localization;
 using WalletManagerDTO;
 using WalletManagerDTO.Enumerations;
 using WalletManagerServices.Transaction;
@@ -15,11 +16,13 @@ namespace WalletManagerSite.Controllers
     {
         readonly IConfiguration _configuration;
         readonly ITransactionServices _transactionServices;
+        private readonly IStringLocalizer<CompareController> _localizer;
 
-        public CompareController(IConfiguration configuration, ITransactionServices transactionServices)
+        public CompareController(IConfiguration configuration, ITransactionServices transactionServices, IStringLocalizer<CompareController> localizer)
         {
             _configuration = configuration;
             _transactionServices = transactionServices;
+            _localizer = localizer;
         }
         // GET: Compare
         public ActionResult Index()
@@ -29,36 +32,51 @@ namespace WalletManagerSite.Controllers
 
         public ActionResult Compare(List<CsvFileViewModel> csvFiles)
         {
-            var selectedCsvFiles = csvFiles.Where(c => c.IsChecked).ToList();
-            if (selectedCsvFiles == null) return new NotFoundResult();
+            List<TransactionViewModel> expectedTransactions = new List<TransactionViewModel>();
+            List<TransactionViewModel> actualTransactions = new List<TransactionViewModel>();
 
-            if (selectedCsvFiles.Count != 2) return new BadRequestResult();
+            var selectedCsvFiles = csvFiles.Where(c => c.IsChecked).ToList();
+            if (selectedCsvFiles == null)
+            {
+                ViewBag.Error = _localizer["EmptySelectedCsvFileError"];
+                return View(GetCompareViewModel(expectedTransactions, actualTransactions));
+            }
+
+            if (selectedCsvFiles.Count != 2)
+            {
+                ViewBag.Error = _localizer["EmptySelectedCsvFileError"];
+                return View(GetCompareViewModel(expectedTransactions, actualTransactions));
+            }
 
             string expectedFilePath = GetFullFilePath(selectedCsvFiles.First().FileName);
             string actualFilePath = GetFullFilePath(selectedCsvFiles.Last().FileName);
 
-            List<TransactionViewModel> expectedTransactions;
-            List<TransactionViewModel> actualTransactions;
-
             try
             {
                 var transactions = _transactionServices.GetTransactions(expectedFilePath);
-                expectedTransactions = GetTransactionViewModel(transactions).OrderBy(t => t.Category.ToString()).ToList();
+                expectedTransactions = GetTransactionViewModel(transactions);
                 transactions = _transactionServices.GetTransactions(actualFilePath);
-                actualTransactions = GetTransactionViewModel(transactions).OrderBy(t => t.Category.ToString()).ToList();
+                actualTransactions = GetTransactionViewModel(transactions);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new BadRequestResult();
+                ViewBag.Error = ex.Message;
+                return View(GetCompareViewModel(expectedTransactions, actualTransactions));
             }
 
-            if (expectedTransactions == null || actualTransactions == null) return new NotFoundResult();
+            if (expectedTransactions == null || actualTransactions == null)
+            {
+                ViewBag.Error = _localizer["EmptyTransactionList"];
+                return View(GetCompareViewModel(expectedTransactions, actualTransactions));
+            }
 
             AppendMissingCategoryTransactions(expectedTransactions);
-
             AppendMissingCategoryTransactions(actualTransactions);
 
             CompareToAdjustTransactionColor(expectedTransactions, actualTransactions);
+
+            expectedTransactions = expectedTransactions.OrderBy(t => t.Category.ToString()).ToList();
+            actualTransactions = actualTransactions.OrderBy(t => t.Category.ToString()).ToList();
 
             return View(GetCompareViewModel(expectedTransactions, actualTransactions));
         }
@@ -181,26 +199,7 @@ namespace WalletManagerSite.Controllers
             return Path.Combine(Directory.GetCurrentDirectory(), directoryName);
         }
 
-        // GET: Transaction/Edit/fileName
-        [HttpGet]
-        public ActionResult Edit(string fileName)
-        {
-            var fullFilePath = Path.Combine(GetCsvDirectoryPath(), fileName);
-            if (string.IsNullOrWhiteSpace(fullFilePath))
-                return new NotFoundResult();
-
-            try
-            {
-                _transactionServices.LoadTransactions(fullFilePath);
-                return RedirectToAction("Index", "Transaction");
-            }
-            catch (Exception)
-            {
-                return RedirectToAction("Index");
-            }
-        }
-
-        // GET: Transaction/Delete/fileName
+        // GET: Compare/Delete/fileName
         [HttpGet]
         public ActionResult Delete(string fileName)
         {
@@ -224,7 +223,7 @@ namespace WalletManagerSite.Controllers
             };
         }
 
-        // POST: Transaction/Delete/fileName
+        // POST: Compare/Delete/fileName
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string fileName)
