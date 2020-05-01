@@ -50,58 +50,58 @@
     <EmbeddedResource Update="Resource\Controllers\CompareController.fr.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Compare.Compare.en.resx">
+    <EmbeddedResource Update="Resource\Views\Compare\Compare.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Compare.Compare.fr.resx">
+    <EmbeddedResource Update="Resource\Views\Compare\Compare.fr.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Transaction.Delete.en.resx">
+    <EmbeddedResource Update="Resource\Views\Transaction\Delete.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Transaction.Delete.fr.resx">
+    <EmbeddedResource Update="Resource\Views\Transaction\Delete.fr.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Transaction.Details.en.resx">
+    <EmbeddedResource Update="Resource\Views\Transaction\Details.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Transaction.Details.fr.resx">
+    <EmbeddedResource Update="Resource\Views\Transaction\Details.fr.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Transaction.TransactionsTablePartialView.en.resx">
+    <EmbeddedResource Update="Resource\Views\Transaction\TransactionsTablePartialView.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Transaction.TransactionsTablePartialView.fr.resx">
+    <EmbeddedResource Update="Resource\Views\Transaction\TransactionsTablePartialView.fr.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Compare.Index.en.resx">
+    <EmbeddedResource Update="Resource\Views\Compare\Index.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Compare.Index.fr.resx">
+    <EmbeddedResource Update="Resource\Views\Compare\Index.fr.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Home.About.en.resx">
+    <EmbeddedResource Update="Resource\Views\Home\About.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Home.About.fr.resx">
+    <EmbeddedResource Update="Resource\Views\Home\About.fr.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Home.AboutPartialView.en.resx">
+    <EmbeddedResource Update="Resource\Views\Home\AboutPartialView.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Home.AboutPartialView.fr.resx">
+    <EmbeddedResource Update="Resource\Views\Home\AboutPartialView.fr.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Transaction.Edit.en.resx">
+    <EmbeddedResource Update="Resource\Views\Transaction\Edit.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Transaction.Edit.fr.resx">
+    <EmbeddedResource Update="Resource\Views\Transaction\Edit.fr.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Transaction.Index.en.resx">
+    <EmbeddedResource Update="Resource\Views\Transaction\Index.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource\Views.Transaction.Index.fr.resx">
+    <EmbeddedResource Update="Resource\Views\Transaction\Index.fr.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resource\Views\Compare\Delete.en.resx">
