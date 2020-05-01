@@ -38,6 +38,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resource\Controllers\TransactionController.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resource\Controllers\TransactionController.fr.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resource\Controllers\CompareController.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resource\Controllers\CompareController.fr.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resource\Views.Compare.Compare.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>

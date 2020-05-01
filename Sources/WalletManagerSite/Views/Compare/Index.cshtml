@@ -50,7 +50,7 @@
                         @Html.DisplayFor(modelItem => Model[i].UpdateDate)
                     </td>
                     <td>
-                        @Html.ActionLink(Localizer["Edit"].Value, "Edit", new { fileName = Model[i].FileName }) |
+                        @Html.ActionLink(Localizer["Edit"].Value, "List", "Transaction", new { filePath = Model[i].FullPath}) |
                         @Html.ActionLink(Localizer["Delete"].Value, "Delete", new { fileName = Model[i].FileName })
                     </td>
                 </tr>

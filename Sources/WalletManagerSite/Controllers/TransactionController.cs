@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Localization;
+using WalletManagerDTO;
 using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
 
@@ -13,11 +16,13 @@ namespace WalletManagerSite.Controllers
     {
         readonly ITransactionServices _transactionServices;
         readonly IConfiguration _configuration;
+        private readonly IStringLocalizer<TransactionController> _localizer;
 
-        public TransactionController(ITransactionServices transactionServices, IConfiguration configuration)
+        public TransactionController(ITransactionServices transactionServices, IConfiguration configuration, IStringLocalizer<TransactionController> localizer)
         {
             _transactionServices = transactionServices;
             _configuration = configuration;
+            _localizer = localizer;
         }
         // GET: Transaction
         public ActionResult Index()
@@ -25,29 +30,57 @@ namespace WalletManagerSite.Controllers
             return View(GetTransactions());
         }
 
+        // GET: Transaction/123s
+        public ActionResult List(string filePath)
+        {
+            var transactions = new List<TransactionViewModel>();
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                ViewBag.Error = _localizer["EmptyFilePath"];
+                return View("Index", transactions);
+            }
+
+            try
+            {
+                _transactionServices.LoadTransactions(filePath);
+                transactions = GetTransactionsViewModel(_transactionServices.GetTransactions());
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+            }
+            return View("Index", transactions);
+        }
+
+        private List<TransactionViewModel> GetTransactionsViewModel(List<Transaction> list)
+        {
+            return list.Select(transaction => new TransactionViewModel
+            {
+                Amount = transaction.Amount,
+                ComptabilisationDate = transaction.ComptabilisationDate,
+                Compte = transaction.Compte,
+                Label = transaction.Label,
+                OperationDate = transaction.OperationDate,
+                Reference = transaction.Reference,
+                ValueDate = transaction.ValueDate,
+                Category = transaction.Category
+            }).ToList();
+        }
+
         public ActionResult LoadTransactionsTable()
         {
             return PartialView("TransactionsTablePartialView", GetTransactions());
         }
 
-        private List<Models.TransactionViewModel> GetTransactions()
+        private List<TransactionViewModel> GetTransactions()
         {
             var transactions = _transactionServices.GetGroupedTransactionsByLabel();
             if (transactions != null && transactions.Any())
             {
-                return transactions.Select(transaction => new Models.TransactionViewModel
-                {
-                    Amount = transaction.Amount,
-                    ComptabilisationDate = transaction.ComptabilisationDate,
-                    Compte = transaction.Compte,
-                    Label = transaction.Label,
-                    OperationDate = transaction.OperationDate,
-                    Reference = transaction.Reference,
-                    ValueDate = transaction.ValueDate,
-                    Category = transaction.Category
-                }).ToList();
+                return GetTransactionsViewModel(transactions);
             }
-            return new List<Models.TransactionViewModel>();
+
+            return new List<TransactionViewModel>();
         }
 
         [HttpPost]

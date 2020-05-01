@@ -3,6 +3,16 @@
 @inject IViewLocalizer Localizer
 
 <h2>@Localizer["Title"]</h2>
+
+@{
+    if (!string.IsNullOrWhiteSpace(ViewBag.Error))
+    {
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.Error
+        </div>
+    }
+}
+
 <div class="container">
     <form method="post" enctype="multipart/form-data">
         <div id="dropZone" class="dropZone">
