@@ -32,53 +32,60 @@ namespace WalletManagerSite.Controllers
 
         public ActionResult Compare(List<CsvFileViewModel> csvFiles)
         {
-            List<TransactionViewModel> expectedTransactions = new List<TransactionViewModel>();
-            List<TransactionViewModel> actualTransactions = new List<TransactionViewModel>();
+            var compareTransactionList = new CompareViewModel();
 
             var selectedCsvFiles = csvFiles.Where(c => c.IsChecked).ToList();
             if (selectedCsvFiles == null)
             {
                 ViewBag.Error = _localizer["EmptySelectedCsvFileError"];
-                return View(GetCompareViewModel(expectedTransactions, actualTransactions));
+                return View(compareTransactionList);
             }
 
-            if (selectedCsvFiles.Count != 2)
+            if (selectedCsvFiles.Count < 2 || selectedCsvFiles.Count > 4)
             {
-                ViewBag.Error = _localizer["EmptySelectedCsvFileError"];
-                return View(GetCompareViewModel(expectedTransactions, actualTransactions));
+                ViewBag.Error = _localizer["BadNumberOfCsv"];
+                return View(compareTransactionList);
             }
 
-            string expectedFilePath = GetFullFilePath(selectedCsvFiles.First().FileName);
-            string actualFilePath = GetFullFilePath(selectedCsvFiles.Last().FileName);
-
-            try
+            foreach (var selectedFile in selectedCsvFiles)
             {
-                var transactions = _transactionServices.GetTransactions(expectedFilePath);
-                expectedTransactions = GetTransactionViewModel(transactions);
-                transactions = _transactionServices.GetTransactions(actualFilePath);
-                actualTransactions = GetTransactionViewModel(transactions);
+                var filePath = GetFullFilePath(selectedFile.FileName);
+                try
+                {
+                    var transactions = _transactionServices.GetTransactions(filePath);
+                    transactions = _transactionServices.GetGroupedTransactionsByCategory(transactions);
+                    if (transactions == null || !transactions.Any())
+                    {
+                        ViewBag.Error = _localizer["EmptyTransactionList"];
+                        return View(compareTransactionList);
+                    }
+
+                    var transactionsViewModel = GetTransactionViewModel(transactions);
+
+                    AppendMissingCategoryTransactions(transactionsViewModel);
+
+                    var transactionsViewModelOrdered = transactionsViewModel.OrderBy(t => t.Category.ToString()).ToList();
+
+                    compareTransactionList.TransactionsToCompare.Add(GetTransactionsViewModel(transactionsViewModelOrdered));
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Error = ex.Message;
+                    return View(compareTransactionList);
+                }
             }
-            catch (Exception ex)
+
+            CompareToAdjustTransactionColor(compareTransactionList);
+
+            return View(compareTransactionList);
+        }
+
+        private TransactionsViewModel GetTransactionsViewModel(List<TransactionViewModel> transactions)
+        {
+            return new TransactionsViewModel
             {
-                ViewBag.Error = ex.Message;
-                return View(GetCompareViewModel(expectedTransactions, actualTransactions));
-            }
-
-            if (expectedTransactions == null || actualTransactions == null)
-            {
-                ViewBag.Error = _localizer["EmptyTransactionList"];
-                return View(GetCompareViewModel(expectedTransactions, actualTransactions));
-            }
-
-            AppendMissingCategoryTransactions(expectedTransactions);
-            AppendMissingCategoryTransactions(actualTransactions);
-
-            CompareToAdjustTransactionColor(expectedTransactions, actualTransactions);
-
-            expectedTransactions = expectedTransactions.OrderBy(t => t.Category.ToString()).ToList();
-            actualTransactions = actualTransactions.OrderBy(t => t.Category.ToString()).ToList();
-
-            return View(GetCompareViewModel(expectedTransactions, actualTransactions));
+                Transactions = transactions
+            };
         }
 
         private void AppendMissingCategoryTransactions(List<TransactionViewModel> transactions)
@@ -110,31 +117,33 @@ namespace WalletManagerSite.Controllers
             return categories;
         }
 
-        private void CompareToAdjustTransactionColor(List<TransactionViewModel> expectedTransactions, List<TransactionViewModel> actualTransactions)
+        private void CompareToAdjustTransactionColor(CompareViewModel compareViewModel)
         {
-            expectedTransactions.ForEach(transactionToCompared =>
+            var oldTransactions = compareViewModel.TransactionsToCompare.First();
+            foreach (var actualTransactions in compareViewModel.TransactionsToCompare.Skip(1))
             {
-                var comparedTransaction = actualTransactions.FirstOrDefault(t => t.Category.Equals(transactionToCompared.Category));
-                
-                if (comparedTransaction != null)
+                oldTransactions.Transactions.ForEach(transactionToCompared =>
                 {
-                    if (comparedTransaction.Amount == transactionToCompared.Amount)
+                    var comparedTransaction = actualTransactions.Transactions.FirstOrDefault(t => t.Category.Equals(transactionToCompared.Category));
+
+                    if (comparedTransaction != null)
                     {
-                        comparedTransaction.Color = "info";
-                        transactionToCompared.Color = "info";
+                        if (comparedTransaction.Amount == transactionToCompared.Amount)
+                        {
+                            comparedTransaction.Color = "info";
+                        }
+                        else if (comparedTransaction.Amount < transactionToCompared.Amount)
+                        {
+                            comparedTransaction.Color = "success";
+                        }
+                        else
+                        {
+                            comparedTransaction.Color = "danger";
+                        }
                     }
-                    else if (comparedTransaction.Amount < transactionToCompared.Amount)
-                    {
-                        comparedTransaction.Color = "success";
-                        transactionToCompared.Color = "danger";
-                    }
-                    else
-                    {
-                        comparedTransaction.Color = "danger";
-                        transactionToCompared.Color = "success";
-                    }
-                }
-            });
+                });
+                oldTransactions = actualTransactions;
+            }
         }
 
         private string GetFullFilePath(string filename)
@@ -142,15 +151,6 @@ namespace WalletManagerSite.Controllers
             var directoryName = _configuration.GetValue<string>("CsvDirectoryName");
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), directoryName, filename);
             return filePath;
-        }
-
-        private CompareViewModel GetCompareViewModel(List<TransactionViewModel> expectedTransactions, List<TransactionViewModel> actualTransactions)
-        {
-            return new CompareViewModel
-            {
-                ActualTransactions = actualTransactions,
-                ExpectedTransactions = expectedTransactions
-            };
         }
 
         private List<TransactionViewModel> GetTransactionViewModel(List<Transaction> transactions)

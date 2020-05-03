@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace WalletManagerSite.Models
 {
     public class CompareViewModel
     {
-        public IEnumerable<TransactionViewModel> ExpectedTransactions { get; set; }
+        public List<TransactionsViewModel> TransactionsToCompare { get; set; } = new List<TransactionsViewModel>();
 
-        public IEnumerable<TransactionViewModel> ActualTransactions { get; set; }
+        public int ColumnSize { get
+            {
+                return 12 / TransactionsToCompare.Count;
+            }
+        }
     }
 }

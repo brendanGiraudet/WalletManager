@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BadNumberOfCsv" xml:space="preserve">
-    <value>Bad number of csv : only 2 files are need</value>
+    <value>Bad number of csv : between 2 and 4 files are need</value>
   </data>
   <data name="EmptyFileName" xml:space="preserve">
     <value>Empty filename</value>
