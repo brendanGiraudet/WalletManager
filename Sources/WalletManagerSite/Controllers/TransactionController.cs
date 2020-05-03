@@ -88,28 +88,18 @@ namespace WalletManagerSite.Controllers
         {
             var files = Request.Form.Files;
             var file = files.First();
-            string filePath = Path.Combine(Path.GetTempPath(), file.FileName);
-            string message = $"{filePath} uploaded successfully!";
+            string message = $"{file.FileName} uploaded successfully!";
 
             try
             {
                 _transactionServices.LoadTransactions(file.OpenReadStream());
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return Json(ex.Message);
             }
 
             return Json(message);
-        }
-
-        private static void CopyContentInTempFile(IFormFile file, string filePath)
-        {
-            using (FileStream fs = System.IO.File.Create(filePath))
-            {
-                file.CopyTo(fs);
-                fs.Flush();
-            }
         }
 
         private static void DeleteTempFile(string filePath)
