@@ -212,9 +212,13 @@ namespace WalletManagerSite.Controllers
             }
 
             var fullFilePath = Path.Combine(GetCsvDirectoryPath(), fileName);
-            csvFile = GetCsvFile(fullFilePath);
+            if(!System.IO.File.Exists(fullFilePath))
+            {
+                ViewBag.Error = string.Format(_localizer["FileDoesntExist"], fullFilePath);
+                return View(csvFile);
+            }
 
-            return View(csvFile);
+            return View(GetCsvFile(fullFilePath));
         }
 
         private CsvFileViewModel GetCsvFile(string fullFilePath)

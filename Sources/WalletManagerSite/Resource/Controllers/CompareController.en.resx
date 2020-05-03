@@ -129,4 +129,7 @@
   <data name="EmptyTransactionList" xml:space="preserve">
     <value>One more transaction list are empty</value>
   </data>
+  <data name="FileDoesntExist" xml:space="preserve">
+    <value>The file {0} doesn't exist</value>
+  </data>
 </root>
