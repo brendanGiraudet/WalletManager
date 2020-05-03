@@ -238,20 +238,30 @@ namespace WalletManagerSite.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string fileName)
         {
+            var csvFile = new CsvFileViewModel();
             try
             {
-                var fullFilePath = Path.Combine(GetCsvDirectoryPath(), fileName);
-                if (string.IsNullOrWhiteSpace(fullFilePath))
-                    return new NotFoundResult();
+                if (string.IsNullOrWhiteSpace(fileName))
+                {
+                    ViewBag.Error = _localizer["EmptyFileName"];
+                    return View(csvFile);
+                }
 
-                var csvFile = GetCsvFile(fullFilePath);
-                DeleteFile(csvFile.FullPath);
+                var fullFilePath = Path.Combine(GetCsvDirectoryPath(), fileName);
+                if (!System.IO.File.Exists(fullFilePath))
+                {
+                    ViewBag.Error = string.Format(_localizer["FileDoesntExist"], fullFilePath);
+                    return View(csvFile);
+                }
+
+                DeleteFile(fullFilePath);
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                ViewBag.Error = ex.Message;
+                return View(csvFile);
             }
         }
 
