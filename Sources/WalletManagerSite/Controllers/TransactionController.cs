@@ -188,12 +188,13 @@ namespace WalletManagerSite.Controllers
 
             return View(transaction);
         }
-        private Models.TransactionViewModel GetTransaction(string reference)
+
+        private TransactionViewModel GetTransaction(string reference)
         {
             var transaction = _transactionServices.GetTransaction(reference);
             if (transaction != null)
             {
-                return new Models.TransactionViewModel
+                return new TransactionViewModel
                 {
                     Amount = transaction.Amount,
                     ComptabilisationDate = transaction.ComptabilisationDate,
@@ -222,17 +223,17 @@ namespace WalletManagerSite.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                return View();
+                return View(transaction);
             }
             catch
             {
-                return View();
+                return View(transaction);
             }
         }
 
         private void UpdateTransaction(TransactionViewModel transactionViewModel)
         {
-            var transaction = new WalletManagerDTO.Transaction
+            var transaction = new Transaction
             {
                 Amount = transactionViewModel.Amount,
                 Category = transactionViewModel.Category,
@@ -272,15 +273,24 @@ namespace WalletManagerSite.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeletedConfirmed(string reference)
         {
+            var transaction = new TransactionViewModel();
             try
             {
+
+                if (string.IsNullOrWhiteSpace(reference))
+                {
+                    ViewBag.Error = _localizer["EmptyReference"];
+                    return View(transaction);
+                }
+
                 _transactionServices.Delete(reference);
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
-                return RedirectToAction(nameof(Delete), "Transaction", new { @reference = reference });
+                ViewBag.Error = ex.Message;
+                return RedirectToAction(nameof(Delete), "Transaction", new { reference });
             }
         }
 
