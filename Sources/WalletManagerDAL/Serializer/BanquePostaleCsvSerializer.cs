@@ -48,6 +48,7 @@ namespace WalletManagerDAL.Serializer
                         Compte = compteNumber,
                         OperationDate = Convert.ToDateTime(values[0]),
                         Label = values[1],
+                        Reference = Guid.NewGuid().ToString(),
                         Amount = Convert.ToDouble(values[2].Replace('.', ',')),
                         Category = GetCategory(values)
                     };
