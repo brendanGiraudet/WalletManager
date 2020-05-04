@@ -10,9 +10,11 @@ namespace WalletManagerTestProject
 {
     public class SerializerTests
     {
+        const string banquePopulaireCsvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV_Banque_populaire\";
+
         [Theory]
-        [InlineData(@"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserialize.csv")]
-        [InlineData(@"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserializeWithCategory.csv")]
+        [InlineData(banquePopulaireCsvBasePath + "deserialize.csv")]
+        [InlineData(banquePopulaireCsvBasePath + "deserializeWithCategory.csv")]
         public void ShouldHaveListOfTransactionWhenIDeserializeACsvString(string csvPath)
         {
             // Arrange
@@ -26,8 +28,8 @@ namespace WalletManagerTestProject
         }
 
         [Theory]
-        [InlineData(@"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserialize.csv")]
-        [InlineData(@"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserializeWithCategory.csv")]
+        [InlineData(banquePopulaireCsvBasePath + "deserialize.csv")]
+        [InlineData(banquePopulaireCsvBasePath + "deserializeWithCategory.csv")]
         public void ShouldHaveListOfTransactionWhenIDeserializeAstream(string csvPath)
         {
             // Arrange
@@ -43,7 +45,7 @@ namespace WalletManagerTestProject
 
         [Theory]
         [InlineData("")]
-        [InlineData(@"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\wrong.csv")]
+        [InlineData(banquePopulaireCsvBasePath + "wrong.csv")]
         public void ShouldThrowExceptionWhenIDeserializeAWrongCsvFile(string csvPath)
         {
             // Arrange
@@ -61,7 +63,7 @@ namespace WalletManagerTestProject
         {
             // Arrange
             ISerializer serializer = new BanquePopulaireCsvSerializer();
-            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\serialize.csv";
+            var csvPath = banquePopulaireCsvBasePath + "serialize.csv";
             var transactions = new List<WalletManagerDTO.Transaction>
             {
                 new WalletManagerDTO.Transaction
@@ -141,7 +143,7 @@ namespace WalletManagerTestProject
             // Arrange
             ISerializer serializer = new BanquePopulaireCsvSerializer();
             var emptyTransactionList = new List<WalletManagerDTO.Transaction>();
-            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\serialize.csv";
+            var csvPath = banquePopulaireCsvBasePath + "serialize.csv";
 
             // Act
             Action serializeAction = () => serializer.Serialize(emptyTransactionList, csvPath);

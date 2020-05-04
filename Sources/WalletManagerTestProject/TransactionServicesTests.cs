@@ -7,13 +7,15 @@ namespace WalletManagerTestProject
 {
     public class TransactionServicesTests
     {
+        const string banquePopulaireCsvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV_Banque_populaire\";
+
         [Fact]
         public void ShouldLoadTransactionsWhenIPutCsvDataFile()
         {
             // Arrange
             var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
             var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserialize.csv";
+            var csvPath = banquePopulaireCsvBasePath + "deserialize.csv";
 
             // Act
             transactionServices.LoadTransactions(csvPath);
@@ -28,7 +30,7 @@ namespace WalletManagerTestProject
             // Arrange
             var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
             var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserialize.csv";
+            var csvPath = banquePopulaireCsvBasePath + "deserialize.csv";
             transactionServices.LoadTransactions(csvPath);
 
             // Act
@@ -45,7 +47,7 @@ namespace WalletManagerTestProject
             var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
             var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
             const string expectedReference = "2V7926X";
-            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserialize.csv";
+            var csvPath = banquePopulaireCsvBasePath + "deserialize.csv";
             transactionServices.LoadTransactions(csvPath);
 
             // Act
@@ -62,7 +64,7 @@ namespace WalletManagerTestProject
             // Arrange
             var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
             var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\update.csv";
+            var csvPath = banquePopulaireCsvBasePath + "update.csv";
             transactionServices.LoadTransactions(csvPath);
             var updatedTransaction = new WalletManagerDTO.Transaction
             {
@@ -109,7 +111,7 @@ namespace WalletManagerTestProject
             // Arrange
             var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
             var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\regroup.csv";
+            var csvPath = banquePopulaireCsvBasePath + "regroup.csv";
             transactionServices.LoadTransactions(csvPath);
             const double expectedGroupedPaypalAmount = -288.69;
 
@@ -127,7 +129,7 @@ namespace WalletManagerTestProject
             // Arrange
             var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
             var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\deserialize.csv";
+            var csvPath = banquePopulaireCsvBasePath + "deserialize.csv";
             transactionServices.LoadTransactions(csvPath);
 
             // Act
@@ -143,7 +145,7 @@ namespace WalletManagerTestProject
             // Arrange
             var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
             var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\regroupByCategory.csv";
+            var csvPath = banquePopulaireCsvBasePath + "regroupByCategory.csv";
             transactionServices.LoadTransactions(csvPath);
             const double expectedGroupedNAAmount = -2000;
 
@@ -161,7 +163,7 @@ namespace WalletManagerTestProject
             // Arrange
             var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
             var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\save.csv";
+            var csvPath = banquePopulaireCsvBasePath + "save.csv";
             var transactionsToSave = new List<WalletManagerDTO.Transaction>
             {
                 new WalletManagerDTO.Transaction
@@ -201,7 +203,7 @@ namespace WalletManagerTestProject
             // Arrange
             var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
             var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\save.csv";
+            var csvPath = banquePopulaireCsvBasePath + "save.csv";
             var transactionsToSave = new List<WalletManagerDTO.Transaction>();
 
             // Act
@@ -257,7 +259,7 @@ namespace WalletManagerTestProject
             // Arrange
             var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
             var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var filePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\save.csv";
+            var filePath = banquePopulaireCsvBasePath + "save.csv";
             var expectedReference = "ref2";
             transactionServices.LoadTransactions(filePath);
 
