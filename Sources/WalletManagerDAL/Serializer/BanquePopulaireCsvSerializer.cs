@@ -6,7 +6,7 @@ using WalletManagerDTO;
 
 namespace WalletManagerDAL.Serializer
 {
-    public class CsvSerializer : ISerializer
+    public class BanquePopulaireCsvSerializer : ISerializer
     {
         public List<Transaction> Deserialize(string csvPath)
         {
