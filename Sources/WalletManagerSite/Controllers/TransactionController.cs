@@ -57,12 +57,10 @@ namespace WalletManagerSite.Controllers
             return list.Select(transaction => new TransactionViewModel
             {
                 Amount = transaction.Amount,
-                ComptabilisationDate = transaction.ComptabilisationDate,
                 Compte = transaction.Compte,
                 Label = transaction.Label,
                 OperationDate = transaction.OperationDate,
                 Reference = transaction.Reference,
-                ValueDate = transaction.ValueDate,
                 Category = transaction.Category
             }).ToList();
         }
@@ -197,12 +195,10 @@ namespace WalletManagerSite.Controllers
                 return new TransactionViewModel
                 {
                     Amount = transaction.Amount,
-                    ComptabilisationDate = transaction.ComptabilisationDate,
                     Compte = transaction.Compte,
                     Label = transaction.Label,
                     OperationDate = transaction.OperationDate,
                     Reference = transaction.Reference,
-                    ValueDate = transaction.ValueDate,
                     Category = transaction.Category
                 };
             }
@@ -237,12 +233,10 @@ namespace WalletManagerSite.Controllers
             {
                 Amount = transactionViewModel.Amount,
                 Category = transactionViewModel.Category,
-                ComptabilisationDate = transactionViewModel.ComptabilisationDate,
                 Compte = transactionViewModel.Compte,
                 Label = transactionViewModel.Label,
                 OperationDate = transactionViewModel.OperationDate,
                 Reference = transactionViewModel.Reference,
-                ValueDate = transactionViewModel.ValueDate
             };
             _transactionServices.UpdateTransaction(transaction);
         }

@@ -158,12 +158,10 @@ namespace WalletManagerSite.Controllers
             return transactions.Select(transaction => new Models.TransactionViewModel
             {
                 Amount = transaction.Amount,
-                ComptabilisationDate = transaction.ComptabilisationDate,
                 Compte = transaction.Compte,
                 Label = transaction.Label,
                 OperationDate = transaction.OperationDate,
                 Reference = transaction.Reference,
-                ValueDate = transaction.ValueDate,
                 Category = transaction.Category
             }).ToList();
         }

@@ -44,11 +44,9 @@ namespace WalletManagerDAL.Serializer
                     var transaction = new Transaction
                     {
                         Compte = values[0],
-                        ComptabilisationDate = Convert.ToDateTime(values[1]),
                         OperationDate = Convert.ToDateTime(values[2]),
                         Label = values[3],
                         Reference = values[4],
-                        ValueDate = Convert.ToDateTime(values[5]),
                         Amount = Convert.ToDouble(values[6].Replace(',', '.')),
                         Category = GetCategory(values)
                     };
@@ -94,11 +92,11 @@ namespace WalletManagerDAL.Serializer
             foreach (var transaction in transactions)
             {
                 stringWriter.Write(transaction.Compte + delimiter);
-                stringWriter.Write(transaction.ComptabilisationDate + delimiter);
+                stringWriter.Write(" " + delimiter);
                 stringWriter.Write(transaction.OperationDate + delimiter);
                 stringWriter.Write(transaction.Label + delimiter);
                 stringWriter.Write(transaction.Reference + delimiter);
-                stringWriter.Write(transaction.ValueDate + delimiter);
+                stringWriter.Write(" " + delimiter);
                 stringWriter.Write(transaction.Amount + delimiter);
                 stringWriter.Write(transaction.Category + delimiter);
                 stringWriter.Write(stringWriter.NewLine);

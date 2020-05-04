@@ -69,11 +69,9 @@ namespace WalletManagerTestProject
             var updatedTransaction = new WalletManagerDTO.Transaction
             {
                 Compte = "31419185918",
-                ComptabilisationDate = new System.DateTime(2020, 03, 31),
                 OperationDate = new System.DateTime(2020, 03, 31),
                 Label = "VIR M BRENDAN GIRAUDET Virement vers BRENDAN GIRAUDET",
                 Reference = "6681107",
-                ValueDate = new System.DateTime(2020, 03, 31),
                 Amount = -1000,
                 Category = WalletManagerDTO.Enumerations.TransactionCategory.Courses
             };
@@ -171,9 +169,7 @@ namespace WalletManagerTestProject
                     Amount = 10,
                     Category = WalletManagerDTO.Enumerations.TransactionCategory.Courses,
                     Reference = "ref1",
-                    ComptabilisationDate = DateTime.Now,
                     OperationDate = DateTime.Now,
-                    ValueDate = DateTime.Now,
                     Compte = "Compte1",
                     Label = "Label1"
                 },
@@ -182,9 +178,7 @@ namespace WalletManagerTestProject
                     Amount = 20,
                     Category = WalletManagerDTO.Enumerations.TransactionCategory.Internet,
                     Reference = "ref2",
-                    ComptabilisationDate = DateTime.Now,
                     OperationDate = DateTime.Now,
-                    ValueDate = DateTime.Now,
                     Compte = "Compte2",
                     Label = "Label2"
                 }
@@ -227,9 +221,7 @@ namespace WalletManagerTestProject
                     Amount = 10,
                     Category = WalletManagerDTO.Enumerations.TransactionCategory.Courses,
                     Reference = "ref1",
-                    ComptabilisationDate = DateTime.Now,
                     OperationDate = DateTime.Now,
-                    ValueDate = DateTime.Now,
                     Compte = "Compte1",
                     Label = "Label1"
                 },
@@ -238,9 +230,7 @@ namespace WalletManagerTestProject
                     Amount = 20,
                     Category = WalletManagerDTO.Enumerations.TransactionCategory.Internet,
                     Reference = "ref2",
-                    ComptabilisationDate = DateTime.Now,
                     OperationDate = DateTime.Now,
-                    ValueDate = DateTime.Now,
                     Compte = "Compte2",
                     Label = "Label2"
                 }

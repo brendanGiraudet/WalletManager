@@ -70,12 +70,10 @@ namespace WalletManagerServices.Transaction
             {
                 Amount = t.Amount,
                 Category = t.Category,
-                ComptabilisationDate = t.ComptabilisationDate,
                 Compte = t.Compte,
                 Label = t.Label,
                 OperationDate = t.OperationDate,
                 Reference = t.Reference,
-                ValueDate = t.ValueDate 
             }).ToList();
         }
 
