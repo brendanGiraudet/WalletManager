@@ -4,11 +4,10 @@ using Xunit;
 using System.Collections.Generic;
 using System;
 using System.IO;
-using Microsoft.AspNetCore.Http;
 
 namespace WalletManagerTestProject
 {
-    public class SerializerTests
+    public class BanquePopulaireCsvSerializerTests
     {
         const string banquePopulaireCsvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV_Banque_populaire\";
 
