@@ -13,7 +13,7 @@ namespace WalletManagerDAL.Serializer
             IEnumerable<string> csvLines;
             try
             {
-                csvLines = File.ReadAllLines(csvPath).Skip(8);
+                csvLines = File.ReadAllLines(csvPath);
             }
             catch (Exception ex)
             {
@@ -28,7 +28,7 @@ namespace WalletManagerDAL.Serializer
 
             var streamReader = new StreamReader(stream);
             var contentFile = streamReader.ReadToEnd();
-            var csvLines = contentFile.Trim().Split("\n").Skip(8);
+            var csvLines = contentFile.Trim().Split("\n");
             return Deserialize(csvLines);
         }
 
@@ -38,11 +38,14 @@ namespace WalletManagerDAL.Serializer
 
             try
             {
+                var compteNumber = GetCompteNumber(csvLines);
+                csvLines = csvLines.Skip(8);
                 foreach (var csvLine in csvLines)
                 {
                     var values = csvLine.Split(';').ToArray();
                     var transaction = new Transaction
                     {
+                        Compte = compteNumber,
                         OperationDate = Convert.ToDateTime(values[0]),
                         Label = values[1],
                         Amount = Convert.ToDouble(values[2].Replace('.', ',')),
@@ -62,6 +65,13 @@ namespace WalletManagerDAL.Serializer
             }
 
             return transactions;
+        }
+
+        private string GetCompteNumber(IEnumerable<string> csvLines)
+        {
+            var firstLine = csvLines.First();
+            var splittedLine = firstLine.Split(';');
+            return splittedLine.Last();
         }
 
         private static WalletManagerDTO.Enumerations.TransactionCategory GetCategory(string[] values)
