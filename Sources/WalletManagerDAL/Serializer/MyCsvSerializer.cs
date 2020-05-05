@@ -5,7 +5,7 @@ using WalletManagerDTO;
 
 namespace WalletManagerDAL.Serializer
 {
-    public class BanquePopulaireCsvSerializer : ICsvSerializer
+    public class MyCsvSerializer : ICsvSerializer
     {
         public List<Transaction> Deserialize(IEnumerable<string> csvLines)
         {
@@ -20,11 +20,11 @@ namespace WalletManagerDAL.Serializer
                     var transaction = new Transaction
                     {
                         Compte = values[0],
-                        OperationDate = Convert.ToDateTime(values[2]),
-                        Label = values[3],
-                        Reference = values[4],
-                        Amount = Convert.ToDouble(values[6].Replace(',', '.')),
-                        Category = WalletManagerDTO.Enumerations.TransactionCategory.NA
+                        OperationDate = Convert.ToDateTime(values[1]),
+                        Label = values[2],
+                        Reference = values[3],
+                        Amount = Convert.ToDouble(values[4].Replace(',', '.')),
+                        Category = GetCategory(values)
                     };
 
                     transactions.Add(transaction);
@@ -40,6 +40,20 @@ namespace WalletManagerDAL.Serializer
             }
 
             return transactions;
+        }
+
+        private static WalletManagerDTO.Enumerations.TransactionCategory GetCategory(string[] values)
+        {
+            try
+            {
+                Enum.TryParse(values.GetValue(5).ToString(), out WalletManagerDTO.Enumerations.TransactionCategory category);
+
+                return category;
+            }
+            catch (Exception)
+            {
+                return WalletManagerDTO.Enumerations.TransactionCategory.NA;
+            }
         }
     }
 }

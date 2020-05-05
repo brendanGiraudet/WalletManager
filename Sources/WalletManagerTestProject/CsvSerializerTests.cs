@@ -7,17 +7,18 @@ using System.IO;
 
 namespace WalletManagerTestProject
 {
-    public class BanquePostaleCsvSerializerTests
+    public class CsvSerializerTests
     {
-        const string banquePostaleCsvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV_Banque_postale\";
+        const string csvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\Csv\";
 
         [Theory]
-        [InlineData(banquePostaleCsvBasePath + "deserialize.csv")]
-        [InlineData(banquePostaleCsvBasePath + "deserializeWithCategory.csv")]
+        [InlineData(csvBasePath + "banquePopulaire.csv")]
+        [InlineData(csvBasePath + "banquePostale.csv")]
+        [InlineData(csvBasePath + "deserialize.csv")]
         public void ShouldHaveListOfTransactionWhenIDeserializeACsvString(string csvPath)
         {
             // Arrange
-            ISerializer serializer = new BanquePostaleCsvSerializer();
+            var serializer = new CsvSerializer();
 
             // Act
             var transactionList = serializer.Deserialize(csvPath);
@@ -27,12 +28,13 @@ namespace WalletManagerTestProject
         }
 
         [Theory]
-        [InlineData(banquePostaleCsvBasePath + "deserialize.csv")]
-        [InlineData(banquePostaleCsvBasePath + "deserializeWithCategory.csv")]
+        [InlineData(csvBasePath + "banquePopulaire.csv")]
+        [InlineData(csvBasePath + "banquePostale.csv")]
+        [InlineData(csvBasePath + "deserialize.csv")]
         public void ShouldHaveListOfTransactionWhenIDeserializeAstream(string csvPath)
         {
             // Arrange
-            ISerializer serializer = new BanquePostaleCsvSerializer();
+            var serializer = new CsvSerializer();
             var expectedStream = File.OpenRead(csvPath);
 
             // Act
@@ -44,11 +46,11 @@ namespace WalletManagerTestProject
 
         [Theory]
         [InlineData("")]
-        [InlineData(banquePostaleCsvBasePath + "wrong.csv")]
+        [InlineData(csvBasePath + "wrong.csv")]
         public void ShouldThrowExceptionWhenIDeserializeAWrongCsvFile(string csvPath)
         {
             // Arrange
-            ISerializer serializer = new BanquePostaleCsvSerializer();
+            var serializer = new CsvSerializer();
 
             // Act
             Action deserializeAction = () => serializer.Deserialize(csvPath);
@@ -58,11 +60,11 @@ namespace WalletManagerTestProject
         }
 
         [Fact]
-        public void ShouldHaveACsvFileWhenISerializeTransactionList()
+        public void ShouldSerializeTransactionList()
         {
             // Arrange
-            ISerializer serializer = new BanquePostaleCsvSerializer();
-            var csvPath = banquePostaleCsvBasePath + "serialize.csv";
+            var serializer = new CsvSerializer();
+            var csvPath = csvBasePath + "serialize.csv";
             var transactions = new List<WalletManagerDTO.Transaction>
             {
                 new WalletManagerDTO.Transaction
@@ -98,7 +100,7 @@ namespace WalletManagerTestProject
         public void ShouldThrowExceptionWhenISerializeWithWrongCsvPath(string csvPath)
         {
             // Arrange
-            ISerializer serializer = new BanquePostaleCsvSerializer();
+            ISerializer serializer = new CsvSerializer();
             var transactions = new List<WalletManagerDTO.Transaction>
             {
                 new WalletManagerDTO.Transaction
@@ -132,9 +134,9 @@ namespace WalletManagerTestProject
         public void ShouldThrowExceptionWhenISerializeEmptyTransactionList()
         {
             // Arrange
-            ISerializer serializer = new BanquePostaleCsvSerializer();
+            ISerializer serializer = new CsvSerializer();
             var emptyTransactionList = new List<WalletManagerDTO.Transaction>();
-            var csvPath = banquePostaleCsvBasePath + "serialize.csv";
+            var csvPath = csvBasePath + "serialize.csv";
 
             // Act
             Action serializeAction = () => serializer.Serialize(emptyTransactionList, csvPath);

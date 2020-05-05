@@ -31,7 +31,7 @@ namespace WalletManagerSite
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddSingleton<WalletManagerDAL.Serializer.ISerializer, WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer>();
+            services.AddSingleton<WalletManagerDAL.Serializer.ISerializer, WalletManagerDAL.Serializer.CsvSerializer>();
             services.AddSingleton<WalletManagerServices.Transaction.ITransactionServices, WalletManagerServices.Transaction.TransactionServices>();
 
             services.AddLocalization(opts => { opts.ResourcesPath = "Resource"; });

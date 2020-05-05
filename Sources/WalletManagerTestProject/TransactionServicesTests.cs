@@ -1,24 +1,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WalletManagerDAL.Serializer;
+using WalletManagerServices.Transaction;
 using Xunit;
 
 namespace WalletManagerTestProject
 {
     public class TransactionServicesTests
     {
-        const string banquePopulaireCsvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV_Banque_populaire\";
+        const string csvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\";
+        readonly ITransactionServices _transactionServices;
+
+        public TransactionServicesTests()
+        {
+            ISerializer serializer = new CsvSerializer();
+            _transactionServices = new TransactionServices(serializer);
+        }
 
         [Fact]
         public void ShouldLoadTransactionsWhenIPutCsvDataFile()
         {
             // Arrange
-            var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
-            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = banquePopulaireCsvBasePath + "deserialize.csv";
+            var csvPath = csvBasePath + "deserialize.csv";
 
             // Act
-            transactionServices.LoadTransactions(csvPath);
+            _transactionServices.LoadTransactions(csvPath);
 
             // Assert
             Assert.True(true); // because no exceptions are thrown
@@ -28,13 +35,11 @@ namespace WalletManagerTestProject
         public void ShouldHaveListOfTransactionWhenIGetTransactions()
         {
             // Arrange
-            var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
-            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = banquePopulaireCsvBasePath + "deserialize.csv";
-            transactionServices.LoadTransactions(csvPath);
+            var csvPath = csvBasePath + "deserialize.csv";
+            _transactionServices.LoadTransactions(csvPath);
 
             // Act
-            var transactions = transactionServices.GetTransactions();
+            var transactions = _transactionServices.GetTransactions();
 
             // Assert
             Assert.True(transactions.Any());
@@ -44,14 +49,12 @@ namespace WalletManagerTestProject
         public void ShouldHaveAtransactionWhenIPutAGoodReference()
         {
             // Arrange
-            var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
-            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            const string expectedReference = "2V7926X";
-            var csvPath = banquePopulaireCsvBasePath + "deserialize.csv";
-            transactionServices.LoadTransactions(csvPath);
+            const string expectedReference = "475QGS0";
+            var csvPath = csvBasePath + "deserialize.csv";
+            _transactionServices.LoadTransactions(csvPath);
 
             // Act
-            var transaction = transactionServices.GetTransaction(expectedReference);
+            var transaction = _transactionServices.GetTransaction(expectedReference);
 
             // Assert
             Assert.NotNull(transaction);
@@ -62,23 +65,21 @@ namespace WalletManagerTestProject
         public void ShouldUpdateCategoryTransaction()
         {
             // Arrange
-            var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
-            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = banquePopulaireCsvBasePath + "update.csv";
-            transactionServices.LoadTransactions(csvPath);
+            var csvPath = csvBasePath + "save.csv";
+            _transactionServices.LoadTransactions(csvPath);
             var updatedTransaction = new WalletManagerDTO.Transaction
             {
-                Compte = "31419185918",
+                Compte = "Compte1",
                 OperationDate = new System.DateTime(2020, 03, 31),
-                Label = "VIR M BRENDAN GIRAUDET Virement vers BRENDAN GIRAUDET",
-                Reference = "6681107",
-                Amount = -1000,
+                Label = "Label1",
+                Reference = "ref1",
+                Amount = 10,
                 Category = WalletManagerDTO.Enumerations.TransactionCategory.Courses
             };
 
             // Act
-            transactionServices.UpdateTransaction(updatedTransaction);
-            var transaction = transactionServices.GetTransaction(updatedTransaction.Reference);
+            _transactionServices.UpdateTransaction(updatedTransaction);
+            var transaction = _transactionServices.GetTransaction(updatedTransaction.Reference);
 
             // Assert
             Assert.Equal(updatedTransaction.Category, transaction.Category);
@@ -88,8 +89,6 @@ namespace WalletManagerTestProject
         public void ShouldThrownExceptionWhenUpdateCategoryTransaction()
         {
             // Arrange
-            var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
-            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
             var updatedTransaction = new WalletManagerDTO.Transaction
             {
                 Reference = "doesntExist",
@@ -97,7 +96,7 @@ namespace WalletManagerTestProject
             };
 
             // Act
-            Action updateTransactionAction = () => transactionServices.UpdateTransaction(updatedTransaction);
+            Action updateTransactionAction = () => _transactionServices.UpdateTransaction(updatedTransaction);
 
             // Assert
             Assert.Throws<WalletManagerDTO.Exceptions.TransactionServiceException>(updateTransactionAction);
@@ -107,14 +106,12 @@ namespace WalletManagerTestProject
         public void ShouldHaveListOfRegroupedTransactionWhenIGetGroupedTransactions()
         {
             // Arrange
-            var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
-            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = banquePopulaireCsvBasePath + "regroup.csv";
-            transactionServices.LoadTransactions(csvPath);
-            const double expectedGroupedPaypalAmount = -288.69;
+            var csvPath = csvBasePath + "deserialize.csv";
+            _transactionServices.LoadTransactions(csvPath);
+            const double expectedGroupedPaypalAmount = -25;
 
             // Act
-            var transactions = transactionServices.GetGroupedTransactionsByLabel();
+            var transactions = _transactionServices.GetGroupedTransactionsByLabel();
             var paypalTransaction = transactions.Find(t => t.Label.Contains("PAYPAL         750800"));
 
             // Assert
@@ -125,13 +122,11 @@ namespace WalletManagerTestProject
         public void ShouldHaveOnlyDebitTransactionsWhenGetDebitTransactions()
         {
             // Arrange
-            var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
-            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = banquePopulaireCsvBasePath + "deserialize.csv";
-            transactionServices.LoadTransactions(csvPath);
+            var csvPath = csvBasePath + "deserialize.csv";
+            _transactionServices.LoadTransactions(csvPath);
 
             // Act
-            var debitTransactions = transactionServices.GetDebitTransactions();
+            var debitTransactions = _transactionServices.GetDebitTransactions();
 
             // Assert
             Assert.DoesNotContain(debitTransactions, t => t.Amount >= 0);
@@ -141,15 +136,13 @@ namespace WalletManagerTestProject
         public void ShouldHaveListOfRegroupedTransactionByCategory()
         {
             // Arrange
-            var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
-            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = banquePopulaireCsvBasePath + "regroupByCategory.csv";
-            transactionServices.LoadTransactions(csvPath);
+            var csvPath = csvBasePath + "deserialize.csv";
+            _transactionServices.LoadTransactions(csvPath);
             const double expectedGroupedNAAmount = -2000;
 
             // Act
-            var transactions = transactionServices.GetGroupedTransactionsByCategory(transactionServices.GetDebitTransactions());
-            var NATransaction = transactions.Find(t => t.Category.Equals(WalletManagerDTO.Enumerations.TransactionCategory.NA));
+            var transactions = _transactionServices.GetGroupedTransactionsByCategory(_transactionServices.GetDebitTransactions());
+            var NATransaction = transactions.Find(t => t.Category.Equals(WalletManagerDTO.Enumerations.TransactionCategory.Courses));
 
             // Assert
             Assert.Equal(expectedGroupedNAAmount, Math.Round(NATransaction.Amount, 2));
@@ -159,9 +152,7 @@ namespace WalletManagerTestProject
         public void ShouldSaveTransactionsIntoCsvFile()
         {
             // Arrange
-            var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
-            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = banquePopulaireCsvBasePath + "save.csv";
+            var csvPath = csvBasePath + "save.csv";
             var transactionsToSave = new List<WalletManagerDTO.Transaction>
             {
                 new WalletManagerDTO.Transaction
@@ -185,7 +176,7 @@ namespace WalletManagerTestProject
             };
 
             // Act
-            transactionServices.SaveTransactionsIntoCsvFile(csvPath, transactionsToSave);
+            _transactionServices.SaveTransactionsIntoCsvFile(csvPath, transactionsToSave);
 
             // Assert
             Assert.True(true);
@@ -195,13 +186,11 @@ namespace WalletManagerTestProject
         public void ShouldThrownExceptionWhenITryToSaveTransactionsIntoCsvFileWithEmptyTransactionList()
         {
             // Arrange
-            var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
-            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var csvPath = banquePopulaireCsvBasePath + "save.csv";
+            var csvPath = csvBasePath + "save.csv";
             var transactionsToSave = new List<WalletManagerDTO.Transaction>();
 
             // Act
-            Action saveTransactionsIntoCsvFileAction = () => transactionServices.SaveTransactionsIntoCsvFile(csvPath, transactionsToSave);
+            Action saveTransactionsIntoCsvFileAction = () => _transactionServices.SaveTransactionsIntoCsvFile(csvPath, transactionsToSave);
 
             // Assert
             Assert.Throws<WalletManagerDTO.Exceptions.TransactionServiceException>(saveTransactionsIntoCsvFileAction);
@@ -211,8 +200,6 @@ namespace WalletManagerTestProject
         public void ShouldThrownExceptionWhenITryToSaveTransactionsIntoCsvFileWithEmptyCsvPath()
         {
             // Arrange
-            var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
-            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
             var csvPath = "";
             var transactionsToSave = new List<WalletManagerDTO.Transaction>
             {
@@ -237,7 +224,7 @@ namespace WalletManagerTestProject
             };
 
             // Act
-            Action saveTransactionsIntoCsvFileAction = () => transactionServices.SaveTransactionsIntoCsvFile(csvPath, transactionsToSave);
+            Action saveTransactionsIntoCsvFileAction = () => _transactionServices.SaveTransactionsIntoCsvFile(csvPath, transactionsToSave);
 
             // Assert
             Assert.Throws<WalletManagerDTO.Exceptions.TransactionServiceException>(saveTransactionsIntoCsvFileAction);
@@ -247,15 +234,13 @@ namespace WalletManagerTestProject
         public void ShouldDeleteTransaction()
         {
             // Arrange
-            var transactionSerializer = new WalletManagerDAL.Serializer.BanquePopulaireCsvSerializer();
-            var transactionServices = new WalletManagerServices.Transaction.TransactionServices(transactionSerializer);
-            var filePath = banquePopulaireCsvBasePath + "save.csv";
+            var filePath = csvBasePath + "save.csv";
             var expectedReference = "ref2";
-            transactionServices.LoadTransactions(filePath);
+            _transactionServices.LoadTransactions(filePath);
 
             // Act
-            transactionServices.Delete(expectedReference);
-            var deletedTransaction = transactionServices.GetTransaction(expectedReference);
+            _transactionServices.Delete(expectedReference);
+            var deletedTransaction = _transactionServices.GetTransaction(expectedReference);
 
             // Assert
             Assert.Null(deletedTransaction);

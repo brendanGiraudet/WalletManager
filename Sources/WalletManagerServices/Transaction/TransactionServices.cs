@@ -47,11 +47,11 @@ namespace WalletManagerServices.Transaction
                 var transactionToMergeLabelLenght = transactionToMerge.Label.Length;
                 var numberOfMaxLetterToChange = transactionToMergeLabelLenght * maxLetterTochangePourcent;
 
-                var isAlreadyMerge = groupedTransactions.Any(t => LevenshteinDistanceCompute(RemoveParasiteString(t.Label), RemoveParasiteString(transactionToMerge.Label)) <= numberOfMaxLetterToChange);
+                var isAlreadyMerge = groupedTransactions.Any(t => LevenshteinDistanceCompute(t.Label, transactionToMerge.Label) <= numberOfMaxLetterToChange);
 
                 if (isAlreadyMerge) continue;
 
-                var similarTransactions = copiedTransactions.Where(t => LevenshteinDistanceCompute(RemoveParasiteString(t.Label), RemoveParasiteString(transactionToMerge.Label)) <= numberOfMaxLetterToChange && t.Reference != transactionToMerge.Reference).ToList();
+                var similarTransactions = copiedTransactions.Where(t => LevenshteinDistanceCompute(t.Label, transactionToMerge.Label) <= numberOfMaxLetterToChange && t.Reference != transactionToMerge.Reference).ToList();
 
                 similarTransactions.ForEach(t =>
                 {
