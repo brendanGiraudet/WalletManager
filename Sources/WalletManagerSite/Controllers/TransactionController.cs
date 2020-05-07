@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using WalletManagerDTO;
+using WalletManagerServices.Mapper;
 using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
 
@@ -17,12 +18,14 @@ namespace WalletManagerSite.Controllers
         readonly ITransactionServices _transactionServices;
         readonly IConfiguration _configuration;
         private readonly IStringLocalizer<TransactionController> _localizer;
+        readonly IMapper _mapper;
 
-        public TransactionController(ITransactionServices transactionServices, IConfiguration configuration, IStringLocalizer<TransactionController> localizer)
+        public TransactionController(ITransactionServices transactionServices, IConfiguration configuration, IStringLocalizer<TransactionController> localizer, IMapper mapper)
         {
             _transactionServices = transactionServices;
             _configuration = configuration;
             _localizer = localizer;
+            _mapper = mapper;
         }
         // GET: Transaction
         public ActionResult Index()
@@ -52,17 +55,9 @@ namespace WalletManagerSite.Controllers
             return View("Index", transactions);
         }
 
-        private List<TransactionViewModel> GetTransactionsViewModel(List<Transaction> list)
+        private List<TransactionViewModel> GetTransactionsViewModel(List<Transaction> transactions)
         {
-            return list.Select(transaction => new TransactionViewModel
-            {
-                Amount = transaction.Amount,
-                Compte = transaction.Compte,
-                Label = transaction.Label,
-                OperationDate = transaction.OperationDate,
-                Reference = transaction.Reference,
-                Category = transaction.Category
-            }).ToList();
+            return _mapper.MapToTransactionsViewModel(transactions).ToList();
         }
 
         public ActionResult LoadTransactionsTable()
@@ -113,13 +108,11 @@ namespace WalletManagerSite.Controllers
 
         private object GetTransactionsChart()
         {
-            var debitTransactions = _transactionServices.GetTransactions();
-            var groupedTransactionsByCategory = _transactionServices.GetGroupedTransactionsByCategory(debitTransactions);
-            return groupedTransactionsByCategory.Select(transaction => new TransactionChartViewModel
-            {
-                Amount = transaction.Amount * -1, // google piechart should only have positif amount
-                Category = transaction.Category.ToString()
-            }).ToList();
+            var transactions = _transactionServices.GetTransactions();
+            var groupedTransactionsByCategory = _transactionServices.GetGroupedTransactionsByCategory(transactions);
+            var transactionsChartViewModel = _mapper.MapToTransactionsChartViewModel(groupedTransactionsByCategory);
+            
+            return transactionsChartViewModel.ToList();
         }
 
         // GET: Transaction/Details/5
@@ -192,15 +185,8 @@ namespace WalletManagerSite.Controllers
             var transaction = _transactionServices.GetTransaction(reference);
             if (transaction != null)
             {
-                return new TransactionViewModel
-                {
-                    Amount = transaction.Amount,
-                    Compte = transaction.Compte,
-                    Label = transaction.Label,
-                    OperationDate = transaction.OperationDate,
-                    Reference = transaction.Reference,
-                    Category = transaction.Category
-                };
+                var transactionViewModel = _mapper.MapToTransactionViewModel(transaction);
+                return transactionViewModel;
             }
             return null;
         }
@@ -229,15 +215,7 @@ namespace WalletManagerSite.Controllers
 
         private void UpdateTransaction(TransactionViewModel transactionViewModel)
         {
-            var transaction = new Transaction
-            {
-                Amount = transactionViewModel.Amount,
-                Category = transactionViewModel.Category,
-                Compte = transactionViewModel.Compte,
-                Label = transactionViewModel.Label,
-                OperationDate = transactionViewModel.OperationDate,
-                Reference = transactionViewModel.Reference,
-            };
+            var transaction = _mapper.MapToTransactionDto(transactionViewModel);
             _transactionServices.UpdateTransaction(transaction);
         }
 
