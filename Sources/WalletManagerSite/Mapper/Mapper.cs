@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using WalletManagerSite.Models;
 
@@ -7,6 +8,22 @@ namespace WalletManagerServices.Mapper
 {
     public class Mapper : IMapper
     {
+        public CsvFileViewModel MapToCsvFileViewModel(FileInfo fileInfo)
+        {
+            if (fileInfo == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            return new CsvFileViewModel
+            {
+                CreatedDate = fileInfo.CreationTime,
+                FileName = fileInfo.Name,
+                FullPath = fileInfo.FullName,
+                UpdateDate = fileInfo.LastWriteTime
+            };
+        }
+
         public TransactionChartViewModel MapToTransactionChartViewModel(WalletManagerDTO.Transaction transaction)
         {
             if (transaction == null)

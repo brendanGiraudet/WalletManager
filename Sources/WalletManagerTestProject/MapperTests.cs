@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using WalletManagerServices.Mapper;
 using WalletManagerTestProject.Utils;
 using Xunit;
@@ -201,6 +202,36 @@ namespace WalletManagerTestProject
 
             // Act
             Action mapAction = () => _ = _mapper.MapToTransactionsViewModel(transactionViewModelListFake);
+
+            // Assert
+            Assert.Throws<ArgumentNullException>(mapAction);
+        }
+
+        [Fact]
+        public void ShouldMapFileInfoToCsvFileViewModel()
+        {
+            // Arrange
+            var fileInfoFake = FakerUtils.GetFileInfoFaker.Generate();
+
+            // Act
+            var csvFileViewModel = _mapper.MapToCsvFileViewModel(fileInfoFake);
+
+            // Assert
+            Assert.NotNull(csvFileViewModel);
+            Assert.Equal(fileInfoFake.CreationTime, csvFileViewModel.CreatedDate);
+            Assert.Equal(fileInfoFake.Name, csvFileViewModel.FileName);
+            Assert.Equal(fileInfoFake.FullName, csvFileViewModel.FullPath);
+            Assert.Equal(fileInfoFake.LastWriteTime, csvFileViewModel.UpdateDate);
+        }
+
+        [Fact]
+        public void ShouldThrowExceptionWhenMapCsvFileViewModelWithEmptyFileInfo()
+        {
+            // Arrange
+            FileInfo fileInfoFake = null;
+
+            // Act
+            Action mapAction = () => _ = _mapper.MapToCsvFileViewModel(fileInfoFake);
 
             // Assert
             Assert.Throws<ArgumentNullException>(mapAction);

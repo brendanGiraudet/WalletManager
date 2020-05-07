@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.IO;
 using WalletManagerSite.Models;
 
 namespace WalletManagerServices.Mapper
@@ -17,5 +18,7 @@ namespace WalletManagerServices.Mapper
         WalletManagerDTO.Transaction MapToTransactionDto(TransactionViewModel transactionViewModel);
         
         TransactionsViewModel MapToTransactionsViewModel(List<TransactionViewModel> transactionsViewModel);
+        
+        CsvFileViewModel MapToCsvFileViewModel(FileInfo fileInfo);
     }
 }

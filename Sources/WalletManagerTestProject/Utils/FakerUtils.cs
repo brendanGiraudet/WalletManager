@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using System.IO;
 
 namespace WalletManagerTestProject.Utils
 {
@@ -19,5 +20,8 @@ namespace WalletManagerTestProject.Utils
             .RuleFor(field => field.Label, faker => faker.Random.String2(2))
             .RuleFor(field => field.OperationDate, faker => faker.Date.Past())
             .RuleFor(field => field.Reference, faker => faker.Random.String2(2));
+
+        public static Faker<FileInfo> GetFileInfoFaker => new Faker<FileInfo>()
+            .CustomInstantiator(faker => new FileInfo(Path.GetTempFileName()));
     }
 }
