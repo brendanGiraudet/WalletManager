@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using WalletManagerSite.Models;
 
@@ -7,6 +8,11 @@ namespace WalletManagerServices.Mapper
 {
     public class Mapper : IMapper
     {
+        public IEnumerable<TransactionViewModel> MapToTransactionsViewModel(IEnumerable<WalletManagerDTO.Transaction> transactions)
+        {
+            return transactions.Select(MapToTransactionViewModel);
+        }
+
         public TransactionViewModel MapToTransactionViewModel(WalletManagerDTO.Transaction transaction)
         {
             if(transaction == null)

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using WalletManagerServices.Mapper;
 using WalletManagerTestProject.Utils;
 using Xunit;
@@ -41,6 +43,40 @@ namespace WalletManagerTestProject
 
             // Act
             Action mapAction =  () => _ = _mapper.MapToTransactionViewModel(transactionDtoFaker);
+
+            // Assert
+            Assert.Throws<ArgumentNullException>(mapAction);
+        }
+
+        [Fact]
+        public void ShouldMapTransactionsDtoToTransactionsViewModel()
+        {
+            // Arrange
+            var transactionsDtoFaker = FakerUtils.GetTransactionDtoFaker.Generate(2);
+
+            // Act
+            var transactionsViewModel = _mapper.MapToTransactionsViewModel(transactionsDtoFaker);
+
+            // Assert
+            Assert.NotNull(transactionsDtoFaker);
+            transactionsDtoFaker.ForEach( t => {
+                Assert.Contains(transactionsViewModel, tvm => tvm.Amount.Equals(t.Amount));
+                Assert.Contains(transactionsViewModel, tvm => tvm.Category.Equals(t.Category));
+                Assert.Contains(transactionsViewModel, tvm => tvm.Compte.Equals(t.Compte));
+                Assert.Contains(transactionsViewModel, tvm => tvm.Label.Equals(t.Label));
+                Assert.Contains(transactionsViewModel, tvm => tvm.OperationDate.Equals(t.OperationDate));
+                Assert.Contains(transactionsViewModel, tvm => tvm.Reference.Equals(t.Reference));
+            });
+        }
+
+        [Fact]
+        public void ShouldThrowExceptionWhenMapToTransactionsViewModelWithEmptyTransactionsDto()
+        {
+            // Arrange
+            IEnumerable<WalletManagerDTO.Transaction> transactionsDtoFaker = null;
+
+            // Act
+            Action mapAction = () => _ = _mapper.MapToTransactionsViewModel(transactionsDtoFaker);
 
             // Assert
             Assert.Throws<ArgumentNullException>(mapAction);
