@@ -81,5 +81,63 @@ namespace WalletManagerTestProject
             // Assert
             Assert.Throws<ArgumentNullException>(mapAction);
         }
+
+        [Fact]
+        public void ShouldMapTransactionDtoToTransactionChartViewModel()
+        {
+            // Arrange
+            var transactionDtoFaker = FakerUtils.GetTransactionDtoFaker.Generate();
+
+            // Act
+            var transactionChartViewModel = _mapper.MapToTransactionChartViewModel(transactionDtoFaker);
+
+            // Assert
+            Assert.NotNull(transactionDtoFaker);
+            Assert.Equal(transactionDtoFaker.Amount, transactionChartViewModel.Amount);
+            Assert.Equal(transactionDtoFaker.Category.ToString(), transactionChartViewModel.Category);
+        }
+
+        [Fact]
+        public void ShouldThrowExceptionWhenMapToTransactionChartViewModelWithEmptyTransactionDto()
+        {
+            // Arrange
+            WalletManagerDTO.Transaction transactionDtoFaker = null;
+
+            // Act
+            Action mapAction = () => _ = _mapper.MapToTransactionChartViewModel(transactionDtoFaker);
+
+            // Assert
+            Assert.Throws<ArgumentNullException>(mapAction);
+        }
+
+        [Fact]
+        public void ShouldMapTransactionsDtoToTransactionsChartViewModel()
+        {
+            // Arrange
+            var transactionsDtoFaker = FakerUtils.GetTransactionDtoFaker.Generate(2);
+
+            // Act
+            var transactionsViewModel = _mapper.MapToTransactionsChartViewModel(transactionsDtoFaker);
+
+            // Assert
+            Assert.NotNull(transactionsDtoFaker);
+            transactionsDtoFaker.ForEach(t => {
+                Assert.Contains(transactionsViewModel, tvm => tvm.Amount.Equals(t.Amount));
+                Assert.Contains(transactionsViewModel, tvm => tvm.Category.Equals(t.Category.ToString()));
+            });
+        }
+
+        [Fact]
+        public void ShouldThrowExceptionWhenMapToTransactionsChartViewModelWithEmptyTransactionsDto()
+        {
+            // Arrange
+            IEnumerable<WalletManagerDTO.Transaction> transactionsDtoFaker = null;
+
+            // Act
+            Action mapAction = () => _ = _mapper.MapToTransactionsChartViewModel(transactionsDtoFaker);
+
+            // Assert
+            Assert.Throws<ArgumentNullException>(mapAction);
+        }
     }
 }
