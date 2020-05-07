@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoBogus" Version="2.8.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
@@ -15,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\WalletManagerDAL\WalletManagerDAL.csproj" />
     <ProjectReference Include="..\WalletManagerServices\WalletManagerServices.csproj" />
+    <ProjectReference Include="..\WalletManagerSite\WalletManagerSite.csproj" />
   </ItemGroup>
 
   <ItemGroup>
