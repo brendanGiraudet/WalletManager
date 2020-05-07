@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using WalletManagerDTO;
 using WalletManagerDTO.Enumerations;
+using WalletManagerServices.Mapper;
 using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
 
@@ -16,13 +17,15 @@ namespace WalletManagerSite.Controllers
     {
         readonly IConfiguration _configuration;
         readonly ITransactionServices _transactionServices;
-        private readonly IStringLocalizer<CompareController> _localizer;
+        readonly IStringLocalizer<CompareController> _localizer;
+        readonly IMapper _mapper;
 
-        public CompareController(IConfiguration configuration, ITransactionServices transactionServices, IStringLocalizer<CompareController> localizer)
+        public CompareController(IConfiguration configuration, ITransactionServices transactionServices, IStringLocalizer<CompareController> localizer, IMapper mapper)
         {
             _configuration = configuration;
             _transactionServices = transactionServices;
             _localizer = localizer;
+            _mapper = mapper;
         }
         // GET: Compare
         public ActionResult Index()
@@ -80,12 +83,9 @@ namespace WalletManagerSite.Controllers
             return View(compareTransactionList);
         }
 
-        private TransactionsViewModel GetTransactionsViewModel(List<TransactionViewModel> transactions)
+        private TransactionsViewModel GetTransactionsViewModel(List<TransactionViewModel> transactionsViewModel)
         {
-            return new TransactionsViewModel
-            {
-                Transactions = transactions
-            };
+            return _mapper.MapToTransactionsViewModel(transactionsViewModel);
         }
 
         private void AppendMissingCategoryTransactions(List<TransactionViewModel> transactions)
@@ -155,15 +155,7 @@ namespace WalletManagerSite.Controllers
 
         private List<TransactionViewModel> GetTransactionViewModel(List<Transaction> transactions)
         {
-            return transactions.Select(transaction => new Models.TransactionViewModel
-            {
-                Amount = transaction.Amount,
-                Compte = transaction.Compte,
-                Label = transaction.Label,
-                OperationDate = transaction.OperationDate,
-                Reference = transaction.Reference,
-                Category = transaction.Category
-            }).ToList();
+            return _mapper.MapToTransactionsViewModel(transactions).ToList();
         }
 
         private List<CsvFileViewModel> GetCsvList()
@@ -222,13 +214,7 @@ namespace WalletManagerSite.Controllers
         private CsvFileViewModel GetCsvFile(string fullFilePath)
         {
             var fileInfo = new FileInfo(fullFilePath);
-            return new CsvFileViewModel
-            {
-                CreatedDate = fileInfo.CreationTime,
-                FileName = fileInfo.Name,
-                FullPath = fileInfo.FullName,
-                UpdateDate = fileInfo.LastWriteTime
-            };
+            return _mapper.MapToCsvFileViewModel(fileInfo);
         }
 
         // POST: Compare/Delete/fileName
