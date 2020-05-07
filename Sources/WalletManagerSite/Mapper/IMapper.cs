@@ -1,18 +1,21 @@
 ﻿
 using System.Collections.Generic;
+using WalletManagerSite.Models;
 
 namespace WalletManagerServices.Mapper
 {
     public interface IMapper
     {
-        WalletManagerSite.Models.TransactionViewModel MapToTransactionViewModel(WalletManagerDTO.Transaction transaction);
+        TransactionViewModel MapToTransactionViewModel(WalletManagerDTO.Transaction transaction);
 
-        IEnumerable<WalletManagerSite.Models.TransactionViewModel> MapToTransactionsViewModel(IEnumerable<WalletManagerDTO.Transaction> transactions);
+        IEnumerable<TransactionViewModel> MapToTransactionsViewModel(IEnumerable<WalletManagerDTO.Transaction> transactions);
         
-        WalletManagerSite.Models.TransactionChartViewModel MapToTransactionChartViewModel(WalletManagerDTO.Transaction transaction);
+        TransactionChartViewModel MapToTransactionChartViewModel(WalletManagerDTO.Transaction transaction);
 
-        IEnumerable<WalletManagerSite.Models.TransactionChartViewModel> MapToTransactionsChartViewModel(IEnumerable<WalletManagerDTO.Transaction> transactions);
+        IEnumerable<TransactionChartViewModel> MapToTransactionsChartViewModel(IEnumerable<WalletManagerDTO.Transaction> transactions);
 
-        WalletManagerDTO.Transaction MapToTransactionDto(WalletManagerSite.Models.TransactionViewModel transactionViewModel);
+        WalletManagerDTO.Transaction MapToTransactionDto(TransactionViewModel transactionViewModel);
+        
+        TransactionsViewModel MapToTransactionsViewModel(List<TransactionViewModel> transactionsViewModel);
     }
 }

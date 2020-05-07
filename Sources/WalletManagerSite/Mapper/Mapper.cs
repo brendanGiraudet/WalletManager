@@ -49,6 +49,19 @@ namespace WalletManagerServices.Mapper
             return transactions.Select(MapToTransactionViewModel);
         }
 
+        public TransactionsViewModel MapToTransactionsViewModel(List<TransactionViewModel> transactionsViewModel)
+        {
+            if(transactionsViewModel == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            return new TransactionsViewModel
+            {
+                Transactions = transactionsViewModel
+            };
+        }
+
         public TransactionViewModel MapToTransactionViewModel(WalletManagerDTO.Transaction transaction)
         {
             if(transaction == null)

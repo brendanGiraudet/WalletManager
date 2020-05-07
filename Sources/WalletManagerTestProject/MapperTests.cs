@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using WalletManagerServices.Mapper;
 using WalletManagerTestProject.Utils;
 using Xunit;
@@ -167,6 +166,41 @@ namespace WalletManagerTestProject
 
             // Act
             Action mapAction = () => _ = _mapper.MapToTransactionDto(transactionViewModelFake);
+
+            // Assert
+            Assert.Throws<ArgumentNullException>(mapAction);
+        }
+
+        [Fact]
+        public void ShouldMapTransactionViewModelListToTransactionsViewModel()
+        {
+            // Arrange
+            var transactionViewModelListFake = FakerUtils.GetTransactionViewModelFaker.Generate(2);
+
+            // Act
+            var transactionsViewModel = _mapper.MapToTransactionsViewModel(transactionViewModelListFake);
+
+            // Assert
+            Assert.NotNull(transactionsViewModel);
+
+            transactionViewModelListFake.ForEach(t => {
+                Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.Amount.Equals(t.Amount));
+                Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.Category.Equals(t.Category));
+                Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.Compte.Equals(t.Compte));
+                Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.Label.Equals(t.Label));
+                Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.OperationDate.Equals(t.OperationDate));
+                Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.Reference.Equals(t.Reference));
+            });
+        }
+
+        [Fact]
+        public void ShouldThrowExceptionWhenMapToTransactionsViewModelWithEmptyTransactionViewModelList()
+        {
+            // Arrange
+            List<WalletManagerSite.Models.TransactionViewModel> transactionViewModelListFake = null;
+
+            // Act
+            Action mapAction = () => _ = _mapper.MapToTransactionsViewModel(transactionViewModelListFake);
 
             // Assert
             Assert.Throws<ArgumentNullException>(mapAction);
