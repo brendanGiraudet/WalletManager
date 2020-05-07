@@ -11,5 +11,13 @@ namespace WalletManagerTestProject.Utils
             .RuleFor(field => field.Label, faker => faker.Random.String2(2))
             .RuleFor(field => field.OperationDate, faker => faker.Date.Past())
             .RuleFor(field => field.Reference, faker => faker.Random.String2(2));
+
+        public static Faker<WalletManagerSite.Models.TransactionViewModel> GetTransactionViewModelFaker => new Faker<WalletManagerSite.Models.TransactionViewModel>()
+            .RuleFor(field => field.Amount, faker => faker.Random.Double())
+            .RuleFor(field => field.Category, faker => faker.Random.Enum<WalletManagerDTO.Enumerations.TransactionCategory>())
+            .RuleFor(field => field.Compte, faker => faker.Random.String2(2))
+            .RuleFor(field => field.Label, faker => faker.Random.String2(2))
+            .RuleFor(field => field.OperationDate, faker => faker.Date.Past())
+            .RuleFor(field => field.Reference, faker => faker.Random.String2(2));
     }
 }

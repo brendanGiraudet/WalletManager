@@ -21,6 +21,24 @@ namespace WalletManagerServices.Mapper
             };
         }
 
+        public WalletManagerDTO.Transaction MapToTransactionDto(TransactionViewModel transactionViewModel)
+        {
+            if (transactionViewModel == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            return new WalletManagerDTO.Transaction
+            {
+                Amount = transactionViewModel.Amount,
+                Category = transactionViewModel.Category,
+                Compte = transactionViewModel.Compte,
+                Label = transactionViewModel.Label,
+                OperationDate = transactionViewModel.OperationDate,
+                Reference = transactionViewModel.Reference
+            };
+        }
+
         public IEnumerable<TransactionChartViewModel> MapToTransactionsChartViewModel(IEnumerable<WalletManagerDTO.Transaction> transactions)
         {
             return transactions.Select(MapToTransactionChartViewModel);

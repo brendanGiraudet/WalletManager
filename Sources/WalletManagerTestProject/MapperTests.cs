@@ -26,7 +26,7 @@ namespace WalletManagerTestProject
             var transactionViewModel = _mapper.MapToTransactionViewModel(transactionDtoFaker);
 
             // Assert
-            Assert.NotNull(transactionDtoFaker);
+            Assert.NotNull(transactionViewModel);
             Assert.Equal(transactionDtoFaker.Amount, transactionViewModel.Amount);
             Assert.Equal(transactionDtoFaker.Category, transactionViewModel.Category);
             Assert.Equal(transactionDtoFaker.Compte, transactionViewModel.Compte);
@@ -135,6 +135,38 @@ namespace WalletManagerTestProject
 
             // Act
             Action mapAction = () => _ = _mapper.MapToTransactionsChartViewModel(transactionsDtoFaker);
+
+            // Assert
+            Assert.Throws<ArgumentNullException>(mapAction);
+        }
+        
+        [Fact]
+        public void ShouldMapTransactionViewModelToTransactionDto()
+        {
+            // Arrange
+            var transactionViewModelFake = FakerUtils.GetTransactionViewModelFaker.Generate();
+
+            // Act
+            var transactionDto = _mapper.MapToTransactionDto(transactionViewModelFake);
+
+            // Assert
+            Assert.NotNull(transactionDto);
+            Assert.Equal(transactionViewModelFake.Amount, transactionDto.Amount);
+            Assert.Equal(transactionViewModelFake.Category, transactionDto.Category);
+            Assert.Equal(transactionViewModelFake.Compte, transactionDto.Compte);
+            Assert.Equal(transactionViewModelFake.Label, transactionDto.Label);
+            Assert.Equal(transactionViewModelFake.OperationDate, transactionDto.OperationDate);
+            Assert.Equal(transactionViewModelFake.Reference, transactionDto.Reference);
+        }
+
+        [Fact]
+        public void ShouldThrowExceptionWhenMapToTransactionDtoWithEmptyTransactionViewModel()
+        {
+            // Arrange
+            WalletManagerSite.Models.TransactionViewModel transactionViewModelFake = null;
+
+            // Act
+            Action mapAction = () => _ = _mapper.MapToTransactionDto(transactionViewModelFake);
 
             // Assert
             Assert.Throws<ArgumentNullException>(mapAction);

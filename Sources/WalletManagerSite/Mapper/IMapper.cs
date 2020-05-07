@@ -12,5 +12,7 @@ namespace WalletManagerServices.Mapper
         WalletManagerSite.Models.TransactionChartViewModel MapToTransactionChartViewModel(WalletManagerDTO.Transaction transaction);
 
         IEnumerable<WalletManagerSite.Models.TransactionChartViewModel> MapToTransactionsChartViewModel(IEnumerable<WalletManagerDTO.Transaction> transactions);
+
+        WalletManagerDTO.Transaction MapToTransactionDto(WalletManagerSite.Models.TransactionViewModel transactionViewModel);
     }
 }
