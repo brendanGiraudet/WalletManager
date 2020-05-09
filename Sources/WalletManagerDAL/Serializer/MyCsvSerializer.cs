@@ -23,7 +23,7 @@ namespace WalletManagerDAL.Serializer
                         OperationDate = Convert.ToDateTime(values[1]),
                         Label = values[2],
                         Reference = values[3],
-                        Amount = Convert.ToDouble(values[4].Replace(',', '.')),
+                        Amount = Convert.ToDouble(values[4].Replace('.', ',')),
                         Category = GetCategory(values)
                     };
 
