@@ -46,7 +46,7 @@ namespace WalletManagerSite.Controllers
             try
             {
                 _transactionServices.LoadTransactions(filePath);
-                transactions = GetTransactionsViewModel(_transactionServices.GetTransactions());
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
