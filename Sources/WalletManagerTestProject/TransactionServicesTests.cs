@@ -108,7 +108,7 @@ namespace WalletManagerTestProject
             // Arrange
             var csvPath = csvBasePath + "deserialize.csv";
             _transactionServices.LoadTransactions(csvPath);
-            const double expectedGroupedPaypalAmount = -25;
+            const decimal expectedGroupedPaypalAmount = -25;
 
             // Act
             var transactions = _transactionServices.GetGroupedTransactionsByLabel();
@@ -138,14 +138,14 @@ namespace WalletManagerTestProject
             // Arrange
             var csvPath = csvBasePath + "deserialize.csv";
             _transactionServices.LoadTransactions(csvPath);
-            const double expectedGroupedNAAmount = -2000;
+            const decimal expectedGroupedNAAmount = -2000;
 
             // Act
             var transactions = _transactionServices.GetGroupedTransactionsByCategory(_transactionServices.GetDebitTransactions());
             var NATransaction = transactions.Find(t => t.Category.Equals(WalletManagerDTO.Enumerations.TransactionCategory.Courses));
 
             // Assert
-            Assert.Equal(expectedGroupedNAAmount, Math.Round(NATransaction.Amount, 2));
+            Assert.Equal(expectedGroupedNAAmount, NATransaction.Amount);
         }
 
         [Fact]

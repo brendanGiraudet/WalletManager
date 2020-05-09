@@ -13,7 +13,7 @@ namespace WalletManagerSite.Models
 
         public string Reference { get; set; }
 
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         public TransactionCategory Category { get; set; } = TransactionCategory.NA;
 

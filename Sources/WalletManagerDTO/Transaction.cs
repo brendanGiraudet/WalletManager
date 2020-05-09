@@ -12,7 +12,7 @@ namespace WalletManagerDTO
 
         public string Reference { get; set; }
 
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         public Enumerations.TransactionCategory Category { get; set; }
 

@@ -73,7 +73,7 @@ namespace WalletManagerTestProject
                     OperationDate = new DateTime(2020,03,31),
                     Label = "300320 CB****1526 ALLDEBRID.COM  92MONTROUGE",
                     Reference = "475QGS0",
-                    Amount = -15.99,
+                    Amount = -15.99m,
                     Category = WalletManagerDTO.Enumerations.TransactionCategory.Internet
                 },
                 new WalletManagerDTO.Transaction
@@ -109,7 +109,7 @@ namespace WalletManagerTestProject
                     OperationDate = new DateTime(2020,03,31),
                     Label = "300320 CB****1526 ALLDEBRID.COM  92MONTROUGE",
                     Reference = "475QGS0",
-                    Amount = -15.99,
+                    Amount = -15.99m,
                     Category = WalletManagerDTO.Enumerations.TransactionCategory.Internet
                 },
                 new WalletManagerDTO.Transaction
