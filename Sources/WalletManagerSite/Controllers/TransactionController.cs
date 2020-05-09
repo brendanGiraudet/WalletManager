@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using WalletManagerDTO;
-using WalletManagerServices.Mapper;
+using WalletManagerSite.Mapper;
 using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using WalletManagerSite.Models;
 
-namespace WalletManagerServices.Mapper
+namespace WalletManagerSite.Mapper
 {
     public interface IMapper
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using WalletManagerServices.Mapper;
+using WalletManagerSite.Mapper;
 using WalletManagerTestProject.Utils;
 using Xunit;
 

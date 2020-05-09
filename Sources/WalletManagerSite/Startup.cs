@@ -33,6 +33,7 @@ namespace WalletManagerSite
 
             services.AddSingleton<WalletManagerDAL.Serializer.ISerializer, WalletManagerDAL.Serializer.CsvSerializer>();
             services.AddSingleton<WalletManagerServices.Transaction.ITransactionServices, WalletManagerServices.Transaction.TransactionServices>();
+            services.AddScoped<Mapper.IMapper, Mapper.Mapper>();
 
             services.AddLocalization(opts => { opts.ResourcesPath = "Resource"; });
 

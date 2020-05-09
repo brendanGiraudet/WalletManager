@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using WalletManagerDTO;
 using WalletManagerDTO.Enumerations;
-using WalletManagerServices.Mapper;
+using WalletManagerSite.Mapper;
 using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
 

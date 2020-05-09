@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using WalletManagerSite.Models;
 
-namespace WalletManagerServices.Mapper
+namespace WalletManagerSite.Mapper
 {
     public class Mapper : IMapper
     {
