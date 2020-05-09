@@ -67,7 +67,7 @@ namespace WalletManagerSite.Controllers
 
         private List<TransactionViewModel> GetTransactions()
         {
-            var transactions = _transactionServices.GetGroupedTransactionsByLabel();
+            var transactions = _transactionServices.GetTransactions();
             if (transactions != null && transactions.Any())
             {
                 return GetTransactionsViewModel(transactions);
