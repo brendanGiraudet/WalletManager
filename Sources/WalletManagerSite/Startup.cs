@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Web.Mvc;
 
 namespace WalletManagerSite
 {
@@ -37,22 +37,16 @@ namespace WalletManagerSite
 
             services.AddLocalization(opts => { opts.ResourcesPath = "Resource"; });
 
-            services.AddMvc()
-                .AddViewLocalization(
-                    LanguageViewLocationExpanderFormat.Suffix,
-                    opts => { opts.ResourcesPath = "Resource"; })
-                .AddDataAnnotationsLocalization();
+            var defaultCultureInfo = new CultureInfo("fr-FR");
+            defaultCultureInfo.NumberFormat.NumberDecimalSeparator = ".";
 
             services.Configure<RequestLocalizationOptions>(
                 opts =>
                 {
                     var supportedCultures = new List<CultureInfo>
                     {
-                        new CultureInfo("en-GB"),
                         new CultureInfo("en-US"),
-                        new CultureInfo("en"),
-                        new CultureInfo("fr-FR"),
-                        new CultureInfo("fr"),
+                        defaultCultureInfo,
                     };
 
                     opts.DefaultRequestCulture = new RequestCulture("fr");
@@ -61,6 +55,15 @@ namespace WalletManagerSite
                     // UI strings that we have localized.
                     opts.SupportedUICultures = supportedCultures;
                 });
+
+            services.AddMvc()
+                .AddViewLocalization(
+                    LanguageViewLocationExpanderFormat.Suffix,
+                    opts =>
+                    {
+                        opts.ResourcesPath = "Resource";
+                    })
+                .AddDataAnnotationsLocalization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
