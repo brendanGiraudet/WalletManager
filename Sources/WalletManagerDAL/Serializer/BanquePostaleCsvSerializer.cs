@@ -24,7 +24,7 @@ namespace WalletManagerDAL.Serializer
                         OperationDate = Convert.ToDateTime(values[0]),
                         Label = values[1],
                         Reference = Guid.NewGuid().ToString(),
-                        Amount = Convert.ToDecimal(values[2].Replace('.', ',')),
+                        Amount = Convert.ToDecimal(values[2]),
                         Category = WalletManagerDTO.Enumerations.TransactionCategory.NA
                     };
 

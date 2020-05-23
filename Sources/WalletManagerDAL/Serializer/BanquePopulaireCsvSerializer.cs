@@ -23,7 +23,7 @@ namespace WalletManagerDAL.Serializer
                         OperationDate = Convert.ToDateTime(values[2]),
                         Label = values[3],
                         Reference = values[4],
-                        Amount = Convert.ToDecimal(values[6].Replace('.', ',')),
+                        Amount = Convert.ToDecimal(values[6]),
                         Category = WalletManagerDTO.Enumerations.TransactionCategory.NA
                     };
 
