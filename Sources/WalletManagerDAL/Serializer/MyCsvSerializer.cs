@@ -17,14 +17,20 @@ namespace WalletManagerDAL.Serializer
                 foreach (var csvLine in csvLines)
                 {
                     var values = csvLine.Split(';').ToArray();
+                    var compte = values[0];
+                    var operationDate = Convert.ToDateTime(values[1]);
+                    var label = values[2];
+                    var reference = values[3];
+                    var amount = Convert.ToDecimal(values[4]);
+                    var category = GetCategory(values);
                     var transaction = new Transaction
                     {
-                        Compte = values[0],
-                        OperationDate = Convert.ToDateTime(values[1]),
-                        Label = values[2],
-                        Reference = values[3],
-                        Amount = Convert.ToDecimal(values[4].Replace('.', ',')),
-                        Category = GetCategory(values)
+                        Compte = compte,
+                        OperationDate = operationDate,
+                        Label = label,
+                        Reference = reference,
+                        Amount = amount,
+                        Category = category
                     };
 
                     transactions.Add(transaction);
