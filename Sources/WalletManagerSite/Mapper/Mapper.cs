@@ -33,7 +33,7 @@ namespace WalletManagerSite.Mapper
 
             return new TransactionChartViewModel
             {
-                Amount = transaction.Amount,
+                Amount = transaction.Amount < 0 ? transaction.Amount*-1 : transaction.Amount,
                 Category = transaction.Category.ToString(),
             };
         }
