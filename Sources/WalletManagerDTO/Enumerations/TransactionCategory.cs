@@ -6,6 +6,8 @@ namespace WalletManagerDTO.Enumerations
         NA,
         Courses,
         Electricite,
+        Epargne,
+        Frais_banque,
         Gaz,
         Internet,
         Loyer,
