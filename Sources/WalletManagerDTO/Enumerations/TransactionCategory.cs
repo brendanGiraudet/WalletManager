@@ -12,6 +12,7 @@ namespace WalletManagerDTO.Enumerations
         Internet,
         Loyer,
         MalBouffe,
+        Salaire,
         Sante,
         Taxe,
         Telephone,
