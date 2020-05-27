@@ -1,20 +1,20 @@
-﻿@{
-    ViewData["Title"] = "About transaction index";
-    ViewData["Message"] = "Lister les transactions d'un csv";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["AboutIndexTransaction"];
 }
 <h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
-
 
 <div class="panel panel-primary">
-    <div class="panel-heading">Glisser déposer pour charger la liste des transactions du fichier csv</div>
+    <div class="panel-heading">@Localizer["LoadTransactionsText"]</div>
     <div class="panel-body">
         <img src="~/images/Index_without_csv.png" class="img-thumbnail" />
     </div>
 </div>
 
 <div class="panel panel-primary">
-    <div class="panel-heading">Image après avoir chargé le fichier csv</div>
+    <div class="panel-heading">@Localizer["ImageText"]</div>
     <div class="panel-body">
         <img src="~/images/Index_with_transactions.png" class="img-thumbnail" />
     </div>

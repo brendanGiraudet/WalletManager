@@ -1,20 +1,20 @@
-﻿@{
-    ViewData["Title"] = "About transaction edit";
-    ViewData["Message"] = "Editer une transaction";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["AboutEditTransaction"];
 }
 <h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
-
 
 <div class="panel panel-primary">
-    <div class="panel-heading">Cliquer sur Edit pour mettre à jour une transaction</div>
+    <div class="panel-heading">@Localizer["EditText"]</div>
     <div class="panel-body">
         <img src="~/images/Index_with_transactions.png" class="img-thumbnail" />
     </div>
 </div>
 
 <div class="panel panel-primary">
-    <div class="panel-heading">Image lorsque l'on edit une transaction</div>
+    <div class="panel-heading">@Localizer["ImageText"]</div>
     <div class="panel-body">
         <img src="~/images/Edit_transaction.png" class="img-thumbnail" />
     </div>

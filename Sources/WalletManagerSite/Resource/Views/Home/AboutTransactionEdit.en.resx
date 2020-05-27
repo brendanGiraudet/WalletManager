@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="HowTo" xml:space="preserve">
-    <value>How to</value>
+  <data name="AboutEditTransaction" xml:space="preserve">
+    <value>About transaction edit</value>
   </data>
-  <data name="TransactionEdit" xml:space="preserve">
-    <value>Edit transaction</value>
+  <data name="EditText" xml:space="preserve">
+    <value>Click  "Edit" to update transaction</value>
   </data>
-  <data name="TransactionsList" xml:space="preserve">
-    <value>List of transactions</value>
+  <data name="ImageText" xml:space="preserve">
+    <value>Image when editing a transaction</value>
   </data>
 </root>
