@@ -63,13 +63,15 @@ namespace WalletManagerSite.Controllers
                         return View(compareTransactionList);
                     }
 
-                    var transactionsViewModel = GetTransactionViewModel(transactions);
+                    var transactionViewModels = GetTransactionViewModels(transactions);
 
-                    AppendMissingCategoryTransactions(transactionsViewModel);
+                    AppendMissingCategoryTransactions(transactionViewModels);
 
-                    var transactionsViewModelOrdered = transactionsViewModel.OrderBy(t => t.Category.ToString()).ToList();
+                    var transactionsViewModelOrdered = transactionViewModels.OrderBy(t => t.Category.ToString()).ToList();
 
-                    compareTransactionList.TransactionsToCompare.Add(GetTransactionsViewModel(transactionsViewModelOrdered));
+                    var transactionsViewModel = GetTransactionsViewModel(transactionsViewModelOrdered);
+
+                    compareTransactionList.TransactionsToCompare.Add(transactionsViewModel);
                 }
                 catch (Exception ex)
                 {
@@ -91,6 +93,7 @@ namespace WalletManagerSite.Controllers
         private void AppendMissingCategoryTransactions(List<TransactionViewModel> transactions)
         {
             List<TransactionCategory> categories = GetCategories();
+            var firstTransaction = transactions.FirstOrDefault();
             
             foreach (var category in categories)
             {
@@ -99,7 +102,8 @@ namespace WalletManagerSite.Controllers
                     transactions.Add(new TransactionViewModel
                     {
                         Category = category,
-                        Amount = 0
+                        Amount = 0,
+                        OperationDate = firstTransaction != null? firstTransaction.OperationDate : DateTime.Now
                     });
                 }
             }
@@ -153,9 +157,9 @@ namespace WalletManagerSite.Controllers
             return filePath;
         }
 
-        private List<TransactionViewModel> GetTransactionViewModel(List<Transaction> transactions)
+        private List<TransactionViewModel> GetTransactionViewModels(List<Transaction> transactions)
         {
-            return _mapper.MapToTransactionsViewModel(transactions).ToList();
+            return _mapper.MapToTransactionViewModels(transactions).ToList();
         }
 
         private List<CsvFileViewModel> GetCsvList()

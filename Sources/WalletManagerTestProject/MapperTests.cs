@@ -55,7 +55,7 @@ namespace WalletManagerTestProject
             var transactionsDtoFaker = FakerUtils.GetTransactionDtoFaker.Generate(2);
 
             // Act
-            var transactionsViewModel = _mapper.MapToTransactionsViewModel(transactionsDtoFaker);
+            var transactionsViewModel = _mapper.MapToTransactionViewModels(transactionsDtoFaker);
 
             // Assert
             Assert.NotNull(transactionsDtoFaker);
@@ -76,7 +76,7 @@ namespace WalletManagerTestProject
             IEnumerable<WalletManagerDTO.Transaction> transactionsDtoFaker = null;
 
             // Act
-            Action mapAction = () => _ = _mapper.MapToTransactionsViewModel(transactionsDtoFaker);
+            Action mapAction = () => _ = _mapper.MapToTransactionViewModels(transactionsDtoFaker);
 
             // Assert
             Assert.Throws<ArgumentNullException>(mapAction);

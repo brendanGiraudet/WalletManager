@@ -57,7 +57,7 @@ namespace WalletManagerSite.Controllers
 
         private List<TransactionViewModel> GetTransactionsViewModel(List<Transaction> transactions)
         {
-            return _mapper.MapToTransactionsViewModel(transactions).ToList();
+            return _mapper.MapToTransactionViewModels(transactions).ToList();
         }
 
         public ActionResult LoadTransactionsTable()

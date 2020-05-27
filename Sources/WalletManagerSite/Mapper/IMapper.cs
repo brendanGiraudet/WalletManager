@@ -9,7 +9,7 @@ namespace WalletManagerSite.Mapper
     {
         TransactionViewModel MapToTransactionViewModel(WalletManagerDTO.Transaction transaction);
 
-        IEnumerable<TransactionViewModel> MapToTransactionsViewModel(IEnumerable<WalletManagerDTO.Transaction> transactions);
+        IEnumerable<TransactionViewModel> MapToTransactionViewModels(IEnumerable<WalletManagerDTO.Transaction> transactions);
         
         TransactionChartViewModel MapToTransactionChartViewModel(WalletManagerDTO.Transaction transaction);
 

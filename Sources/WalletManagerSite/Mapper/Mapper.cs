@@ -61,7 +61,7 @@ namespace WalletManagerSite.Mapper
             return transactions.Select(MapToTransactionChartViewModel);
         }
 
-        public IEnumerable<TransactionViewModel> MapToTransactionsViewModel(IEnumerable<WalletManagerDTO.Transaction> transactions)
+        public IEnumerable<TransactionViewModel> MapToTransactionViewModels(IEnumerable<WalletManagerDTO.Transaction> transactions)
         {
             return transactions.Select(MapToTransactionViewModel);
         }
