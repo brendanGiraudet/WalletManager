@@ -69,6 +69,8 @@ namespace WalletManagerSite.Controllers
 
                     var transactionsViewModelOrdered = transactionViewModels.OrderBy(t => t.Category.ToString()).ToList();
 
+                    UnsignAmount(transactionsViewModelOrdered);
+
                     var transactionsViewModel = GetTransactionsViewModel(transactionsViewModelOrdered);
 
                     compareTransactionList.TransactionsToCompare.Add(transactionsViewModel);
@@ -80,9 +82,20 @@ namespace WalletManagerSite.Controllers
                 }
             }
 
+            compareTransactionList.TransactionsToCompare = OrderTransactionsByDate(compareTransactionList);
             CompareToAdjustTransactionColor(compareTransactionList);
 
             return View(compareTransactionList);
+        }
+
+        private static List<TransactionsViewModel> OrderTransactionsByDate(CompareViewModel compareTransactionList)
+        {
+            return compareTransactionList.TransactionsToCompare.OrderByDescending(t => t.Date).ToList();
+        }
+
+        private static void UnsignAmount(List<TransactionViewModel> transactionsViewModelOrdered)
+        {
+            transactionsViewModelOrdered.ForEach(t => { if (t.Amount < 0) t.Amount *= -1; });
         }
 
         private TransactionsViewModel GetTransactionsViewModel(List<TransactionViewModel> transactionsViewModel)
@@ -94,16 +107,16 @@ namespace WalletManagerSite.Controllers
         {
             List<TransactionCategory> categories = GetCategories();
             var firstTransaction = transactions.FirstOrDefault();
-            
+
             foreach (var category in categories)
             {
-                if(!transactions.Any(t => t.Category.Equals(category)))
+                if (!transactions.Any(t => t.Category.Equals(category)))
                 {
                     transactions.Add(new TransactionViewModel
                     {
                         Category = category,
                         Amount = 0,
-                        OperationDate = firstTransaction != null? firstTransaction.OperationDate : DateTime.Now
+                        OperationDate = firstTransaction != null ? firstTransaction.OperationDate : DateTime.Now
                     });
                 }
             }
@@ -198,7 +211,7 @@ namespace WalletManagerSite.Controllers
         public ActionResult Delete(string fileName)
         {
             var csvFile = new CsvFileViewModel();
-            
+
             if (string.IsNullOrWhiteSpace(fileName))
             {
                 ViewBag.Error = _localizer["EmptyFileName"];
@@ -206,7 +219,7 @@ namespace WalletManagerSite.Controllers
             }
 
             var fullFilePath = Path.Combine(GetCsvDirectoryPath(), fileName);
-            if(!System.IO.File.Exists(fullFilePath))
+            if (!System.IO.File.Exists(fullFilePath))
             {
                 ViewBag.Error = string.Format(_localizer["FileDoesntExist"], fullFilePath);
                 return View(csvFile);
@@ -246,7 +259,7 @@ namespace WalletManagerSite.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
                 return View(csvFile);
