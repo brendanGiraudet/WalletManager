@@ -14,8 +14,6 @@
     else
     {
         <div>
-            <h4>TransactionViewModel</h4>
-            <hr />
             <dl class="dl-horizontal">
                 <dt>
                     @Html.DisplayNameFor(model => model.Compte)
@@ -57,7 +55,7 @@
         </div>
         <div>
             @Html.ActionLink(Localizer["Edit"].Value, "Edit", new { reference = Model.Reference }) |
-            <a asp-action="Index">Back to List</a>
+            <a asp-action="Index">@Localizer["Back"]</a>
         </div>
     }
 }

@@ -19,8 +19,6 @@
     {
         <h3>@Localizer["DeleteQuestion"]</h3>
         <div>
-            <h4>TransactionViewModel</h4>
-            <hr />
             <dl class="dl-horizontal">
                 <dt>
                     @Html.DisplayNameFor(model => model.Compte)
@@ -56,8 +54,8 @@
 
             <form asp-action="Delete">
                 @Html.HiddenFor(model => model.Reference)
-                <input type="submit" value="Delete" class="btn btn-default" /> |
-                <a asp-action="Index">Back to List</a>
+                <input type="submit" value="@Localizer["Title"]" class="btn btn-default" /> |
+                <a asp-action="Index">@Localizer["Back"]</a>
             </form>
         </div>
     }
