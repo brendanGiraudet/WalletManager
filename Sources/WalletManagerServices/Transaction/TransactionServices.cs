@@ -211,5 +211,10 @@ namespace WalletManagerServices.Transaction
         {
             return _transactionSerializer.Deserialize(csvPath);
         }
+
+        public List<WalletManagerDTO.Transaction> FusionTransactions(List<WalletManagerDTO.Transaction> firstTransactionListToFusion, List<WalletManagerDTO.Transaction> secondTransactionListToFusion)
+        {
+            return firstTransactionListToFusion.Concat(secondTransactionListToFusion).ToList();
+        }
     }
 }

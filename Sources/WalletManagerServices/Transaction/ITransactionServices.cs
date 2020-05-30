@@ -27,5 +27,9 @@ namespace WalletManagerServices.Transaction
 
         void Delete(string reference);
         List<WalletManagerDTO.Transaction> GetTransactions(string csvPath);
+        
+        List<WalletManagerDTO.Transaction> FusionTransactions(List<WalletManagerDTO.Transaction> firstTransactionListToFusion, List<WalletManagerDTO.Transaction> secondTransactionListToFusion);
+
+
     }
 }

@@ -245,5 +245,24 @@ namespace WalletManagerTestProject
             // Assert
             Assert.Null(deletedTransaction);
         }
+
+        [Fact]
+        public void ShouldOneTransactionListWhenFusionTwoCsv()
+        {
+            // Arrange
+            var csvPath = csvBasePath + "deserialize.csv";
+            _transactionServices.LoadTransactions(csvPath);
+            const decimal expectedGroupedCourseAmount = -4000;
+            var firstTransactionListToFusion = _transactionServices.GetTransactions();
+            var secondTransactionListToFusion = _transactionServices.GetTransactions();
+
+            // Act
+            var fusionedTransactions = _transactionServices.FusionTransactions(firstTransactionListToFusion, secondTransactionListToFusion);
+            var coursesTransactions = fusionedTransactions.Where(t => t.Category.Equals(WalletManagerDTO.Enumerations.TransactionCategory.Courses));
+            var courseTransactionsAmount = coursesTransactions.Sum(t => t.Amount);
+
+            // Assert
+            Assert.Equal(expectedGroupedCourseAmount, courseTransactionsAmount);
+        }
     }
 }
