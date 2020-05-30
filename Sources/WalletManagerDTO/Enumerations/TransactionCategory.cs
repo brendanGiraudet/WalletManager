@@ -9,6 +9,7 @@ namespace WalletManagerDTO.Enumerations
         Electricite,
         Epargne,
         Frais_banque,
+        Gadget,
         Gaz,
         Internet,
         Loyer,
