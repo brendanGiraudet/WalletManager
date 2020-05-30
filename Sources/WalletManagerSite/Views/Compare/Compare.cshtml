@@ -20,7 +20,7 @@
     @foreach (var transactionsViewModel in Model.TransactionsToCompare)
     {
     <div class="col-md-@Model.ColumnSize">
-        <h3>@transactionsViewModel.Date</h3>
+        <h3>@transactionsViewModel.Date.Value.ToString("Y")</h3>
         <partial name="CompareTransactionsTablePartialView" model="transactionsViewModel.Transactions" />
     </div>
     }

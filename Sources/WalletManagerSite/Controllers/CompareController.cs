@@ -90,7 +90,7 @@ namespace WalletManagerSite.Controllers
 
         private static List<TransactionsViewModel> OrderTransactionsByDate(CompareViewModel compareTransactionList)
         {
-            return compareTransactionList.TransactionsToCompare.OrderByDescending(t => t.Date).ToList();
+            return compareTransactionList.TransactionsToCompare.OrderBy(t => t.Date).ToList();
         }
 
         private static void UnsignAmount(List<TransactionViewModel> transactionsViewModelOrdered)

@@ -7,10 +7,10 @@ namespace WalletManagerSite.Models
     {
         public List<TransactionViewModel> Transactions { get; set; }
 
-        public string Date {
+        public System.DateTime? Date {
             get
             {
-                return Transactions?.FirstOrDefault().OperationDate.ToString("Y");
+                return Transactions?.FirstOrDefault().OperationDate;
             }
          }
     }
