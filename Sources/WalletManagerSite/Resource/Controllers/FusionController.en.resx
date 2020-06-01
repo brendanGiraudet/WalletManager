@@ -117,22 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="About" xml:space="preserve">
-    <value>A propos</value>
+  <data name="BadNumberOfCsv" xml:space="preserve">
+    <value>Bad number of csv : between 2 and 4 files are need</value>
   </data>
-  <data name="Compare" xml:space="preserve">
-    <value>Comparer</value>
+  <data name="EmptyFileName" xml:space="preserve">
+    <value>Empty filename</value>
   </data>
-  <data name="Contact" xml:space="preserve">
-    <value>Contact</value>
+  <data name="EmptySelectedCsvFileError" xml:space="preserve">
+    <value>No csv files are selected</value>
   </data>
-  <data name="Fusion" xml:space="preserve">
-    <value>Fusionner</value>
+  <data name="EmptyTransactionList" xml:space="preserve">
+    <value>One more transaction list are empty</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Accueil</value>
-  </data>
-  <data name="Transaction" xml:space="preserve">
-    <value>Transaction</value>
+  <data name="FileDoesntExist" xml:space="preserve">
+    <value>The file {0} doesn't exist</value>
   </data>
 </root>

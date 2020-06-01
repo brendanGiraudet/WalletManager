@@ -33,6 +33,12 @@ namespace WalletManagerSite.Controllers
             return View(GetTransactions());
         }
 
+        public ActionResult Index([FromQuery] List<Transaction> transactions)
+        {
+            var transactionViewodelList = GetTransactionsViewModel(transactions);
+            return View(transactionViewodelList);
+        }
+
         // GET: Transaction/123s
         public ActionResult List(string filePath)
         {
@@ -300,6 +306,65 @@ namespace WalletManagerSite.Controllers
             var directoryName = _configuration.GetValue<string>("CsvDirectoryName");
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), directoryName, filename);
             return filePath;
+        }
+
+        public ActionResult Fusion(List<CsvFileViewModel> csvFiles)
+        {
+            List<List<Transaction>> transactionsToFusion = new List<List<Transaction>>();
+
+            var selectedCsvFiles = csvFiles.Where(c => c.IsChecked).ToList();
+            if (selectedCsvFiles == null)
+            {
+                ViewBag.Error = _localizer["EmptySelectedCsvFileError"];
+                return View();
+            }
+
+            if (selectedCsvFiles.Count != 2)
+            {
+                ViewBag.Error = _localizer["BadNumberOfCsv"];
+                return View();
+            }
+
+            foreach (var selectedFile in selectedCsvFiles)
+            {
+                var filePath = GetFullFilePath(selectedFile.FileName);
+                try
+                {
+                    var transactions = _transactionServices.GetTransactions(filePath);
+                    if (transactions == null || !transactions.Any())
+                    {
+                        ViewBag.Error = _localizer["EmptyTransactionList"];
+                        return View();
+                    }
+
+                    transactionsToFusion.Add(transactions);
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Error = ex.Message;
+                    return View();
+                }
+            }
+
+            var fusionedTransactions = GetFusionedTransactionList(transactionsToFusion);
+
+            var fusionedtransactionViewModels = GetTransactionsViewModel(fusionedTransactions);
+
+            return View("Index", fusionedtransactionViewModels);
+        }
+
+        private List<Transaction> GetFusionedTransactionList(List<List<Transaction>> transactionsToFusion)
+        {
+            var firstTransactionList = transactionsToFusion.FirstOrDefault();
+            var secondTransactionList = transactionsToFusion.LastOrDefault();
+
+            if (firstTransactionList != null && secondTransactionList != null)
+            {
+                var fusionnedTransactionList = _transactionServices.FusionTransactions(firstTransactionList, secondTransactionList);
+                return fusionnedTransactionList;
+            }
+
+            return new List<Transaction>();
         }
     }
 }

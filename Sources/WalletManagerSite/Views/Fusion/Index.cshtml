@@ -1,0 +1,53 @@
+﻿@model List<WalletManagerSite.Models.CsvFileViewModel>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<h2>@Localizer["Title"]</h2>
+
+<form asp-action="Fusion" asp-controller="Transaction">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Localizer["Fusion"]
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().FileName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().FullPath)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().CreatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().UpdateDate)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                <tr>
+                    <td>
+                        @Html.EditorFor(modelItem => Model[i].IsChecked)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model[i].FileName)
+                        @Html.HiddenFor(modelItem => Model[i].FileName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model[i].FullPath)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model[i].CreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model[i].UpdateDate)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <input type="submit" value="Fusion" class="btn btn-primary" />
+</form>
