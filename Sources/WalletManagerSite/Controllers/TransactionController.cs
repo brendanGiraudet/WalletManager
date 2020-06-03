@@ -33,12 +33,6 @@ namespace WalletManagerSite.Controllers
             return View(GetTransactions());
         }
 
-        public ActionResult Index([FromQuery] List<Transaction> transactions)
-        {
-            var transactionViewodelList = GetTransactionsViewModel(transactions);
-            return View(transactionViewodelList);
-        }
-
         // GET: Transaction/123s
         public ActionResult List(string filePath)
         {
@@ -347,10 +341,9 @@ namespace WalletManagerSite.Controllers
             }
 
             var fusionedTransactions = GetFusionedTransactionList(transactionsToFusion);
+            _transactionServices.SetTransactions(fusionedTransactions);
 
-            var fusionedtransactionViewModels = GetTransactionsViewModel(fusionedTransactions);
-
-            return View("Index", fusionedtransactionViewModels);
+            return RedirectToAction("Index");
         }
 
         private List<Transaction> GetFusionedTransactionList(List<List<Transaction>> transactionsToFusion)
