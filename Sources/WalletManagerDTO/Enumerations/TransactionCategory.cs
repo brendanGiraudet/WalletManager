@@ -8,6 +8,7 @@ namespace WalletManagerDTO.Enumerations
         Courses,
         Electricite,
         Epargne,
+        Factures,
         Frais_banque,
         Gadget,
         Gaz,
@@ -16,6 +17,7 @@ namespace WalletManagerDTO.Enumerations
         MalBouffe,
         Salaire,
         Sante,
+        Sport,
         Taxe,
         Telephone,
         Voiture
