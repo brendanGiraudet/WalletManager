@@ -216,5 +216,10 @@ namespace WalletManagerServices.Transaction
         {
             return firstTransactionListToFusion.Concat(secondTransactionListToFusion).ToList();
         }
+
+        public void SetTransactions(List<WalletManagerDTO.Transaction> transactions)
+        {
+            _transactions = transactions;
+        }
     }
 }

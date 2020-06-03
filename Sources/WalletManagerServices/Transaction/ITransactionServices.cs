@@ -30,6 +30,6 @@ namespace WalletManagerServices.Transaction
         
         List<WalletManagerDTO.Transaction> FusionTransactions(List<WalletManagerDTO.Transaction> firstTransactionListToFusion, List<WalletManagerDTO.Transaction> secondTransactionListToFusion);
 
-
+        void SetTransactions(List<WalletManagerDTO.Transaction> transactions);
     }
 }
