@@ -21,6 +21,13 @@
 /Sources/WalletManagerDAL/bin/Debug/netcoreapp2.1
 /Sources/WalletManagerTestProject/WalletManagerTestProject.csproj.user
 /Sources/WalletManagerSite/Csv
+/Sources/WalletManagerDAL/bin
+/Sources/WalletManagerDTO/bin
+/Sources/WalletManagerServices/bin
+/Sources/WalletManagerSite/bin
+/Sources/WalletManagerSite/.config
+/Sources/WalletManagerSite/Properties/PublishProfiles
+/Sources/WalletManagerTestProject/bin/Debug/netcoreapp3.1
 /Sources/WalletManagerDAL/bin/Release/netcoreapp2.1
 /Sources/WalletManagerDTO/bin/Release/netcoreapp2.1
 /Sources/WalletManagerServices/bin/Release/netcoreapp2.1
