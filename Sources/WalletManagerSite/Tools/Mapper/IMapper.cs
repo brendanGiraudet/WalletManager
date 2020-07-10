@@ -1,9 +1,8 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using WalletManagerSite.Models;
 
-namespace WalletManagerSite.Mapper
+namespace WalletManagerSite.Tools.Mapper
 {
     public interface IMapper
     {
