@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
-using WalletManagerDTO;
-using WalletManagerSite.Mapper;
+using WalletManagerSite.Tools.Mapper;
 using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
 
@@ -34,15 +32,15 @@ namespace WalletManagerSite.Controllers
 
         private List<CsvFileViewModel> GetCsvList()
         {
-            var directoryPath = GetCsvDirectoryPath();
-            var csvFilesName = Directory.GetFiles(directoryPath, "*.csv");
+            var csvDirectoryPath = Tools.Directory.DirectoryTools.GetCsvDirectoryPath(_configuration);
+            var csvFilesName = Tools.Directory.DirectoryTools.GetCsvFiles(csvDirectoryPath);
 
             if (csvFilesName != null && csvFilesName.Any())
             {
                 var csvFiles = new List<CsvFileViewModel>();
                 foreach (var fileName in csvFilesName)
                 {
-                    var fullPath = Path.Combine(directoryPath, fileName);
+                    var fullPath = Path.Combine(csvDirectoryPath, fileName);
                     var fileInfo = new FileInfo(fullPath);
                     csvFiles.Add(new CsvFileViewModel
                     {
@@ -55,12 +53,6 @@ namespace WalletManagerSite.Controllers
                 return csvFiles;
             }
             return new List<CsvFileViewModel>();
-        }
-
-        private string GetCsvDirectoryPath()
-        {
-            var directoryName = _configuration.GetValue<string>("CsvDirectoryName");
-            return Path.Combine(Directory.GetCurrentDirectory(), directoryName);
         }
     }
 }

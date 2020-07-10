@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using WalletManagerDTO;
 using WalletManagerDTO.Enumerations;
-using WalletManagerSite.Mapper;
+using WalletManagerSite.Tools.Mapper;
 using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
 
@@ -177,8 +177,8 @@ namespace WalletManagerSite.Controllers
 
         private List<CsvFileViewModel> GetCsvList()
         {
-            var directoryPath = GetCsvDirectoryPath();
-            var csvFilesName = Directory.GetFiles(directoryPath, "*.csv");
+            var directoryPath = Tools.Directory.DirectoryTools.GetCsvDirectoryPath(_configuration);
+            var csvFilesName = Tools.Directory.DirectoryTools.GetCsvFiles(directoryPath);
 
             if (csvFilesName != null && csvFilesName.Any())
             {
@@ -200,12 +200,6 @@ namespace WalletManagerSite.Controllers
             return new List<CsvFileViewModel>();
         }
 
-        private string GetCsvDirectoryPath()
-        {
-            var directoryName = _configuration.GetValue<string>("CsvDirectoryName");
-            return Path.Combine(Directory.GetCurrentDirectory(), directoryName);
-        }
-
         // GET: Compare/Delete/fileName
         [HttpGet]
         public ActionResult Delete(string fileName)
@@ -218,7 +212,8 @@ namespace WalletManagerSite.Controllers
                 return View(csvFile);
             }
 
-            var fullFilePath = Path.Combine(GetCsvDirectoryPath(), fileName);
+            var csvDirectoryPath = Tools.Directory.DirectoryTools.GetCsvDirectoryPath(_configuration);
+            var fullFilePath = Path.Combine(csvDirectoryPath, fileName);
             if (!System.IO.File.Exists(fullFilePath))
             {
                 ViewBag.Error = string.Format(_localizer["FileDoesntExist"], fullFilePath);
@@ -248,7 +243,8 @@ namespace WalletManagerSite.Controllers
                     return View(csvFile);
                 }
 
-                var fullFilePath = Path.Combine(GetCsvDirectoryPath(), fileName);
+                var csvDirectoryPath = Tools.Directory.DirectoryTools.GetCsvDirectoryPath(_configuration);
+                var fullFilePath = Path.Combine(csvDirectoryPath, fileName);
                 if (!System.IO.File.Exists(fullFilePath))
                 {
                     ViewBag.Error = string.Format(_localizer["FileDoesntExist"], fullFilePath);

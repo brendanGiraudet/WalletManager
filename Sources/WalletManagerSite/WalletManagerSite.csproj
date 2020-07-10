@@ -35,10 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Csv\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Update="Resource\Controllers\FusionController.fr.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
