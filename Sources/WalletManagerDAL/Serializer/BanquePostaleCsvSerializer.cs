@@ -47,7 +47,7 @@ namespace WalletManagerDAL.Serializer
         {
             var firstLine = csvLines.First();
             var splittedLine = firstLine.Split(';');
-            return splittedLine.Last();
+            return splittedLine.Last().Trim('\r');
         }
     }
 }
