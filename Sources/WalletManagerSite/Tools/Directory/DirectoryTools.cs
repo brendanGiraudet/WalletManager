@@ -7,8 +7,7 @@ namespace WalletManagerSite.Tools.Directory
     {
         public static string GetCsvDirectoryPath(IConfiguration configuration)
         {
-            var directoryName = configuration.GetValue<string>("CsvDirectoryName");
-            var directoryPath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), directoryName);
+            var directoryPath = configuration.GetValue<string>("CsvDirectoryPath");
             CreateDirectoryIfNotExist(directoryPath);
             return directoryPath;
         }
