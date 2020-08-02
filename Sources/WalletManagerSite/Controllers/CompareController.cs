@@ -165,8 +165,8 @@ namespace WalletManagerSite.Controllers
 
         private string GetFullFilePath(string filename)
         {
-            var directoryName = _configuration.GetValue<string>("CsvDirectoryName");
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), directoryName, filename);
+            var csvDirectoryPath = Tools.Directory.DirectoryTools.GetCsvDirectoryPath(_configuration);
+            var filePath = Path.Combine(csvDirectoryPath, filename);
             return filePath;
         }
 
