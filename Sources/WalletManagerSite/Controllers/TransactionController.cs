@@ -34,14 +34,17 @@ namespace WalletManagerSite.Controllers
         }
 
         // GET: Transaction/123s
-        public ActionResult List(string filePath)
+        public ActionResult List(string fileName)
         {
             var transactions = new List<TransactionViewModel>();
-            if (string.IsNullOrWhiteSpace(filePath))
+            if (string.IsNullOrWhiteSpace(fileName))
             {
                 ViewBag.Error = _localizer["EmptyFilePath"];
                 return View("Index", transactions);
             }
+
+            var directoryPath = Tools.Directory.DirectoryTools.GetCsvDirectoryPath(_configuration);
+            var filePath = Path.Combine(directoryPath, fileName);
 
             try
             {

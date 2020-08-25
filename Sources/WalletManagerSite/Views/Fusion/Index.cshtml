@@ -23,29 +23,34 @@
                 <th>
                     @Html.DisplayNameFor(model => model.First().UpdateDate)
                 </th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @for (int i = 0; i < Model.Count(); i++)
             {
-                <tr>
-                    <td>
-                        @Html.EditorFor(modelItem => Model[i].IsChecked)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model[i].FileName)
-                        @Html.HiddenFor(modelItem => Model[i].FileName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model[i].FullPath)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model[i].CreatedDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => Model[i].UpdateDate)
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    @Html.EditorFor(modelItem => Model[i].IsChecked)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].FileName)
+                    @Html.HiddenFor(modelItem => Model[i].FileName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].FullPath)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].UpdateDate)
+                </td>
+                <td>
+                    @Html.ActionLink(Localizer["Edit"].Value, "List", "Transaction", new { fileName = Model[i].FileName }) |
+                    @Html.ActionLink(Localizer["Delete"].Value, "Delete", new { fileName = Model[i].FileName })
+                </td>
+            </tr>
             }
         </tbody>
     </table>
