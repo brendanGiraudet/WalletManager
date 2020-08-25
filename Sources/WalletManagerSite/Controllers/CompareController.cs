@@ -183,10 +183,9 @@ namespace WalletManagerSite.Controllers
             if (csvFilesName != null && csvFilesName.Any())
             {
                 var csvFiles = new List<CsvFileViewModel>();
-                foreach (var fileName in csvFilesName)
+                foreach (var csvFile in csvFilesName)
                 {
-                    var fullPath = Path.Combine(directoryPath, fileName);
-                    var fileInfo = new FileInfo(fullPath);
+                    var fileInfo = new FileInfo(csvFile);
                     csvFiles.Add(new CsvFileViewModel
                     {
                         CreatedDate = fileInfo.CreationTime,
