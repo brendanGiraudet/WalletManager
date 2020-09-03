@@ -8,6 +8,9 @@ namespace WalletManagerDAL.Serializer
 {
     public class CsvSerializer : ISerializer
     {
+        readonly string _columnSeparator = ";";
+        readonly string _fileExtension = ";";
+
         public List<Transaction> Deserialize(string csvPath)
         {
             IEnumerable<string> csvLines;
@@ -68,22 +71,40 @@ namespace WalletManagerDAL.Serializer
             StringWriter stringWriter = new StringWriter();
             stringWriter.Write("Compte;Date opération;Libellé;Référence;Montant;Categorie");
             stringWriter.Write(stringWriter.NewLine);
-            var delimiter = ";";
 
             foreach (var transaction in transactions)
             {
-                stringWriter.Write(transaction.Compte + delimiter);
-                stringWriter.Write(transaction.OperationDate + delimiter);
-                stringWriter.Write(transaction.Label + delimiter);
-                stringWriter.Write(transaction.Reference + delimiter);
-                stringWriter.Write(transaction.Amount + delimiter);
-                stringWriter.Write(transaction.Category + delimiter);
+                stringWriter.Write(transaction.Compte + _columnSeparator);
+                stringWriter.Write(transaction.OperationDate + _columnSeparator);
+                stringWriter.Write(transaction.Label + _columnSeparator);
+                stringWriter.Write(transaction.Reference + _columnSeparator);
+                stringWriter.Write(transaction.Amount + _columnSeparator);
+                stringWriter.Write(transaction.Category + _columnSeparator);
                 stringWriter.Write(stringWriter.NewLine);
             }
 
             try
             {
                 File.WriteAllText(csvPath, stringWriter.ToString());
+            }
+            catch (Exception ex)
+            {
+                throw new WalletManagerDTO.Exceptions.SerializerException($"Error : impossible to serialize into csv file in path { csvPath } due to " + ex.Message, ex);
+            }
+        }
+        
+        public void Serialize(IEnumerable<string> categories, string csvPath)
+        {
+            if (categories == null || !categories.Any()) throw new WalletManagerDTO.Exceptions.SerializerException("Impossible to serialize an empty category list");
+
+            var fileExtension = Path.GetExtension(csvPath);
+            if(!fileExtension.Equals(_fileExtension)) throw new WalletManagerDTO.Exceptions.SerializerException($"Impossible to serialize in file with extension  {fileExtension}, you can use {_fileExtension} extension file");
+
+            var csvContent = string.Join(_columnSeparator, categories);
+
+            try
+            {
+                File.WriteAllText(csvPath, csvContent);
             }
             catch (Exception ex)
             {

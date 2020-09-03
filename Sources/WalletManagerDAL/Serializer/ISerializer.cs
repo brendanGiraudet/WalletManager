@@ -13,5 +13,7 @@ namespace WalletManagerDAL.Serializer
         List<Transaction> Deserialize(Stream stream);
 
         List<Transaction> Deserialize(IEnumerable<string> csvLines);
+
+        void Serialize(IEnumerable<string> categories, string csvPath);
     }
 }

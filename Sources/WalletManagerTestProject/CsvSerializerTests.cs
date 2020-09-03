@@ -4,6 +4,8 @@ using Xunit;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using Bogus;
+using WalletManagerDTO.Exceptions;
 
 namespace WalletManagerTestProject
 {
@@ -11,6 +13,7 @@ namespace WalletManagerTestProject
     {
         const string csvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\Csv\";
 
+        #region Transactions
         [Theory]
         [InlineData(csvBasePath + "banquePopulaire.csv")]
         [InlineData(csvBasePath + "banquePostale.csv")]
@@ -144,5 +147,65 @@ namespace WalletManagerTestProject
             // Assert
             Assert.Throws<WalletManagerDTO.Exceptions.SerializerException>(serializeAction);
         }
+        #endregion
+
+        #region Categories
+        [Fact]
+        public void ShouldSerializeListOfCategory()
+        {
+            // Arrange
+            var serializer = new CsvSerializer();
+            var csvFilePath = Path.Combine(csvBasePath, "serializeCategory.csv");
+            var faker = new Faker();
+            var fakeCategories = new List<string>
+            {
+                faker.Random.String2(2),
+                faker.Random.String2(2)
+            };
+
+            // Act
+            serializer.Serialize(fakeCategories, csvFilePath);
+
+            // Assert
+            Assert.True(true);// no exception thrown
+        }
+
+        [Fact]
+        public void ShouldThrowSerializerExceptionWhenSerializeWithEmptyCategoryList()
+        {
+            // Arrange
+            var serializer = new CsvSerializer();
+            var csvFilePath = Path.Combine(csvBasePath, "serializeCategory.csv");
+            var emptyCategoryList = new List<string>();
+
+            // Act
+            Action serializeAction = () => serializer.Serialize(emptyCategoryList, csvFilePath);
+
+            // Assert
+            Assert.Throws<SerializerException>(serializeAction);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(csvBasePath + "wrongExtension.txt")]
+        [InlineData("unknowFilePath.csv")]
+        public void ShouldThrowSerializerExceptionWhenSerializeWithWrongFilePath(string csvFilePath)
+        {
+            // Arrange
+            var serializer = new CsvSerializer();
+            var faker = new Faker();
+            var fakeCategories = new List<string>
+            {
+                faker.Random.String2(2),
+                faker.Random.String2(2)
+            };
+
+            // Act
+            Action serializeAction = () => serializer.Serialize(fakeCategories, csvFilePath);
+
+            // Assert
+            Assert.Throws<SerializerException>(serializeAction);
+        }
+        #endregion
     }
 }
