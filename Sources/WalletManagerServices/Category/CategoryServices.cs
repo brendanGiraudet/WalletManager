@@ -12,7 +12,7 @@ namespace WalletManagerServices.Category
             _serializer = serializer;
         }
 
-        public bool CreateCategories(List<string> categories, string csvPath)
+        public bool SaveCategories(List<string> categories, string csvPath)
         {
             try
             {

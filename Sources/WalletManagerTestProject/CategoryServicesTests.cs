@@ -18,10 +18,10 @@ namespace WalletManagerTestProject
         }
 
         [Fact]
-        public void ShouldHaveTrueWhenCreateCategory()
+        public void ShouldHaveTrueWhenSaveCategories()
         {
             // Arrange
-            var csvPath = csvBasePath + "createCategories.csv";
+            var csvPath = csvBasePath + "saveCategories.csv";
             var faker = new Faker();
             var fakeCategories = new List<string>
             {
@@ -30,7 +30,7 @@ namespace WalletManagerTestProject
             };
 
             // Act
-            var isCreated = _categoryServices.CreateCategories(fakeCategories, csvPath);
+            var isCreated = _categoryServices.SaveCategories(fakeCategories, csvPath);
 
             // Assert
             Assert.True(isCreated);
