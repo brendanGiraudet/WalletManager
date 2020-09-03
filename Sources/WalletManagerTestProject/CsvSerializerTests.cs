@@ -188,7 +188,6 @@ namespace WalletManagerTestProject
         [Theory]
         [InlineData("")]
         [InlineData(csvBasePath + "wrongExtension.txt")]
-        [InlineData("unknowFilePath.csv")]
         public void ShouldThrowSerializerExceptionWhenSerializeWithWrongFilePath(string csvFilePath)
         {
             // Arrange

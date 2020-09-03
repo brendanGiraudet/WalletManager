@@ -9,7 +9,7 @@ namespace WalletManagerDAL.Serializer
     public class CsvSerializer : ISerializer
     {
         readonly string _columnSeparator = ";";
-        readonly string _fileExtension = ";";
+        readonly string _fileExtension = ".csv";
 
         public List<Transaction> Deserialize(string csvPath)
         {
