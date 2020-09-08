@@ -5,9 +5,9 @@ namespace WalletManagerServices.Category
 {
     public class CategoryServices : ICategoryServices
     {
-        readonly WalletManagerDAL.Serializer.ISerializer _serializer;
+        readonly WalletManagerDAL.Serializer.ISerializer<string> _serializer;
 
-        public CategoryServices(WalletManagerDAL.Serializer.ISerializer serializer)
+        public CategoryServices(WalletManagerDAL.Serializer.ISerializer<string> serializer)
         {
             _serializer = serializer;
         }
