@@ -24,9 +24,10 @@ namespace WalletManagerTestProject.Serializer
         {
             // Arrange
             var csvFilePath = Path.Combine(csvBasePath, "deserializeTransactions.csv");
+            var lines = File.ReadAllLines(csvFilePath);
 
             // Act
-            var transactions = _serializer.Deserialize(csvFilePath);
+            var transactions = _serializer.Deserialize(lines);
 
             // Assert
             Assert.True(transactions.Any());

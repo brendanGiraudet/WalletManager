@@ -41,18 +41,16 @@ namespace WalletManagerDAL.Serializer
             }
         }
 
-        IEnumerable<Transaction> ISerializer<Transaction>.Deserialize(string filePath)
+        IEnumerable<Transaction> ISerializer<Transaction>.Deserialize(IEnumerable<string> lines)
         {
             var transactions = new List<Transaction>();
 
             try
             {
-                IEnumerable<string> lines = File.ReadAllLines(filePath);
-
-                lines = lines.Skip(1);
-                foreach (var csvLine in lines)
+                lines = lines.Skip(1);// Skip header
+                foreach (var line in lines)
                 {
-                    var values = csvLine.Split(';').ToArray();
+                    var values = line.Split(';').ToArray();
                     var compte = values[0];
                     var operationDate = Convert.ToDateTime(values[1]);
                     var label = values[2];

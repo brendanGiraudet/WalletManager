@@ -8,15 +8,14 @@ namespace WalletManagerDAL.Serializer
 {
     public class BanquePostaleTransactionsSerializer : ISerializer<Transaction>
     {
-        IEnumerable<Transaction> ISerializer<Transaction>.Deserialize(string filePath)
+        IEnumerable<Transaction> ISerializer<Transaction>.Deserialize(IEnumerable<string> lines)
         {
             var transactions = new List<Transaction>();
 
             try
             {
-                IEnumerable<string> lines = File.ReadAllLines(filePath);
                 var compteNumber = GetCompteNumber(lines);
-                lines = lines.Skip(8);
+                lines = lines.Skip(8); // Skip header
                 foreach (var line in lines)
                 {
                     var values = line.Split(';').ToArray();

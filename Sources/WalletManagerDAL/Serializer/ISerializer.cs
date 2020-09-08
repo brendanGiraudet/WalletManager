@@ -6,7 +6,7 @@ namespace WalletManagerDAL.Serializer
     {
         bool Serialize(IEnumerable<T> objects, string filePath);
 
-        IEnumerable<T> Deserialize(string filePath);
+        IEnumerable<T> Deserialize(IEnumerable<string> filePath);
 
     }
 }
