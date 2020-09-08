@@ -4,7 +4,7 @@ using WalletManagerDAL.Serializer;
 using WalletManagerServices.Category;
 using Xunit;
 
-namespace WalletManagerTestProject
+namespace WalletManagerTestProject.Service
 {
     public class CategoryServicesTests
     {
@@ -13,7 +13,7 @@ namespace WalletManagerTestProject
 
         public CategoryServicesTests()
         {
-            ISerializer serializer = new CsvSerializer();
+            ISerializer<string> serializer = new CategorySerializer();
             _categoryServices = new CategoryServices(serializer);
         }
 

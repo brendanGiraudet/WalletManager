@@ -5,7 +5,7 @@ using WalletManagerDAL.Serializer;
 using WalletManagerServices.Transaction;
 using Xunit;
 
-namespace WalletManagerTestProject
+namespace WalletManagerTestProject.Service
 {
     public class TransactionServicesTests
     {
@@ -70,11 +70,11 @@ namespace WalletManagerTestProject
             var updatedTransaction = new WalletManagerDTO.Transaction
             {
                 Compte = "Compte1",
-                OperationDate = new System.DateTime(2020, 03, 31),
+                OperationDate = new DateTime(2020, 03, 31),
                 Label = "Label1",
                 Reference = "ref1",
                 Amount = 10,
-                Category = WalletManagerDTO.Enumerations.TransactionCategory.Courses
+                Category = "Courses"
             };
 
             // Act
@@ -92,7 +92,7 @@ namespace WalletManagerTestProject
             var updatedTransaction = new WalletManagerDTO.Transaction
             {
                 Reference = "doesntExist",
-                Category = WalletManagerDTO.Enumerations.TransactionCategory.Courses
+                Category = "Courses"
             };
 
             // Act
@@ -158,7 +158,7 @@ namespace WalletManagerTestProject
                 new WalletManagerDTO.Transaction
                 {
                     Amount = 10,
-                    Category = WalletManagerDTO.Enumerations.TransactionCategory.Courses,
+                    Category = "Courses",
                     Reference = "ref1",
                     OperationDate = DateTime.Now,
                     Compte = "Compte1",
@@ -167,7 +167,7 @@ namespace WalletManagerTestProject
                 new WalletManagerDTO.Transaction
                 {
                     Amount = 20,
-                    Category = WalletManagerDTO.Enumerations.TransactionCategory.Internet,
+                    Category = "Internet",
                     Reference = "ref2",
                     OperationDate = DateTime.Now,
                     Compte = "Compte2",
@@ -206,7 +206,7 @@ namespace WalletManagerTestProject
                 new WalletManagerDTO.Transaction
                 {
                     Amount = 10,
-                    Category = WalletManagerDTO.Enumerations.TransactionCategory.Courses,
+                    Category = "Courses",
                     Reference = "ref1",
                     OperationDate = DateTime.Now,
                     Compte = "Compte1",
@@ -215,7 +215,7 @@ namespace WalletManagerTestProject
                 new WalletManagerDTO.Transaction
                 {
                     Amount = 20,
-                    Category = WalletManagerDTO.Enumerations.TransactionCategory.Internet,
+                    Category = "Internet",
                     Reference = "ref2",
                     OperationDate = DateTime.Now,
                     Compte = "Compte2",

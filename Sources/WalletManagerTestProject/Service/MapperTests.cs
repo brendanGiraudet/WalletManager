@@ -5,7 +5,7 @@ using WalletManagerSite.Tools.Mapper;
 using WalletManagerTestProject.Utils;
 using Xunit;
 
-namespace WalletManagerTestProject
+namespace WalletManagerTestProject.Service
 {
     public class MapperTests
     {
@@ -42,7 +42,7 @@ namespace WalletManagerTestProject
             WalletManagerDTO.Transaction transactionDtoFaker = null;
 
             // Act
-            Action mapAction =  () => _ = _mapper.MapToTransactionViewModel(transactionDtoFaker);
+            Action mapAction = () => _ = _mapper.MapToTransactionViewModel(transactionDtoFaker);
 
             // Assert
             Assert.Throws<ArgumentNullException>(mapAction);
@@ -59,7 +59,8 @@ namespace WalletManagerTestProject
 
             // Assert
             Assert.NotNull(transactionsDtoFaker);
-            transactionsDtoFaker.ForEach( t => {
+            transactionsDtoFaker.ForEach(t =>
+            {
                 Assert.Contains(transactionsViewModel, tvm => tvm.Amount.Equals(t.Amount));
                 Assert.Contains(transactionsViewModel, tvm => tvm.Category.Equals(t.Category));
                 Assert.Contains(transactionsViewModel, tvm => tvm.Compte.Equals(t.Compte));
@@ -121,7 +122,8 @@ namespace WalletManagerTestProject
 
             // Assert
             Assert.NotNull(transactionsDtoFaker);
-            transactionsDtoFaker.ForEach(t => {
+            transactionsDtoFaker.ForEach(t =>
+            {
                 Assert.Contains(transactionsViewModel, tvm => tvm.Amount.Equals(t.Amount));
                 Assert.Contains(transactionsViewModel, tvm => tvm.Category.Equals(t.Category.ToString()));
             });
@@ -139,7 +141,7 @@ namespace WalletManagerTestProject
             // Assert
             Assert.Throws<ArgumentNullException>(mapAction);
         }
-        
+
         [Fact]
         public void ShouldMapTransactionViewModelToTransactionDto()
         {
@@ -184,7 +186,8 @@ namespace WalletManagerTestProject
             // Assert
             Assert.NotNull(transactionsViewModel);
 
-            transactionViewModelListFake.ForEach(t => {
+            transactionViewModelListFake.ForEach(t =>
+            {
                 Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.Amount.Equals(t.Amount));
                 Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.Category.Equals(t.Category));
                 Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.Compte.Equals(t.Compte));
