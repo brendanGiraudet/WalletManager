@@ -2,44 +2,50 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using WalletManagerDAL.Serializer;
 
 namespace WalletManagerServices.Transaction
 {
     public class TransactionServices : ITransactionServices
     {
-        readonly WalletManagerDAL.Serializer.ISerializer _transactionSerializer;
-        private List<WalletManagerDTO.Transaction> _transactions;
+        ISerializer<WalletManagerDTO.Transaction> _transactionSerializer;
+        private IEnumerable<WalletManagerDTO.Transaction> _transactions;
 
-        public TransactionServices(WalletManagerDAL.Serializer.ISerializer transactionSerializer)
+        public TransactionServices()
         {
-            _transactionSerializer = transactionSerializer;
             _transactions = new List<WalletManagerDTO.Transaction>();
         }
 
         public void LoadTransactions(string csvPath)
         {
-            _transactions = _transactionSerializer.Deserialize(csvPath);
+            IEnumerable<string> csvLines = File.ReadAllLines(csvPath);
+            _transactionSerializer = GetRightSerializer(csvLines);
+            _transactions = _transactionSerializer.Deserialize(csvLines);
         }
 
         public void LoadTransactions(Stream stream)
         {
-            _transactions = _transactionSerializer.Deserialize(stream);
+            var streamReader = new StreamReader(stream);
+            var contentFile = streamReader.ReadToEnd();
+            var csvLines = contentFile.Trim().Split("\n");
+            _transactionSerializer = GetRightSerializer(csvLines);
+            _transactions = _transactionSerializer.Deserialize(csvLines);
         }
 
         public WalletManagerDTO.Transaction GetTransaction(string reference)
         {
-            return _transactions.Find(transaction => transaction.Reference.Equals(reference));
+            return _transactions.FirstOrDefault(transaction => transaction.Reference.Equals(reference));
         }
 
-        public List<WalletManagerDTO.Transaction> GetTransactions()
+        public IEnumerable<WalletManagerDTO.Transaction> GetTransactions()
         {
             return _transactions;
         }
 
-        public List<WalletManagerDTO.Transaction> GetGroupedTransactionsByLabel()
+        public IEnumerable<WalletManagerDTO.Transaction> GetGroupedTransactionsByLabel()
         {
             var maxLetterTochangePourcent = 0.20;
-            List<WalletManagerDTO.Transaction> copiedTransactions = GetTransactionsCopy(_transactions);
+            IEnumerable<WalletManagerDTO.Transaction> copiedTransactions = GetTransactionsCopy(_transactions);
             var groupedTransactions = new List<WalletManagerDTO.Transaction>();
 
             foreach (var transactionToMerge in copiedTransactions)
@@ -64,7 +70,7 @@ namespace WalletManagerServices.Transaction
             return groupedTransactions;
         }
 
-        private List<WalletManagerDTO.Transaction> GetTransactionsCopy(List<WalletManagerDTO.Transaction> transactions)
+        private IEnumerable<WalletManagerDTO.Transaction> GetTransactionsCopy(IEnumerable<WalletManagerDTO.Transaction> transactions)
         {
             return transactions.Select(t => new WalletManagerDTO.Transaction
             {
@@ -138,7 +144,7 @@ namespace WalletManagerServices.Transaction
             WalletManagerDTO.Transaction findedTransaction;
             try
             {
-                findedTransaction = _transactions.Find(t => t.Reference.Equals(updatedTransaction.Reference));
+                findedTransaction = _transactions.FirstOrDefault(t => t.Reference.Equals(updatedTransaction.Reference));
             }
             catch (Exception ex)
             {
@@ -150,15 +156,15 @@ namespace WalletManagerServices.Transaction
             findedTransaction.Category = updatedTransaction.Category;
         }
 
-        public List<WalletManagerDTO.Transaction> GetDebitTransactions()
+        public IEnumerable<WalletManagerDTO.Transaction> GetDebitTransactions()
         {
             return _transactions.Where(t => t.Amount < 0).ToList();
         }
 
-        public List<WalletManagerDTO.Transaction> GetGroupedTransactionsByCategory(List<WalletManagerDTO.Transaction> transactions)
+        public IEnumerable<WalletManagerDTO.Transaction> GetGroupedTransactionsByCategory(IEnumerable<WalletManagerDTO.Transaction> transactions)
         {
             var maxLetterTochangePourcent = 0.20;
-            List<WalletManagerDTO.Transaction> copiedTransactions = GetTransactionsCopy(transactions);
+            IEnumerable<WalletManagerDTO.Transaction> copiedTransactions = GetTransactionsCopy(transactions);
             var groupedTransactions = new List<WalletManagerDTO.Transaction>();
 
             foreach (var transactionToMerge in copiedTransactions)
@@ -183,7 +189,7 @@ namespace WalletManagerServices.Transaction
             return groupedTransactions;
         }
 
-        public void SaveTransactionsIntoCsvFile(string csvPath, List<WalletManagerDTO.Transaction> transactionsToSave)
+        public void SaveTransactionsIntoCsvFile(string csvPath, IEnumerable<WalletManagerDTO.Transaction> transactionsToSave)
         {
             try
             {
@@ -207,19 +213,37 @@ namespace WalletManagerServices.Transaction
             if (transactionToDelete != null) _transactions.Remove(transactionToDelete);
         }
 
-        public List<WalletManagerDTO.Transaction> GetTransactions(string csvPath)
+        public IEnumerable<WalletManagerDTO.Transaction> GetTransactions(string csvPath)
         {
-            return _transactionSerializer.Deserialize(csvPath);
+            var lines = File.ReadAllLines(csvPath);
+            _transactionSerializer = GetRightSerializer(lines);
+            return _transactionSerializer.Deserialize(lines);
         }
 
-        public List<WalletManagerDTO.Transaction> FusionTransactions(List<WalletManagerDTO.Transaction> firstTransactionListToFusion, List<WalletManagerDTO.Transaction> secondTransactionListToFusion)
+        public IEnumerable<WalletManagerDTO.Transaction> FusionTransactions(IEnumerable<WalletManagerDTO.Transaction> firstTransactionListToFusion, IEnumerable<WalletManagerDTO.Transaction> secondTransactionListToFusion)
         {
             return firstTransactionListToFusion.Concat(secondTransactionListToFusion).ToList();
         }
 
-        public void SetTransactions(List<WalletManagerDTO.Transaction> transactions)
+        public void SetTransactions(IEnumerable<WalletManagerDTO.Transaction> transactions)
         {
             _transactions = transactions;
+        }
+
+        private ISerializer<WalletManagerDTO.Transaction> GetRightSerializer(IEnumerable<string> csvLines)
+        {
+            if (csvLines.Any(csvLine => csvLine.Contains("Montant(EUROS);Montant(FRANCS)")))
+            {
+                return new BanquePostaleTransactionsSerializer();
+            }
+            else if (csvLines.Any(csvLine => csvLine.Contains("Date valeur;Montant")))
+            {
+                return new BanquePopulaireTransactionsSerializer();
+            }
+            else
+            {
+                return new TransactionsSerializer();
+            }
         }
     }
 }

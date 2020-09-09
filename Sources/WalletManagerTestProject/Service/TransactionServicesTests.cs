@@ -14,8 +14,7 @@ namespace WalletManagerTestProject.Service
 
         public TransactionServicesTests()
         {
-            ISerializer serializer = new CsvSerializer();
-            _transactionServices = new TransactionServices(serializer);
+            _transactionServices = new TransactionServices();
         }
 
         [Fact]
@@ -112,7 +111,7 @@ namespace WalletManagerTestProject.Service
 
             // Act
             var transactions = _transactionServices.GetGroupedTransactionsByLabel();
-            var paypalTransaction = transactions.Find(t => t.Label.Contains("PAYPAL         750800"));
+            var paypalTransaction = transactions.FirstOrDefault(t => t.Label.Contains("PAYPAL         750800"));
 
             // Assert
             Assert.Equal(expectedGroupedPaypalAmount, Math.Round(paypalTransaction.Amount, 2));
@@ -142,7 +141,7 @@ namespace WalletManagerTestProject.Service
 
             // Act
             var transactions = _transactionServices.GetGroupedTransactionsByCategory(_transactionServices.GetDebitTransactions());
-            var NATransaction = transactions.Find(t => t.Category.Equals(WalletManagerDTO.Enumerations.TransactionCategory.Courses));
+            var NATransaction = transactions.FirstOrDefault(t => t.Category.Equals(WalletManagerDTO.Enumerations.TransactionCategory.Courses));
 
             // Assert
             Assert.Equal(expectedGroupedNAAmount, NATransaction.Amount);
