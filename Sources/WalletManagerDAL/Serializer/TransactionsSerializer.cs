@@ -37,7 +37,7 @@ namespace WalletManagerDAL.Serializer
             }
             catch (Exception ex)
             {
-                throw new SerializerException($"Error : impossible to serialize into transactions in path { filePath } due to " + ex.Message, ex);
+                throw new SerializerException($"Error : impossible to serialize transactions in path { filePath } due to " + ex.Message, ex);
             }
         }
 
