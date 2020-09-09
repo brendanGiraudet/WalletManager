@@ -2,40 +2,57 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using WalletManagerDTO;
 using WalletManagerDTO.Exceptions;
 
 namespace WalletManagerDAL.Serializer
 {
-    public class CategorySerializer : ISerializer<string>
+    public class CategorySerializer : ISerializer<Category>
     {
         readonly char _columnSeparator = ';';
 
-        bool ISerializer<string>.Serialize(IEnumerable<string> categories, string filePath)
+        bool ISerializer<Category>.Serialize(IEnumerable<Category> categories, string filePath)
         {
             if (categories == null || !categories.Any()) throw new SerializerException("Impossible to serialize an empty category list");
 
+            StringWriter stringWriter = new StringWriter();
+            stringWriter.Write("Name;CreationDate");
+            stringWriter.Write(stringWriter.NewLine);
+
+            foreach (var category in categories)
+            {
+                stringWriter.Write(category.Name + _columnSeparator);
+                stringWriter.Write(category.CreationDate.ToString() + _columnSeparator);
+                stringWriter.Write(stringWriter.NewLine);
+            }
+
             try
             {
-                var content = string.Join(_columnSeparator, categories);
-                File.WriteAllText(filePath, content);
+                File.WriteAllText(filePath, stringWriter.ToString());
                 return true;
             }
             catch (Exception ex)
             {
-                throw new SerializerException($"Error : impossible to serialize categories in { filePath } due to " + ex.Message, ex);
+                throw new SerializerException($"Error : impossible to serialize categories in path { filePath } due to " + ex.Message, ex);
             }
         }
 
-        IEnumerable<string> ISerializer<string>.Deserialize(string filePath)
+        IEnumerable<Category> ISerializer<Category>.Deserialize(IEnumerable<string> lines)
         {
-            var categories = new List<string>();
+            var categories = new List<Category>();
             try
             {
-                var lines = File.ReadAllLines(filePath);
+                lines = lines.Skip(1);// Skip header
                 foreach (var line in lines)
                 {
-                    var inLineCategories = line.Split(_columnSeparator).ToList();
-                    categories.AddRange(inLineCategories);
+                    var values = line.Split(';').ToArray();
+                    var category = new Category
+                    {
+                        Name = values[0],
+                        CreationDate = Convert.ToDateTime(values[1]),
+                    };
+
+                    categories.Add(category);
                 }
             }
             catch (Exception ex)

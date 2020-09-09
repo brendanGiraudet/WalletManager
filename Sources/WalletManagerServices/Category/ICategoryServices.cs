@@ -4,6 +4,6 @@ namespace WalletManagerServices.Category
 {
     public interface ICategoryServices
     {
-        bool SaveCategories(List<string> categories, string csvPath);
+        bool SaveCategories(IEnumerable<WalletManagerDTO.Category> categories, string csvPath);
     }
 }

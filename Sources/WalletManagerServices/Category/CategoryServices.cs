@@ -5,14 +5,14 @@ namespace WalletManagerServices.Category
 {
     public class CategoryServices : ICategoryServices
     {
-        readonly WalletManagerDAL.Serializer.ISerializer<string> _serializer;
+        readonly WalletManagerDAL.Serializer.ISerializer<WalletManagerDTO.Category> _serializer;
 
-        public CategoryServices(WalletManagerDAL.Serializer.ISerializer<string> serializer)
+        public CategoryServices(WalletManagerDAL.Serializer.ISerializer<WalletManagerDTO.Category> serializer)
         {
             _serializer = serializer;
         }
 
-        public bool SaveCategories(List<string> categories, string csvPath)
+        public bool SaveCategories(IEnumerable<WalletManagerDTO.Category> categories, string csvPath)
         {
             try
             {

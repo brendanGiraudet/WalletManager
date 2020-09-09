@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using Bogus;
 using System.Linq;
+using WalletManagerDTO;
+using WalletManagerTestProject.Utils;
 
 namespace WalletManagerTestProject.Serializer
 {
@@ -11,7 +13,7 @@ namespace WalletManagerTestProject.Serializer
     {
         const string csvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CategoriesCsv\";
 
-        readonly ISerializer<string> _serializer;
+        readonly ISerializer<Category> _serializer;
 
         public CategorySerializerTests()
         {
@@ -24,9 +26,10 @@ namespace WalletManagerTestProject.Serializer
         {
             // Arrange
             var csvFilePath = Path.Combine(csvBasePath, "deserializeCategories.csv");
+            var lines = File.ReadAllLines(csvFilePath);
 
             // Act
-            var categories = _serializer.Deserialize(csvFilePath);
+            var categories = _serializer.Deserialize(lines);
 
             // Assert
             Assert.True(categories.Any());
@@ -39,12 +42,7 @@ namespace WalletManagerTestProject.Serializer
         {
             // Arrange
             var csvFilePath = Path.Combine(csvBasePath, "serializeCategories.csv");
-            var faker = new Faker();
-            var categories = new List<string>
-            {
-                faker.Random.String2(2),
-                faker.Random.String2(2)
-            };
+            var categories = FakerUtils.CategoryFaker.Generate(2);
 
             // Act
             var serializeResponse = _serializer.Serialize(categories, csvFilePath);

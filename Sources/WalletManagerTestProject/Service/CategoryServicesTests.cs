@@ -1,7 +1,7 @@
-using Bogus;
-using System.Collections.Generic;
 using WalletManagerDAL.Serializer;
+using WalletManagerDTO;
 using WalletManagerServices.Category;
+using WalletManagerTestProject.Utils;
 using Xunit;
 
 namespace WalletManagerTestProject.Service
@@ -13,7 +13,7 @@ namespace WalletManagerTestProject.Service
 
         public CategoryServicesTests()
         {
-            ISerializer<string> serializer = new CategorySerializer();
+            ISerializer<Category> serializer = new CategorySerializer();
             _categoryServices = new CategoryServices(serializer);
         }
 
@@ -22,12 +22,7 @@ namespace WalletManagerTestProject.Service
         {
             // Arrange
             var csvPath = csvBasePath + "saveCategories.csv";
-            var faker = new Faker();
-            var fakeCategories = new List<string>
-            {
-                faker.Random.String2(2),
-                faker.Random.String2(2)
-            };
+            var fakeCategories = FakerUtils.CategoryFaker.Generate(2);
 
             // Act
             var isCreated = _categoryServices.SaveCategories(fakeCategories, csvPath);
