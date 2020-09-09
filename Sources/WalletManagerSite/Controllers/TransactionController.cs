@@ -58,9 +58,9 @@ namespace WalletManagerSite.Controllers
             return View("Index", transactions);
         }
 
-        private List<TransactionViewModel> GetTransactionsViewModel(List<Transaction> transactions)
+        private IEnumerable<TransactionViewModel> GetTransactionsViewModel(IEnumerable<Transaction> transactions)
         {
-            return _mapper.MapToTransactionViewModels(transactions).ToList();
+            return _mapper.MapToTransactionViewModels(transactions);
         }
 
         public ActionResult LoadTransactionsTable()
@@ -68,7 +68,7 @@ namespace WalletManagerSite.Controllers
             return PartialView("TransactionsTablePartialView", GetTransactions());
         }
 
-        private List<TransactionViewModel> GetTransactions()
+        private IEnumerable<TransactionViewModel> GetTransactions()
         {
             var transactions = _transactionServices.GetTransactions();
             if (transactions != null && transactions.Any())
@@ -305,9 +305,9 @@ namespace WalletManagerSite.Controllers
             return filePath;
         }
 
-        public ActionResult Fusion(List<CsvFileViewModel> csvFiles)
+        public ActionResult Fusion(IEnumerable<CsvFileViewModel> csvFiles)
         {
-            List<List<Transaction>> transactionsToFusion = new List<List<Transaction>>();
+            List<IEnumerable<Transaction>> transactionsToFusion = new List<IEnumerable<Transaction>>();
 
             var selectedCsvFiles = csvFiles.Where(c => c.IsChecked).ToList();
             if (selectedCsvFiles == null)
@@ -349,7 +349,7 @@ namespace WalletManagerSite.Controllers
             return RedirectToAction("Index");
         }
 
-        private List<Transaction> GetFusionedTransactionList(List<List<Transaction>> transactionsToFusion)
+        private IEnumerable<Transaction> GetFusionedTransactionList(IEnumerable<IEnumerable<Transaction>> transactionsToFusion)
         {
             var firstTransactionList = transactionsToFusion.FirstOrDefault();
             var secondTransactionList = transactionsToFusion.LastOrDefault();
