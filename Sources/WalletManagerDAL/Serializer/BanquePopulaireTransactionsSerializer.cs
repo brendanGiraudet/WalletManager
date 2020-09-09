@@ -42,7 +42,7 @@ namespace WalletManagerDAL.Serializer
             }
             catch (Exception ex)
             {
-                throw new WalletManagerDTO.Exceptions.SerializerException($"Error : impossible to deserialize {filePath} due to " + ex.Message, ex);
+                throw new WalletManagerDTO.Exceptions.SerializerException($"Error : impossible to deserialize due to " + ex.Message, ex);
             }
 
             return transactions;
