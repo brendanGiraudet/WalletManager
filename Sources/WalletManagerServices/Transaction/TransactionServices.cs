@@ -208,9 +208,7 @@ namespace WalletManagerServices.Transaction
 
         public void Delete(string reference)
         {
-            var transactionToDelete = GetTransaction(reference);
-
-            if (transactionToDelete != null) _transactions.Remove(transactionToDelete);
+            _transactions = _transactions.Where(t => t.Reference != reference);
         }
 
         public IEnumerable<WalletManagerDTO.Transaction> GetTransactions(string csvPath)
