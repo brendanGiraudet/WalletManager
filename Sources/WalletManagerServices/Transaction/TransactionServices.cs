@@ -158,31 +158,23 @@ namespace WalletManagerServices.Transaction
 
         public IEnumerable<WalletManagerDTO.Transaction> GetDebitTransactions()
         {
-            return _transactions.Where(t => t.Amount < 0).ToList();
+            return _transactions.Where(t => t.Amount < 0);
         }
 
         public IEnumerable<WalletManagerDTO.Transaction> GetGroupedTransactionsByCategory(IEnumerable<WalletManagerDTO.Transaction> transactions)
         {
-            var maxLetterTochangePourcent = 0.20;
             IEnumerable<WalletManagerDTO.Transaction> copiedTransactions = GetTransactionsCopy(transactions);
             var groupedTransactions = new List<WalletManagerDTO.Transaction>();
 
             foreach (var transactionToMerge in copiedTransactions)
             {
-                var transactionToMergeLabelLenght = transactionToMerge.Label.Length;
-                var numberOfMaxLetterToChange = transactionToMergeLabelLenght * maxLetterTochangePourcent;
-
-                var isAlreadyMerge = groupedTransactions.Any(t => t.Category.Equals(transactionToMerge.Category));
+                var isAlreadyMerge = groupedTransactions.Any(t => t.Category.Name.Equals(transactionToMerge.Category.Name));
 
                 if (isAlreadyMerge) continue;
 
-                var similarTransactions = copiedTransactions.Where(t => t.Category.Equals(transactionToMerge.Category) && t.Reference != transactionToMerge.Reference).ToList();
+                var similarTransactions = copiedTransactions.Where(t => t.Category.Name.Equals(transactionToMerge.Category.Name) && t.Reference != transactionToMerge.Reference).ToList();
 
-                similarTransactions.ForEach(t =>
-                {
-                    transactionToMerge.Amount += t.Amount;
-                });
-
+                transactionToMerge.Amount += similarTransactions.Sum(t => t.Amount);
                 groupedTransactions.Add(transactionToMerge);
             }
 
@@ -193,6 +185,7 @@ namespace WalletManagerServices.Transaction
         {
             try
             {
+                _transactionSerializer = new TransactionsSerializer();
                 _transactionSerializer.Serialize(transactionsToSave, csvPath);
             }
             catch (Exception ex)

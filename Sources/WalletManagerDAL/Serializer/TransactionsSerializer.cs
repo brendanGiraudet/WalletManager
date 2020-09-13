@@ -26,7 +26,7 @@ namespace WalletManagerDAL.Serializer
                 stringWriter.Write(transaction.Label + _columnSeparator);
                 stringWriter.Write(transaction.Reference + _columnSeparator);
                 stringWriter.Write(transaction.Amount.ToString() + _columnSeparator);
-                stringWriter.Write(transaction.Category + _columnSeparator);
+                stringWriter.Write(transaction.Category.Name + _columnSeparator);
                 stringWriter.Write(stringWriter.NewLine);
             }
 
@@ -64,7 +64,7 @@ namespace WalletManagerDAL.Serializer
                         Label = label,
                         Reference = reference,
                         Amount = amount,
-                        Category = category
+                        Category = new Category { Name = category }
                     };
 
                     transactions.Add(transaction);

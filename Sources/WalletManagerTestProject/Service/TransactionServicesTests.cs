@@ -73,7 +73,7 @@ namespace WalletManagerTestProject.Service
                 Label = "Label1",
                 Reference = "ref1",
                 Amount = 10,
-                Category = "Courses"
+                Category = new WalletManagerDTO.Category { Name = "Courses" }
             };
 
             // Act
@@ -91,7 +91,7 @@ namespace WalletManagerTestProject.Service
             var updatedTransaction = new WalletManagerDTO.Transaction
             {
                 Reference = "doesntExist",
-                Category = "Courses"
+                Category = new WalletManagerDTO.Category { Name = "Courses" }
             };
 
             // Act
@@ -138,10 +138,11 @@ namespace WalletManagerTestProject.Service
             var csvPath = csvBasePath + "deserialize.csv";
             _transactionServices.LoadTransactions(csvPath);
             const decimal expectedGroupedNAAmount = -2000;
+            var debitTransactions = _transactionServices.GetDebitTransactions();
 
             // Act
-            var transactions = _transactionServices.GetGroupedTransactionsByCategory(_transactionServices.GetDebitTransactions());
-            var NATransaction = transactions.FirstOrDefault(t => t.Category.Equals(WalletManagerDTO.Enumerations.TransactionCategory.Courses));
+            var transactions = _transactionServices.GetGroupedTransactionsByCategory(debitTransactions);
+            var NATransaction = transactions.FirstOrDefault(t => t.Category.Name.Equals("Courses"));
 
             // Assert
             Assert.Equal(expectedGroupedNAAmount, NATransaction.Amount);
@@ -157,7 +158,7 @@ namespace WalletManagerTestProject.Service
                 new WalletManagerDTO.Transaction
                 {
                     Amount = 10,
-                    Category = "Courses",
+                    Category = new WalletManagerDTO.Category { Name = "Courses" },
                     Reference = "ref1",
                     OperationDate = DateTime.Now,
                     Compte = "Compte1",
@@ -166,7 +167,7 @@ namespace WalletManagerTestProject.Service
                 new WalletManagerDTO.Transaction
                 {
                     Amount = 20,
-                    Category = "Internet",
+                    Category = new WalletManagerDTO.Category { Name = "Internet" },
                     Reference = "ref2",
                     OperationDate = DateTime.Now,
                     Compte = "Compte2",
@@ -205,7 +206,7 @@ namespace WalletManagerTestProject.Service
                 new WalletManagerDTO.Transaction
                 {
                     Amount = 10,
-                    Category = "Courses",
+                    Category = new WalletManagerDTO.Category { Name = "Courses" },
                     Reference = "ref1",
                     OperationDate = DateTime.Now,
                     Compte = "Compte1",
@@ -214,7 +215,7 @@ namespace WalletManagerTestProject.Service
                 new WalletManagerDTO.Transaction
                 {
                     Amount = 20,
-                    Category = "Internet",
+                    Category = new WalletManagerDTO.Category { Name = "Internet" },
                     Reference = "ref2",
                     OperationDate = DateTime.Now,
                     Compte = "Compte2",
@@ -254,10 +255,11 @@ namespace WalletManagerTestProject.Service
             const decimal expectedGroupedCourseAmount = -4000;
             var firstTransactionListToFusion = _transactionServices.GetTransactions();
             var secondTransactionListToFusion = _transactionServices.GetTransactions();
+            var categoryName = "Courses";
 
             // Act
             var fusionedTransactions = _transactionServices.FusionTransactions(firstTransactionListToFusion, secondTransactionListToFusion);
-            var coursesTransactions = fusionedTransactions.Where(t => t.Category.Equals(WalletManagerDTO.Enumerations.TransactionCategory.Courses));
+            var coursesTransactions = fusionedTransactions.Where(t => t.Category.Name.Equals(categoryName));
             var courseTransactionsAmount = coursesTransactions.Sum(t => t.Amount);
 
             // Assert

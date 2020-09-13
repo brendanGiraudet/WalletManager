@@ -14,7 +14,7 @@ namespace WalletManagerDTO
 
         public decimal Amount { get; set; }
 
-        public string Category { get; set; }
+        public Category Category { get; set; }
 
         public override string ToString()
         {

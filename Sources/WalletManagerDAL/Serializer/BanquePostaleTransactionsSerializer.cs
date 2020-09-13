@@ -26,7 +26,7 @@ namespace WalletManagerDAL.Serializer
                         Label = values[1],
                         Reference = Guid.NewGuid().ToString(),
                         Amount = Convert.ToDecimal(values[2].Replace(',', '.')),
-                        Category = ""
+                        Category = new Category()
                     };
 
                     transactions.Add(transaction);

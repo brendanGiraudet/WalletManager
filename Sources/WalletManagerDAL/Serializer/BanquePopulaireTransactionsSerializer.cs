@@ -30,7 +30,7 @@ namespace WalletManagerDAL.Serializer
                         Label = values[3],
                         Reference = values[4],
                         Amount = Convert.ToDecimal(values[6]),
-                        Category = string.Empty
+                        Category = new Category()
                     };
 
                     transactions.Add(transaction);
