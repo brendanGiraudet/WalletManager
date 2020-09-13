@@ -1,3 +1,4 @@
+using System.Linq;
 using WalletManagerDAL.Serializer;
 using WalletManagerDTO;
 using WalletManagerServices.Category;
@@ -29,6 +30,19 @@ namespace WalletManagerTestProject.Service
 
             // Assert
             Assert.True(isCreated);
+        }
+
+        [Fact]
+        public void ShouldHaveListOfCategory()
+        {
+            // Arrange
+            var filePath = csvBasePath + "deserializeCategories.csv";
+
+            // Act
+            var categories = _categoryServices.GetCategories(filePath);
+
+            // Assert
+            Assert.True(categories.Any());
         }
     }
 }

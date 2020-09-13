@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace WalletManagerServices.Category
 {
@@ -10,6 +11,12 @@ namespace WalletManagerServices.Category
         public CategoryServices(WalletManagerDAL.Serializer.ISerializer<WalletManagerDTO.Category> serializer)
         {
             _serializer = serializer;
+        }
+
+        public IEnumerable<WalletManagerDTO.Category> GetCategories(string filePath)
+        {
+            var lines = File.ReadAllLines(filePath);
+            return _serializer.Deserialize(lines);
         }
 
         public bool SaveCategories(IEnumerable<WalletManagerDTO.Category> categories, string csvPath)
