@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using System.IO;
+using WalletManagerDTO;
 using WalletManagerSite.Models;
 
 namespace WalletManagerSite.Tools.Mapper
@@ -19,5 +21,7 @@ namespace WalletManagerSite.Tools.Mapper
         TransactionsViewModel MapToTransactionsViewModel(List<TransactionViewModel> transactionsViewModel);
         
         CsvFileViewModel MapToCsvFileViewModel(FileInfo fileInfo);
+
+        SelectListItem MapToSelectListItem(Category category);
     }
 }

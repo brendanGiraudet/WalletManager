@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using WalletManagerDTO;
 using WalletManagerSite.Models;
 
 namespace WalletManagerSite.Tools.Mapper
@@ -34,7 +36,7 @@ namespace WalletManagerSite.Tools.Mapper
             return new TransactionChartViewModel
             {
                 Amount = transaction.Amount < 0 ? transaction.Amount*-1 : transaction.Amount,
-                Category = transaction.Category.ToString(),
+                Category = transaction.Category.Name,
             };
         }
 
@@ -96,5 +98,20 @@ namespace WalletManagerSite.Tools.Mapper
                 Reference = transaction.Reference
             };
         }
+
+        public SelectListItem MapToSelectListItem(Category category)
+        {
+            if (category == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            return new SelectListItem
+            {
+                Value = category.Name,
+                Text = category.Name
+            };
+        }
+
     }
 }
