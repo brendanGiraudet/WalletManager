@@ -20,6 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Views\Category\Index.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Home\AboutPartialView.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

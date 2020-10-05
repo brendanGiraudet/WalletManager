@@ -1,0 +1,15 @@
+﻿@model IEnumerable<WalletManagerSite.Models.CategoryViewModel>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<h2>@Localizer["Title"]</h2>
+
+@Html.ActionLink(Localizer["Save"].Value, "Save", "Category", null, new { @class = "btn btn-primary" })
+
+<div id="transactionsTable">
+    @{
+        Html.RenderPartial("CategoriesTablePartialView", Model);
+    }
+</div>
+
+@Html.ActionLink(Localizer["Save"].Value, "Save", "Category", null, new { @class = "btn btn-primary" })
