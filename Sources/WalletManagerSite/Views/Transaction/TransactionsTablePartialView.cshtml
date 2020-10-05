@@ -34,7 +34,7 @@
                     @Html.DisplayFor(modelItem => item.Amount)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Category)
+                    @Html.DisplayFor(modelItem => item.Category.Name)
                 </td>
                 <td>
                     @Html.ActionLink(Localizer["Edit"].Value, "Edit", new { reference = item.Reference }) |

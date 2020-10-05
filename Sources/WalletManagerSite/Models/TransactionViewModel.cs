@@ -1,5 +1,7 @@
-﻿using System;
-using WalletManagerDTO.Enumerations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
+using WalletManagerDTO;
 
 namespace WalletManagerSite.Models
 {
@@ -15,8 +17,24 @@ namespace WalletManagerSite.Models
 
         public decimal Amount { get; set; }
 
-        public TransactionCategory Category { get; set; } = TransactionCategory.NA;
+        public Category Category
+        {
+            get => new Category { Name = CategoryName };
+            set => CategoryName = value.Name;
+        }
+
+        public string CategoryName { get; set; }
 
         public string Color { get; set; }
+
+        public IEnumerable<Category> Categories { get; set; } = new List<Category>();
+
+        public SelectList CategoriesToSelect
+        {
+            get
+            {
+                return new SelectList(Categories, nameof(Category.Name), nameof(Category.Name));
+            }
+        }
     }
 }

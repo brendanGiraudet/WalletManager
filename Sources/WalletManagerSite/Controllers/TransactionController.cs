@@ -10,6 +10,7 @@ using WalletManagerDTO;
 using WalletManagerSite.Tools.Mapper;
 using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
+using WalletManagerServices.Category;
 
 namespace WalletManagerSite.Controllers
 {
@@ -19,13 +20,15 @@ namespace WalletManagerSite.Controllers
         readonly IConfiguration _configuration;
         private readonly IStringLocalizer<TransactionController> _localizer;
         readonly IMapper _mapper;
+        readonly ICategoryServices _categoryServices;
 
-        public TransactionController(ITransactionServices transactionServices, IConfiguration configuration, IStringLocalizer<TransactionController> localizer, IMapper mapper)
+        public TransactionController(ITransactionServices transactionServices, IConfiguration configuration, IStringLocalizer<TransactionController> localizer, IMapper mapper, ICategoryServices categoryServices)
         {
             _transactionServices = transactionServices;
             _configuration = configuration;
             _localizer = localizer;
             _mapper = mapper;
+            _categoryServices = categoryServices;
         }
         // GET: Transaction
         public ActionResult Index()
@@ -109,13 +112,13 @@ namespace WalletManagerSite.Controllers
             return Json(GetTransactionsChart());
         }
 
-        private object GetTransactionsChart()
+        private IEnumerable<TransactionChartViewModel> GetTransactionsChart()
         {
             var transactions = _transactionServices.GetTransactions();
             var groupedTransactionsByCategory = _transactionServices.GetGroupedTransactionsByCategory(transactions);
             var transactionsChartViewModel = _mapper.MapToTransactionsChartViewModel(groupedTransactionsByCategory);
             
-            return transactionsChartViewModel.ToList();
+            return transactionsChartViewModel;
         }
 
         // GET: Transaction/Details/5
@@ -189,6 +192,12 @@ namespace WalletManagerSite.Controllers
             if (transaction != null)
             {
                 var transactionViewModel = _mapper.MapToTransactionViewModel(transaction);
+                
+                var filePath = Tools.Directory.DirectoryTools.GetCategoryCsvFilePath(_configuration);
+                var categories = _categoryServices.GetCategories(filePath);
+
+                transactionViewModel.Categories = categories;
+
                 return transactionViewModel;
             }
             return null;
@@ -197,7 +206,7 @@ namespace WalletManagerSite.Controllers
         // POST: Transaction/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind("Compte", "ComptabilisationDate", "OperationDate", "Label", "Reference", "ValueDate", "Amount", "Category")] TransactionViewModel transaction)
+        public ActionResult Edit([Bind("Compte", "ComptabilisationDate", "OperationDate", "Label", "Reference", "ValueDate", "Amount", "CategoryName")] TransactionViewModel transaction)
         {
             try
             {
