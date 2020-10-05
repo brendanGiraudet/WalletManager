@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using WalletManagerDTO;
-using WalletManagerDTO.Enumerations;
 using WalletManagerSite.Tools.Mapper;
 using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
+using WalletManagerServices.Category;
 
 namespace WalletManagerSite.Controllers
 {
@@ -19,13 +19,15 @@ namespace WalletManagerSite.Controllers
         readonly ITransactionServices _transactionServices;
         readonly IStringLocalizer<CompareController> _localizer;
         readonly IMapper _mapper;
+        readonly ICategoryServices _categoryServices;
 
-        public CompareController(IConfiguration configuration, ITransactionServices transactionServices, IStringLocalizer<CompareController> localizer, IMapper mapper)
+        public CompareController(IConfiguration configuration, ITransactionServices transactionServices, IStringLocalizer<CompareController> localizer, IMapper mapper, ICategoryServices categoryServices)
         {
             _configuration = configuration;
             _transactionServices = transactionServices;
             _localizer = localizer;
             _mapper = mapper;
+            _categoryServices = categoryServices;
         }
         // GET: Compare
         public ActionResult Index()
@@ -103,16 +105,16 @@ namespace WalletManagerSite.Controllers
             return _mapper.MapToTransactionsViewModel(transactionsViewModel);
         }
 
-        private void AppendMissingCategoryTransactions(List<TransactionViewModel> transactions)
+        private void AppendMissingCategoryTransactions(IEnumerable<TransactionViewModel> transactions)
         {
-            List<TransactionCategory> categories = GetCategories();
+            var categories = GetCategories();
             var firstTransaction = transactions.FirstOrDefault();
 
             foreach (var category in categories)
             {
                 if (!transactions.Any(t => t.Category.Equals(category)))
                 {
-                    transactions.Add(new TransactionViewModel
+                    transactions.Append(new TransactionViewModel
                     {
                         Category = category,
                         Amount = 0,
@@ -122,15 +124,10 @@ namespace WalletManagerSite.Controllers
             }
         }
 
-        private List<TransactionCategory> GetCategories()
+        private IEnumerable<Category> GetCategories()
         {
-            var categories = new List<TransactionCategory>();
-            var categoriesName = Enum.GetNames(typeof(TransactionCategory));
-            foreach (var categoryName in categoriesName)
-            {
-                categories.Add((TransactionCategory)Enum.Parse(typeof(TransactionCategory), categoryName));
-            }
-
+            var filePath = Tools.Directory.DirectoryTools.GetCategoryCsvFilePath(_configuration);
+            var categories = _categoryServices.GetCategories(filePath);
             return categories;
         }
 
@@ -170,7 +167,7 @@ namespace WalletManagerSite.Controllers
             return filePath;
         }
 
-        private List<TransactionViewModel> GetTransactionViewModels(List<Transaction> transactions)
+        private IEnumerable<TransactionViewModel> GetTransactionViewModels(IEnumerable<Transaction> transactions)
         {
             return _mapper.MapToTransactionViewModels(transactions).ToList();
         }
