@@ -23,5 +23,7 @@ namespace WalletManagerSite.Tools.Mapper
         CsvFileViewModel MapToCsvFileViewModel(FileInfo fileInfo);
 
         SelectListItem MapToSelectListItem(Category category);
+
+        CategoryViewModel MapToCategoryViewModel(Category category);
     }
 }

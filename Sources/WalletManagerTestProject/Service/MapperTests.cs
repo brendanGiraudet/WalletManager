@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using WalletManagerDTO;
 using WalletManagerSite.Tools.Mapper;
 using WalletManagerTestProject.Utils;
 using Xunit;
@@ -239,5 +240,35 @@ namespace WalletManagerTestProject.Service
             // Assert
             Assert.Throws<ArgumentNullException>(mapAction);
         }
+
+        #region MapToCategoryViewModel
+        [Fact]
+        public void ShouldMapCategoryToViewModel()
+        {
+            // Arrange
+            var fakeCategory = FakerUtils.CategoryFaker.Generate();
+
+            // Act
+            var categoryViewModel = _mapper.MapToCategoryViewModel(fakeCategory);
+
+            // Assert
+            Assert.NotNull(categoryViewModel);
+            Assert.Equal(fakeCategory.Name, categoryViewModel.CategoryName);
+            Assert.Equal(fakeCategory.CreationDate, categoryViewModel.CreationDate);
+        }
+
+        [Fact]
+        public void ShouldThrowExceptionWhendMapCategoryToViewModelWithEmptyCategory()
+        {
+            // Arrange
+            Category fakeCategory = null;
+
+            // Act
+            Action mapAction = () => _ = _mapper.MapToCategoryViewModel(fakeCategory);
+
+            // Assert
+            Assert.Throws<ArgumentNullException>(mapAction);
+        }
+        #endregion
     }
 }

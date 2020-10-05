@@ -35,7 +35,7 @@ namespace WalletManagerSite.Tools.Mapper
 
             return new TransactionChartViewModel
             {
-                Amount = transaction.Amount < 0 ? transaction.Amount*-1 : transaction.Amount,
+                Amount = transaction.Amount < 0 ? transaction.Amount * -1 : transaction.Amount,
                 Category = transaction.Category.Name,
             };
         }
@@ -70,7 +70,7 @@ namespace WalletManagerSite.Tools.Mapper
 
         public TransactionsViewModel MapToTransactionsViewModel(List<TransactionViewModel> transactionsViewModel)
         {
-            if(transactionsViewModel == null)
+            if (transactionsViewModel == null)
             {
                 throw new ArgumentNullException();
             }
@@ -83,7 +83,7 @@ namespace WalletManagerSite.Tools.Mapper
 
         public TransactionViewModel MapToTransactionViewModel(WalletManagerDTO.Transaction transaction)
         {
-            if(transaction == null)
+            if (transaction == null)
             {
                 throw new ArgumentNullException();
             }
@@ -113,5 +113,18 @@ namespace WalletManagerSite.Tools.Mapper
             };
         }
 
+        public CategoryViewModel MapToCategoryViewModel(Category category)
+        {
+            if (category == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            return new CategoryViewModel
+            {
+                CategoryName = category.Name,
+                CreationDate = category.CreationDate
+            };
+        }
     }
 }
