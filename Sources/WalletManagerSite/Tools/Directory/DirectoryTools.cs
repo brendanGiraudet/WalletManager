@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System.IO;
 
 namespace WalletManagerSite.Tools.Directory
 {
@@ -11,6 +10,13 @@ namespace WalletManagerSite.Tools.Directory
             CreateDirectoryIfNotExist(directoryPath);
             return directoryPath;
         }
+        
+        public static string GetCategoryCsvFilePath(IConfiguration configuration)
+        {
+            var categoryCsvFilePath = configuration.GetValue<string>("CategoryCsvFilePath");
+            return categoryCsvFilePath;
+        }
+        
 
         public static void CreateDirectoryIfNotExist(string directoryPath)
         {
