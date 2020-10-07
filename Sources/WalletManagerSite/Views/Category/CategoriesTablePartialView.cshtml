@@ -25,9 +25,7 @@
                     @Html.DisplayFor(modelItem => item.CreationDate)
                 </td>
                 <td>
-                    @Html.ActionLink(Localizer["Edit"].Value, "Edit", new { reference = item.CategoryName }) |
-                    @Html.ActionLink(Localizer["Details"].Value, "Details", new { reference = item.CategoryName }) |
-                    @Html.ActionLink(Localizer["Delete"].Value, "Delete", new { reference = item.CategoryName })
+                    @Html.ActionLink(Localizer["Delete"].Value, "Delete", new { categoryName = item.CategoryName })
                 </td>
             </tr>
         }

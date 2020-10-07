@@ -1,0 +1,38 @@
+﻿@model WalletManagerSite.Models.CategoryViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["Title"];
+}
+
+<h2>@Localizer["Title"]</h2>
+
+@{
+    if (!string.IsNullOrWhiteSpace(ViewBag.Error))
+    {
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.Error
+        </div>
+    }
+    else
+    {
+        <h3>@Localizer["DeleteQuestion"]</h3>
+        <div>
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.CategoryName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.CreationDate)
+                </dd>
+            </dl>
+
+            <form asp-action="Delete">
+                @Html.HiddenFor(model => model.CategoryName)
+                <input type="submit" value="@Localizer["Title"]" class="btn btn-default" /> |
+                <a asp-action="Index">@Localizer["Back"]</a>
+            </form>
+        </div>
+    }
+}
