@@ -13,5 +13,7 @@ namespace WalletManagerServices.Category
         void AddCategory(WalletManagerDTO.Category category);
         
         void Delete(string categoryName);
+        
+        bool SaveCategories(string csvPath);
     }
 }

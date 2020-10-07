@@ -105,5 +105,25 @@ namespace WalletManagerSite.Controllers
         }
 
         private IEnumerable<CategoryViewModel> GetCategoryViewModels(IEnumerable<Category> categories) => categories.Select(_mapper.MapToCategoryViewModel);
+
+        public ActionResult Save()
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    string filePath = Tools.Directory.DirectoryTools.GetCategoryCsvFilePath(_configuration);
+                    _categoryServices.SaveCategories(filePath);
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
+        }
     }
 }

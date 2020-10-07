@@ -27,6 +27,11 @@ namespace WalletManagerServices.Category
             return _categories;
         }
 
+        public bool SaveCategories(string csvPath)
+        {
+            return SaveCategories(_categories, csvPath);
+        }
+
         public bool SaveCategories(IEnumerable<WalletManagerDTO.Category> categories, string csvPath)
         {
             try
