@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using WalletManagerDTO;
 using WalletManagerSite.Tools.Mapper;
-using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
 using WalletManagerServices.Category;
 
@@ -114,6 +112,35 @@ namespace WalletManagerSite.Controllers
                 {
                     string filePath = Tools.Directory.DirectoryTools.GetCategoryCsvFilePath(_configuration);
                     _categoryServices.SaveCategories(filePath);
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Category/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Category/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind("CategoryName")] CategoryViewModel categoryViewModel)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var categoryDto = _mapper.MapToCategory(categoryViewModel);
+                    _categoryServices.AddCategory(categoryDto);
 
                     return RedirectToAction(nameof(Index));
                 }

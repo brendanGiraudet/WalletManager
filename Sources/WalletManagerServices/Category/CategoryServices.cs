@@ -8,12 +8,11 @@ namespace WalletManagerServices.Category
     public class CategoryServices : ICategoryServices
     {
         readonly WalletManagerDAL.Serializer.ISerializer<WalletManagerDTO.Category> _serializer;
-        IEnumerable<WalletManagerDTO.Category> _categories;
+        private IEnumerable<WalletManagerDTO.Category> _categories = Enumerable.Empty<WalletManagerDTO.Category>();
 
         public CategoryServices(WalletManagerDAL.Serializer.ISerializer<WalletManagerDTO.Category> serializer)
         {
             _serializer = serializer;
-            _categories = new List<WalletManagerDTO.Category>();
         }
 
         public IEnumerable<WalletManagerDTO.Category> GetCategories(string filePath)
@@ -52,7 +51,9 @@ namespace WalletManagerServices.Category
 
         public void AddCategory(WalletManagerDTO.Category category)
         {
-            _categories.Append(category);
+            var categoryList = _categories.ToList();
+            categoryList.Add(category);
+            _categories = categoryList;
         }
 
         public void Delete(string categoryName)

@@ -120,6 +120,9 @@
   <data name="About" xml:space="preserve">
     <value>A propos</value>
   </data>
+  <data name="Category" xml:space="preserve">
+    <value>Categorie</value>
+  </data>
   <data name="Compare" xml:space="preserve">
     <value>Comparer</value>
   </data>
