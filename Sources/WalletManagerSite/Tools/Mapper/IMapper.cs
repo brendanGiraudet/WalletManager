@@ -25,5 +25,7 @@ namespace WalletManagerSite.Tools.Mapper
         SelectListItem MapToSelectListItem(Category category);
 
         CategoryViewModel MapToCategoryViewModel(Category category);
+        
+        Category MapToCategory(CategoryViewModel categoryViewModel);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using System.IO;
 using WalletManagerDTO;
+using WalletManagerSite.Models;
 
 namespace WalletManagerTestProject.Utils
 {
@@ -27,6 +28,10 @@ namespace WalletManagerTestProject.Utils
 
         public static Faker<Category> CategoryFaker => new Faker<Category>()
             .RuleFor(field => field.Name, faker => faker.Random.String2(2))
+            .RuleFor(field => field.CreationDate, faker => faker.Date.Past());
+        
+        public static Faker<CategoryViewModel> CategoryViewModelFaker => new Faker<CategoryViewModel>()
+            .RuleFor(field => field.CategoryName, faker => faker.Random.String2(2))
             .RuleFor(field => field.CreationDate, faker => faker.Date.Past());
     }
 }

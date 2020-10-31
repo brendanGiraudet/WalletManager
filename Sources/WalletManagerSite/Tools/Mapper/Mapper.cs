@@ -126,5 +126,19 @@ namespace WalletManagerSite.Tools.Mapper
                 CreationDate = category.CreationDate
             };
         }
+        
+        public Category MapToCategory(CategoryViewModel categoryViewModel)
+        {
+            if (categoryViewModel == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            return new Category
+            {
+                Name = categoryViewModel.CategoryName,
+                CreationDate = categoryViewModel.CreationDate
+            };
+        }
     }
 }
