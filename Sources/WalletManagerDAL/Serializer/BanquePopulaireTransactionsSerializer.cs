@@ -27,7 +27,7 @@ namespace WalletManagerDAL.Serializer
                         Compte = values[0],
                         OperationDate = Convert.ToDateTime(values[2]),
                         Label = values[3],
-                        Reference = values[4],
+                        Reference = Guid.NewGuid().ToString(),
                         Amount = Convert.ToDecimal(values[6]),
                         Category = new Category()
                     };

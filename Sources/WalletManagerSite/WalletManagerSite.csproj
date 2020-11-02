@@ -175,4 +175,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="BankTransactionsCsv\" />
+  </ItemGroup>
+
 </Project>
