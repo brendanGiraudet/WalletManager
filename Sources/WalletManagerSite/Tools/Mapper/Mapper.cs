@@ -68,7 +68,7 @@ namespace WalletManagerSite.Tools.Mapper
             return transactions.Select(MapToTransactionViewModel);
         }
 
-        public TransactionsViewModel MapToTransactionsViewModel(List<TransactionViewModel> transactionsViewModel)
+        public TransactionsViewModel MapToTransactionsViewModel(IEnumerable<TransactionViewModel> transactionsViewModel)
         {
             if (transactionsViewModel == null)
             {

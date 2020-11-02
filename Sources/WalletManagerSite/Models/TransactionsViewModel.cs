@@ -5,7 +5,7 @@ namespace WalletManagerSite.Models
 {
     public class TransactionsViewModel
     {
-        public List<TransactionViewModel> Transactions { get; set; }
+        public IEnumerable<TransactionViewModel> Transactions { get; set; }
 
         public System.DateTime? Date {
             get

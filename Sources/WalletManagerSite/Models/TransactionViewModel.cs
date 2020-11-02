@@ -19,7 +19,7 @@ namespace WalletManagerSite.Models
 
         public Category Category
         {
-            get => new Category { Name = CategoryName };
+            get => new Category { Name = CategoryName, CreationDate = DateTime.Now };
             set => CategoryName = value.Name;
         }
 

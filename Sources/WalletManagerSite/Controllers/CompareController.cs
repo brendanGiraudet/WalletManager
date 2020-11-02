@@ -51,31 +51,31 @@ namespace WalletManagerSite.Controllers
                 ViewBag.Error = _localizer["BadNumberOfCsv"];
                 return View(compareTransactionList);
             }
-
+            var transactionsToCompare = new List<TransactionsViewModel>();
             foreach (var selectedFile in selectedCsvFiles)
             {
                 var filePath = GetFullFilePath(selectedFile.FileName);
                 try
                 {
                     var transactions = _transactionServices.GetTransactions(filePath);
-                    transactions = _transactionServices.GetGroupedTransactionsByCategory(transactions);
-                    if (transactions == null || !transactions.Any())
+                    var groupedTransactions = _transactionServices.GetGroupedTransactionsByCategory(transactions);
+                    if (groupedTransactions == null || !groupedTransactions.Any())
                     {
                         ViewBag.Error = _localizer["EmptyTransactionList"];
                         return View(compareTransactionList);
                     }
 
-                    var transactionViewModels = GetTransactionViewModels(transactions);
+                    var transactionViewModels = GetTransactionViewModels(groupedTransactions);
 
-                    AppendMissingCategoryTransactions(transactionViewModels);
+                    transactionViewModels = AppendMissingCategoryTransactions(transactionViewModels);
 
-                    var transactionsViewModelOrdered = transactionViewModels.OrderBy(t => t.Category.ToString()).ToList();
+                    var transactionsViewModelOrdered = transactionViewModels.OrderBy(t => t.Category.Name.ToString()).AsEnumerable();
 
-                    UnsignAmount(transactionsViewModelOrdered);
+                    transactionsViewModelOrdered = UnsignAmount(transactionsViewModelOrdered);
 
                     var transactionsViewModel = GetTransactionsViewModel(transactionsViewModelOrdered);
-
-                    compareTransactionList.TransactionsToCompare.Add(transactionsViewModel);
+                    
+                    transactionsToCompare.Add(transactionsViewModel);
                 }
                 catch (Exception ex)
                 {
@@ -83,45 +83,48 @@ namespace WalletManagerSite.Controllers
                     return View(compareTransactionList);
                 }
             }
-
-            compareTransactionList.TransactionsToCompare = OrderTransactionsByDate(compareTransactionList);
+            compareTransactionList.TransactionsToCompare = OrderedTransactionsByDate(transactionsToCompare);
             CompareToAdjustTransactionColor(compareTransactionList);
 
             return View(compareTransactionList);
         }
 
-        private static List<TransactionsViewModel> OrderTransactionsByDate(CompareViewModel compareTransactionList)
+        private IEnumerable<TransactionsViewModel> OrderedTransactionsByDate(IEnumerable<TransactionsViewModel> transactions)
         {
-            return compareTransactionList.TransactionsToCompare.OrderBy(t => t.Date).ToList();
+            var transactionsOrderedByDate = transactions.OrderBy(t => t.Date);
+            return transactionsOrderedByDate;
         }
 
-        private static void UnsignAmount(List<TransactionViewModel> transactionsViewModelOrdered)
+        private IEnumerable<TransactionViewModel> UnsignAmount(IEnumerable<TransactionViewModel> transactionsViewModelOrdered)
         {
-            transactionsViewModelOrdered.ForEach(t => { if (t.Amount < 0) t.Amount *= -1; });
+            var transactionList = transactionsViewModelOrdered.ToList();
+            transactionList.ForEach(t => { if (t.Amount < 0) t.Amount *= -1; });
+            return transactionList;
         }
 
-        private TransactionsViewModel GetTransactionsViewModel(List<TransactionViewModel> transactionsViewModel)
+        private TransactionsViewModel GetTransactionsViewModel(IEnumerable<TransactionViewModel> transactionsViewModel)
         {
             return _mapper.MapToTransactionsViewModel(transactionsViewModel);
         }
 
-        private void AppendMissingCategoryTransactions(IEnumerable<TransactionViewModel> transactions)
+        private IEnumerable<TransactionViewModel> AppendMissingCategoryTransactions(IEnumerable<TransactionViewModel> transactions)
         {
             var categories = GetCategories();
-            var firstTransaction = transactions.FirstOrDefault();
+            var transactionList = transactions.ToList();
 
             foreach (var category in categories)
             {
-                if (!transactions.Any(t => t.Category.Equals(category)))
+                if (!transactionList.Any(t => t.Category.Name.Equals(category.Name)))
                 {
-                    transactions.Append(new TransactionViewModel
+                    transactionList.Add(new TransactionViewModel
                     {
                         Category = category,
                         Amount = 0,
-                        OperationDate = firstTransaction != null ? firstTransaction.OperationDate : DateTime.Now
+                        OperationDate = DateTime.Now
                     });
                 }
             }
+            return transactionList;
         }
 
         private IEnumerable<Category> GetCategories()
@@ -136,9 +139,9 @@ namespace WalletManagerSite.Controllers
             var oldTransactions = compareViewModel.TransactionsToCompare.First();
             foreach (var actualTransactions in compareViewModel.TransactionsToCompare.Skip(1))
             {
-                oldTransactions.Transactions.ForEach(transactionToCompared =>
+                foreach (var transactionToCompared in oldTransactions.Transactions)
                 {
-                    var comparedTransaction = actualTransactions.Transactions.FirstOrDefault(t => t.Category.Equals(transactionToCompared.Category));
+                    var comparedTransaction = actualTransactions.Transactions.FirstOrDefault(t => t.Category.Name.Equals(transactionToCompared.Category.Name));
 
                     if (comparedTransaction != null)
                     {
@@ -155,7 +158,7 @@ namespace WalletManagerSite.Controllers
                             comparedTransaction.Color = "danger";
                         }
                     }
-                });
+                }
                 oldTransactions = actualTransactions;
             }
         }

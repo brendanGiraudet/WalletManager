@@ -18,7 +18,7 @@ namespace WalletManagerSite.Tools.Mapper
 
         WalletManagerDTO.Transaction MapToTransactionDto(TransactionViewModel transactionViewModel);
         
-        TransactionsViewModel MapToTransactionsViewModel(List<TransactionViewModel> transactionsViewModel);
+        TransactionsViewModel MapToTransactionsViewModel(IEnumerable<TransactionViewModel> transactionsViewModel);
         
         CsvFileViewModel MapToCsvFileViewModel(FileInfo fileInfo);
 
