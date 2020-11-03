@@ -21,6 +21,16 @@ namespace WalletManagerSite.Controllers
         private readonly IStringLocalizer<TransactionController> _localizer;
         readonly IMapper _mapper;
         readonly ICategoryServices _categoryServices;
+        public string CurrentFilename { 
+            get
+            {
+                return TempData["Filename"].ToString();
+            }
+            set
+            {
+                TempData["Filename"] = value;
+            }
+        }
 
         public TransactionController(ITransactionServices transactionServices, IConfiguration configuration, IStringLocalizer<TransactionController> localizer, IMapper mapper, ICategoryServices categoryServices)
         {
@@ -39,7 +49,7 @@ namespace WalletManagerSite.Controllers
         // GET: Transaction/123s
         public ActionResult List(string fileName)
         {
-            var transactions = new List<TransactionViewModel>();
+            IEnumerable<TransactionViewModel> transactions = Enumerable.Empty<TransactionViewModel>();
             if (string.IsNullOrWhiteSpace(fileName))
             {
                 ViewBag.Error = _localizer["EmptyFilePath"];
@@ -52,7 +62,10 @@ namespace WalletManagerSite.Controllers
             try
             {
                 _transactionServices.LoadTransactions(filePath);
-                return RedirectToAction("Index");
+                transactions = GetTransactions();
+                CurrentFilename = fileName;
+
+                return View("Index", transactions);
             }
             catch (Exception ex)
             {
@@ -92,6 +105,7 @@ namespace WalletManagerSite.Controllers
             try
             {
                 _transactionServices.LoadTransactions(file.OpenReadStream());
+                CurrentFilename = file.FileName;
             }
             catch (Exception ex)
             {
@@ -117,7 +131,7 @@ namespace WalletManagerSite.Controllers
             var transactions = _transactionServices.GetTransactions();
             var groupedTransactionsByCategory = _transactionServices.GetGroupedTransactionsByCategory(transactions);
             var transactionsChartViewModel = _mapper.MapToTransactionsChartViewModel(groupedTransactionsByCategory);
-            
+
             return transactionsChartViewModel;
         }
 
@@ -192,11 +206,12 @@ namespace WalletManagerSite.Controllers
             if (transaction != null)
             {
                 var transactionViewModel = _mapper.MapToTransactionViewModel(transaction);
-                
+
                 var filePath = Tools.Directory.DirectoryTools.GetCategoryCsvFilePath(_configuration);
                 var categories = _categoryServices.GetCategories(filePath);
+                var categoriseOrderedByName = categories.OrderBy(c => c.Name);
 
-                transactionViewModel.Categories = categories;
+                transactionViewModel.Categories = categoriseOrderedByName;
 
                 return transactionViewModel;
             }
@@ -271,39 +286,28 @@ namespace WalletManagerSite.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
                 return RedirectToAction(nameof(Delete), "Transaction", new { reference });
             }
         }
 
-        // GET: Transaction/Save
         public ActionResult Save()
         {
-            return View();
-        }
+            if (string.IsNullOrEmpty(CurrentFilename))
+                return RedirectToAction(nameof(Index));
 
-        // POST: Transaction/Save
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Save([Bind("FileName")] SaveTransactionsViewModel saveTransactionsViewModel)
-        {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    string filePath = GetFullFilePath(saveTransactionsViewModel.FileName);
-                    _transactionServices.SaveTransactionsIntoCsvFile(filePath);
+                string filePath = GetFullFilePath(CurrentFilename);
+                _transactionServices.SaveTransactionsIntoCsvFile(filePath);
 
-                    return RedirectToAction(nameof(Index));
-                }
-
-                return View();
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
 
