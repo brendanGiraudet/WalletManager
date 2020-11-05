@@ -98,6 +98,7 @@ namespace WalletManagerSite.Controllers
             var transactions = _transactionServices.GetTransactions();
             if (transactions != null && transactions.Any())
             {
+                transactions = transactions.OrderBy(t => t.OperationDate);
                 return GetTransactionsViewModel(transactions);
             }
 
