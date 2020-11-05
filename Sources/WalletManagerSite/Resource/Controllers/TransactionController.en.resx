@@ -123,6 +123,18 @@
   <data name="EmptyReference" xml:space="preserve">
     <value>Reference is empty</value>
   </data>
+  <data name="SuccessDeleteMessage" xml:space="preserve">
+    <value>Transaction is delete with successfull</value>
+  </data>
+  <data name="SuccessEditMessage" xml:space="preserve">
+    <value>Transaction is update with successfull</value>
+  </data>
+  <data name="SuccessFusionMessage" xml:space="preserve">
+    <value>Transactions are fusionned with successfull</value>
+  </data>
+  <data name="SuccessSaveMessage" xml:space="preserve">
+    <value>Success transactions are saved</value>
+  </data>
   <data name="TransactionNotFound" xml:space="preserve">
     <value>Transaction not found</value>
   </data>

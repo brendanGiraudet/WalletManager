@@ -34,11 +34,24 @@
                     @Html.DisplayFor(modelItem => item.Amount)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Category.Name)
+
+                    <select class="form-control" onchange="UpdateCategory(this, '@item.Reference')">
+                        @foreach (var category in item.Categories)
+                        {
+                            var isSelected = category.Name == item.CategoryName;
+                            if (isSelected)
+                            {
+                                <option value="@category.Name" selected>@category.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@category.Name">@category.Name</option>
+                            }
+
+                        }
+                    </select>
                 </td>
                 <td>
-                    @Html.ActionLink(Localizer["Edit"].Value, "Edit", new { reference = item.Reference }) |
-                    @Html.ActionLink(Localizer["Details"].Value, "Details", new { reference = item.Reference }) |
                     @Html.ActionLink(Localizer["Delete"].Value, "Delete", new { reference = item.Reference })
                 </td>
             </tr>

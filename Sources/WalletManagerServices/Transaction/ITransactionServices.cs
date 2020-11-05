@@ -31,5 +31,6 @@ namespace WalletManagerServices.Transaction
         IEnumerable<WalletManagerDTO.Transaction> FusionTransactions(IEnumerable<WalletManagerDTO.Transaction> firstTransactionListToFusion, IEnumerable<WalletManagerDTO.Transaction> secondTransactionListToFusion);
 
         void SetTransactions(IEnumerable<WalletManagerDTO.Transaction> transactions);
+        bool UpdateCategory(string categoryname, string reference);
     }
 }

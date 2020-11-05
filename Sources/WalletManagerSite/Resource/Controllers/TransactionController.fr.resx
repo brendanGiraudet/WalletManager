@@ -123,6 +123,18 @@
   <data name="EmptyReference" xml:space="preserve">
     <value>La référence n'est pas renseigné</value>
   </data>
+  <data name="SuccessDeleteMessage" xml:space="preserve">
+    <value>La transaction a bien été supprimée</value>
+  </data>
+  <data name="SuccessEditMessage" xml:space="preserve">
+    <value>La transaction a bien été mise à jour</value>
+  </data>
+  <data name="SuccessFusionMessage" xml:space="preserve">
+    <value>La fusion a bien été faite</value>
+  </data>
+  <data name="SuccessSaveMessage" xml:space="preserve">
+    <value>Les transactions ont bien été sauvegardées</value>
+  </data>
   <data name="TransactionNotFound" xml:space="preserve">
     <value>Transaction non trouvé</value>
   </data>

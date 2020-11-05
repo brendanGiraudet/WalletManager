@@ -33,6 +33,7 @@ namespace WalletManagerSite.Controllers
         public ActionResult Index()
         {
             var categories = GetCategories();
+            categories = categories.OrderBy(c => c.Name);
             var categoryViewModels = GetCategoryViewModels(categories);
             return View(categoryViewModels);
         }

@@ -76,7 +76,16 @@ namespace WalletManagerSite.Controllers
 
         private IEnumerable<TransactionViewModel> GetTransactionsViewModel(IEnumerable<Transaction> transactions)
         {
-            return _mapper.MapToTransactionViewModels(transactions);
+            var filePath = Tools.Directory.DirectoryTools.GetCategoryCsvFilePath(_configuration);
+            var categories = _categoryServices.GetCategories(filePath);
+            var categoriesOrderedByName = categories.OrderBy(c => c.Name);
+            var transactionViewModels = _mapper.MapToTransactionViewModels(transactions);
+            var transactionViewModelList = transactionViewModels.ToList();
+            foreach (var transaction in transactionViewModelList)
+            {
+                transaction.Categories = categoriesOrderedByName;
+            }
+            return transactionViewModelList;
         }
 
         public ActionResult LoadTransactionsTable()
@@ -113,6 +122,20 @@ namespace WalletManagerSite.Controllers
             }
 
             return Json(message);
+        }
+        
+        [HttpPost]
+        public IActionResult UpdateCategory(string categoryName, string reference)
+        {
+            try
+            {
+                var isUpdated = _transactionServices.UpdateCategory(categoryName, reference);
+                return Json(isUpdated);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
         }
 
         private static void DeleteTempFile(string filePath)
@@ -209,9 +232,9 @@ namespace WalletManagerSite.Controllers
 
                 var filePath = Tools.Directory.DirectoryTools.GetCategoryCsvFilePath(_configuration);
                 var categories = _categoryServices.GetCategories(filePath);
-                var categoriseOrderedByName = categories.OrderBy(c => c.Name);
+                var categoriesOrderedByName = categories.OrderBy(c => c.Name);
 
-                transactionViewModel.Categories = categoriseOrderedByName;
+                transactionViewModel.Categories = categoriesOrderedByName;
 
                 return transactionViewModel;
             }
@@ -228,6 +251,8 @@ namespace WalletManagerSite.Controllers
                 if (ModelState.IsValid)
                 {
                     UpdateTransaction(transaction);
+
+                    TempData["Success"] = _localizer["SuccessEditMessage"].Value;
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -284,6 +309,8 @@ namespace WalletManagerSite.Controllers
 
                 _transactionServices.Delete(reference);
 
+                TempData["Success"] = _localizer["SuccessDeleteMessage"].Value;
+
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -302,6 +329,8 @@ namespace WalletManagerSite.Controllers
             {
                 string filePath = GetFullFilePath(CurrentFilename);
                 _transactionServices.SaveTransactionsIntoCsvFile(filePath);
+
+                TempData["Success"] = _localizer["SuccessSaveMessage"].Value;
 
                 return RedirectToAction(nameof(Index));
             }
@@ -358,6 +387,8 @@ namespace WalletManagerSite.Controllers
 
             var fusionedTransactions = GetFusionedTransactionList(transactionsToFusion);
             _transactionServices.SetTransactions(fusionedTransactions);
+
+            TempData["Success"] = _localizer["SuccessFusionMessage"].Value;
 
             return RedirectToAction("Index");
         }

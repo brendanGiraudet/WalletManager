@@ -11,6 +11,13 @@
             @ViewBag.Error
         </div>
     }
+
+    if (TempData.ContainsKey("Success"))
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["Success"].ToString()
+        </div>
+    }
 }
 
 <div class="container">
@@ -54,6 +61,20 @@
 @section Scripts{
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
+        function UpdateCategory(select, reference) {
+            var data = { categoryName: select.value, reference: reference };
+            $.post('@Url.Action("UpdateCategory")', data, function (response) {
+                if (response == true) {
+                    alert('Success the category name is updated');
+                }
+                else {
+                    alert('Error when update category name');
+                }
+            });
+            
+            return false;
+        }
+
         google.charts.load('current', {
             packages: ['corechart']
         });

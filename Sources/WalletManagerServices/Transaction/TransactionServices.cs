@@ -236,5 +236,14 @@ namespace WalletManagerServices.Transaction
                 return new TransactionsSerializer();
             }
         }
+
+        public bool UpdateCategory(string categoryname, string reference)
+        {
+            var transaction = _transactions.FirstOrDefault(t => t.Reference.Equals(reference));
+            if (transaction == null) return false;
+
+            transaction.Category.Name = categoryname;
+            return true;
+        }
     }
 }
