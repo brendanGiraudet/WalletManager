@@ -38,7 +38,7 @@ namespace WalletManagerDAL.Serializer
                         OperationDate = Convert.ToDateTime(values[0]),
                         Label = values[2],
                         Reference = Guid.NewGuid().ToString(),
-                        Amount = Convert.ToDecimal(amount),
+                        Amount = Convert.ToDecimal(amount.Replace(',', '.')),
                         Category = new Category()
                     };
 

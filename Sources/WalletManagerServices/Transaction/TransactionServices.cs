@@ -8,19 +8,25 @@ namespace WalletManagerServices.Transaction
 {
     public class TransactionServices : ITransactionServices
     {
-        ISerializer<WalletManagerDTO.Transaction> _transactionSerializer;
+        TransactionsSerializerFactory _transactionsSerializerFactory;
         private IEnumerable<WalletManagerDTO.Transaction> _transactions;
 
         public TransactionServices()
         {
             _transactions = new List<WalletManagerDTO.Transaction>();
+            _transactionsSerializerFactory = new TransactionsSerializerFactory();
+        }
+
+        public void LoadTransactions(IEnumerable<string> csvLines)
+        {
+            var transactionSerializer = _transactionsSerializerFactory.GetSerializer(csvLines);
+            _transactions = transactionSerializer.Deserialize(csvLines);
         }
 
         public void LoadTransactions(string csvPath)
         {
             IEnumerable<string> csvLines = File.ReadAllLines(csvPath);
-            _transactionSerializer = GetRightSerializer(csvLines);
-            _transactions = _transactionSerializer.Deserialize(csvLines);
+            LoadTransactions(csvLines);
         }
 
         public void LoadTransactions(Stream stream)
@@ -28,8 +34,7 @@ namespace WalletManagerServices.Transaction
             var streamReader = new StreamReader(stream);
             var contentFile = streamReader.ReadToEnd();
             var csvLines = contentFile.Trim().Split("\n");
-            _transactionSerializer = GetRightSerializer(csvLines);
-            _transactions = _transactionSerializer.Deserialize(csvLines);
+            LoadTransactions(csvLines);
         }
 
         public WalletManagerDTO.Transaction GetTransaction(string reference)
@@ -81,14 +86,6 @@ namespace WalletManagerServices.Transaction
                 OperationDate = t.OperationDate,
                 Reference = t.Reference,
             }).ToList();
-        }
-
-        private string RemoveParasiteString(string label)
-        {
-            if (label.Contains("CB****1526"))
-                return label.Remove(0, 10);
-
-            return label;
         }
 
         /// <summary>
@@ -185,8 +182,8 @@ namespace WalletManagerServices.Transaction
         {
             try
             {
-                _transactionSerializer = new TransactionsSerializer();
-                _transactionSerializer.Serialize(transactionsToSave, csvPath);
+                var transactionSerializer = _transactionsSerializerFactory.GetSerializer();
+                transactionSerializer.Serialize(transactionsToSave, csvPath);
             }
             catch (Exception ex)
             {
@@ -206,9 +203,9 @@ namespace WalletManagerServices.Transaction
 
         public IEnumerable<WalletManagerDTO.Transaction> GetTransactions(string csvPath)
         {
-            var lines = File.ReadAllLines(csvPath);
-            _transactionSerializer = GetRightSerializer(lines);
-            return _transactionSerializer.Deserialize(lines);
+            LoadTransactions(csvPath);
+
+            return _transactions;
         }
 
         public IEnumerable<WalletManagerDTO.Transaction> FusionTransactions(IEnumerable<WalletManagerDTO.Transaction> firstTransactionListToFusion, IEnumerable<WalletManagerDTO.Transaction> secondTransactionListToFusion)
@@ -219,22 +216,6 @@ namespace WalletManagerServices.Transaction
         public void SetTransactions(IEnumerable<WalletManagerDTO.Transaction> transactions)
         {
             _transactions = transactions;
-        }
-
-        private ISerializer<WalletManagerDTO.Transaction> GetRightSerializer(IEnumerable<string> csvLines)
-        {
-            if (csvLines.Any(csvLine => csvLine.Contains("Montant(EUROS);Montant(FRANCS)")))
-            {
-                return new BanquePostaleTransactionsSerializer();
-            }
-            else if (csvLines.Any(csvLine => csvLine.Contains("Date valeur;Montant")))
-            {
-                return new BanquePopulaireTransactionsSerializer();
-            }
-            else
-            {
-                return new TransactionsSerializer();
-            }
         }
 
         public bool UpdateCategory(string categoryname, string reference)
