@@ -64,11 +64,8 @@
         function UpdateCategory(select, reference) {
             var data = { categoryName: select.value, reference: reference };
             $.post('@Url.Action("UpdateCategory")', data, function (response) {
-                if (response == true) {
-                    alert('Success the category name is updated');
-                }
-                else {
-                    alert('Error when update category name');
+                if (response != true) {
+                    alert('Error when update category name ');
                 }
             });
             
