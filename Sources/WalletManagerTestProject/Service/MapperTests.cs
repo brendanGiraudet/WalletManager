@@ -30,7 +30,7 @@ namespace WalletManagerTestProject.Service
             // Assert
             Assert.NotNull(transactionViewModel);
             Assert.Equal(transactionDtoFaker.Amount, transactionViewModel.Amount);
-            Assert.Equal(transactionDtoFaker.Category, transactionViewModel.Category);
+            Assert.Equal(transactionDtoFaker.Category.Name, transactionViewModel.Category.Name);
             Assert.Equal(transactionDtoFaker.Compte, transactionViewModel.Compte);
             Assert.Equal(transactionDtoFaker.Label, transactionViewModel.Label);
             Assert.Equal(transactionDtoFaker.OperationDate, transactionViewModel.OperationDate);
@@ -64,7 +64,7 @@ namespace WalletManagerTestProject.Service
             transactionsDtoFaker.ForEach(t =>
             {
                 Assert.Contains(transactionsViewModel, tvm => tvm.Amount.Equals(t.Amount));
-                Assert.Contains(transactionsViewModel, tvm => tvm.Category.Equals(t.Category));
+                Assert.Contains(transactionsViewModel, tvm => tvm.Category.Name.Equals(t.Category.Name));
                 Assert.Contains(transactionsViewModel, tvm => tvm.Compte.Equals(t.Compte));
                 Assert.Contains(transactionsViewModel, tvm => tvm.Label.Equals(t.Label));
                 Assert.Contains(transactionsViewModel, tvm => tvm.OperationDate.Equals(t.OperationDate));
@@ -97,7 +97,7 @@ namespace WalletManagerTestProject.Service
             // Assert
             Assert.NotNull(transactionDtoFaker);
             Assert.Equal(transactionDtoFaker.Amount, transactionChartViewModel.Amount);
-            Assert.Equal(transactionDtoFaker.Category.ToString(), transactionChartViewModel.Category);
+            Assert.Equal(transactionDtoFaker.Category.Name, transactionChartViewModel.Category);
         }
 
         [Fact]
@@ -127,7 +127,7 @@ namespace WalletManagerTestProject.Service
             transactionsDtoFaker.ForEach(t =>
             {
                 Assert.Contains(transactionsViewModel, tvm => tvm.Amount.Equals(t.Amount));
-                Assert.Contains(transactionsViewModel, tvm => tvm.Category.Equals(t.Category.ToString()));
+                Assert.Contains(transactionsViewModel, tvm => tvm.Category.Equals(t.Category.Name));
             });
         }
 
@@ -156,7 +156,7 @@ namespace WalletManagerTestProject.Service
             // Assert
             Assert.NotNull(transactionDto);
             Assert.Equal(transactionViewModelFake.Amount, transactionDto.Amount);
-            Assert.Equal(transactionViewModelFake.Category, transactionDto.Category);
+            Assert.Equal(transactionViewModelFake.Category.Name, transactionDto.Category.Name);
             Assert.Equal(transactionViewModelFake.Compte, transactionDto.Compte);
             Assert.Equal(transactionViewModelFake.Label, transactionDto.Label);
             Assert.Equal(transactionViewModelFake.OperationDate, transactionDto.OperationDate);
@@ -191,7 +191,7 @@ namespace WalletManagerTestProject.Service
             transactionViewModelListFake.ForEach(t =>
             {
                 Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.Amount.Equals(t.Amount));
-                Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.Category.Equals(t.Category));
+                Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.Category.Name.Equals(t.Category.Name));
                 Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.Compte.Equals(t.Compte));
                 Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.Label.Equals(t.Label));
                 Assert.Contains(transactionsViewModel.Transactions, tvm => tvm.OperationDate.Equals(t.OperationDate));
