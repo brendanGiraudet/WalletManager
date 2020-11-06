@@ -38,6 +38,7 @@
                     <select class="form-control" onchange="UpdateCategory(this, '@item.Reference')">
                         @foreach (var category in item.Categories)
                         {
+                            <option>@Localizer["CategorySelection"]</option>
                             var isSelected = category.Name == item.CategoryName;
                             if (isSelected)
                             {
