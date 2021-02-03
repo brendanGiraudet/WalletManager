@@ -15,8 +15,8 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v2
       
-    - name: Install SDK 5.0
-      run: sudo apt-get install dotnet-sdk-5.0
+    - name: Install SDK 2.1
+      run: sudo apt-get install dotnet-sdk-2.1
         
     - name: Install dependencies
       working-directory: /home/runner/work/WalletManager/Sources
