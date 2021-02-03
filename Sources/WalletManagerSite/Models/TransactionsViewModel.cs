@@ -10,7 +10,8 @@ namespace WalletManagerSite.Models
         public System.DateTime? Date {
             get
             {
-                return Transactions?.FirstOrDefault().OperationDate;
+                var transaction = Transactions.FirstOrDefault(t => t.Amount > 0);
+                return transaction?.OperationDate;
             }
          }
     }
