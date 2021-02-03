@@ -1,17 +1,16 @@
-﻿using WalletManagerDAL.Serializer;
-using Xunit;
-using System.Collections.Generic;
-using System.IO;
-using Bogus;
+﻿using System.IO;
 using System.Linq;
+using WalletManagerDAL.Serializer;
 using WalletManagerDTO;
 using WalletManagerTestProject.Utils;
+using Xunit;
 
 namespace WalletManagerTestProject.Serializer
 {
     public class CategorySerializerTests
     {
-        const string csvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CategoriesCsv\";
+        const string csvBasePath = @"/home/runner/work/WalletManager/WalletManager/Sources\WalletManagerTestProject\CategoriesCsv\";
+        //const string csvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CategoriesCsv\";
 
         readonly ISerializer<Category> _serializer;
 

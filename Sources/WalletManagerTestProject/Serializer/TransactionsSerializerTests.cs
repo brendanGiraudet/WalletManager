@@ -9,7 +9,8 @@ namespace WalletManagerTestProject.Serializer
 {
     public class TransactionsSerializerTests
     {
-        const string csvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\TransactionsCsv\";
+        const string csvBasePath = @"/home/runner/work/WalletManager/WalletManager/Sources\WalletManagerTestProject\TransactionsCsv\";
+        //const string csvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\TransactionsCsv\";
 
         readonly ISerializer<Transaction> _serializer;
 
