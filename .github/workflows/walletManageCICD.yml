@@ -19,15 +19,15 @@ jobs:
       run: sudo apt-get install -y aspnetcore-runtime-2.1
     
     - name: check folder
-      working-directory: /home/runner/work/WalletManager/Sources
+      working-directory: ./Sources
       run: ls -la
         
     - name: Install dependencies
-      working-directory: /home/runner/work/WalletManager/Sources
+      working-directory: ./Sources
       run: dotnet restore
     
     - name: Build
-      working-directory: /home/runner/work/WalletManager/Sources
+      working-directory: ./Sources
       run: dotnet build --configuration Release --no-restore
     
     - name: Test
