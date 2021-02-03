@@ -36,9 +36,9 @@
                 <td>
 
                     <select class="form-control" onchange="UpdateCategory(this, '@item.Reference')">
+                        <option>@Localizer["CategorySelection"]</option>
                         @foreach (var category in item.Categories)
                         {
-                            <option>@Localizer["CategorySelection"]</option>
                             var isSelected = category.Name == item.CategoryName;
                             if (isSelected)
                             {
