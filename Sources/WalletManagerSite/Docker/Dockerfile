@@ -1,7 +1,6 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.1
-
-RUN mkdir /app
 WORKDIR /app
+EXPOSE 7501
 
 COPY ./Source .
 
