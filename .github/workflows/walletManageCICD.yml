@@ -17,13 +17,9 @@ jobs:
       
     - name: Install SDK 2.1
       run: sudo apt-get install -y aspnetcore-runtime-2.1
-    
-    - name: check folder
-      working-directory: ./Sources
-      run: ls -la
         
     - name: Install dependencies
-      working-directory: ./Sources
+      working-directory: /home/runner/work/WalletManager/WalletManager/Sources
       run: dotnet restore
     
     - name: Build
@@ -31,14 +27,14 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     
     - name: Test
-      working-directory: /home/runner/work/WalletManager/Sources
+      working-directory: /home/runner/work/WalletManager/WalletManager/Sources
       run: dotnet test --no-restore --verbosity normal
 
   Continuous_delivery:
     needs: [Continuous-integration]
     runs-on: ubuntu-latest
     env:
-      Repo: /home/runner/work/WalletManager/Sources/WalletManagerSite/Docker
+      Repo: /home/runner/work/WalletManager/WalletManager/Sources/WalletManagerSite/Docker
       DockerImageName: bakayarusama/wallet_manager:latest
 
     steps:
@@ -50,7 +46,7 @@ jobs:
              -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
     - name: Build Docker image
-      working-directory: /home/runner/work/WalletManager/Sources/WalletManagerSite/Docker
+      working-directory: /home/runner/work/WalletManager/WalletManager/Sources/WalletManagerSite/Docker
       run: docker build -t $DockerImageName $Repo
 
     - name: Publish Docker image
