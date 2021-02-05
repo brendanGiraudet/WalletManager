@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:2.1 AS base
 WORKDIR /app
 EXPOSE 7501
 
-FROM mcr.microsoft.com/dotnet/aspnet:2.1 AS build
+FROM mcr.microsoft.com/dotnet/sdk:2.1 AS build
 WORKDIR /src
 COPY ["./WalletManagerSite.csproj", "WalletManagerSite/"]
 WORKDIR "/src/WalletManagerSite"
