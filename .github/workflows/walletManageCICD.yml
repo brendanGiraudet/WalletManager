@@ -34,7 +34,7 @@ jobs:
     needs: [Continuous-integration]
     runs-on: ubuntu-latest
     env:
-      Repo: /home/runner/work/WalletManager/WalletManager/Sources/WalletManagerSite/Docker
+      Repo: /home/runner/work/WalletManager/WalletManager/Sources/WalletManagerSite
       DockerImageName: bakayarusama/wallet_manager:latest
 
     steps:
@@ -46,7 +46,7 @@ jobs:
              -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
     - name: Build Docker image
-      working-directory: /home/runner/work/WalletManager/WalletManager/Sources/WalletManagerSite/Docker
+      working-directory: /home/runner/work/WalletManager/WalletManager/Sources/WalletManagerSite
       run: docker build -t $DockerImageName $Repo
 
     - name: Publish Docker image
