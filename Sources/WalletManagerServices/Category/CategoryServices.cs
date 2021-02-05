@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using WalletManagerServices.File;
 
 namespace WalletManagerServices.Category
 {
@@ -9,20 +10,24 @@ namespace WalletManagerServices.Category
     {
         readonly WalletManagerDAL.Serializer.ISerializer<WalletManagerDTO.Category> _serializer;
         private IEnumerable<WalletManagerDTO.Category> _categories = Enumerable.Empty<WalletManagerDTO.Category>();
+        private readonly IFileService _fileService;
 
-        public CategoryServices(WalletManagerDAL.Serializer.ISerializer<WalletManagerDTO.Category> serializer)
+        public CategoryServices(WalletManagerDAL.Serializer.ISerializer<WalletManagerDTO.Category> serializer,
+            IFileService fileService)
         {
             _serializer = serializer;
+            _fileService = fileService;
         }
 
-        public IEnumerable<WalletManagerDTO.Category> GetCategories(string filePath)
+        public async Task<IEnumerable<WalletManagerDTO.Category>> GetCategories(string filePath)
         {
-            if(!_categories.Any())
+            if (!_categories.Any())
             {
-                var lines = File.ReadAllLines(filePath);
-                _categories = _serializer.Deserialize(lines);
+                var fileServiceResponse = await _fileService.Read(filePath);
+                if(!fileServiceResponse.HasError)
+                    _categories = _serializer.Deserialize(fileServiceResponse.Content);
             }
-            
+
             return _categories;
         }
 

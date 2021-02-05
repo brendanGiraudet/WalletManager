@@ -11,6 +11,7 @@ using WalletManagerSite.Tools.Mapper;
 using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
 using WalletManagerServices.Category;
+using System.Threading.Tasks;
 
 namespace WalletManagerSite.Controllers
 {
@@ -47,7 +48,7 @@ namespace WalletManagerSite.Controllers
         }
 
         // GET: Transaction/123s
-        public ActionResult List(string fileName)
+        public async Task<ActionResult> List(string fileName)
         {
             IEnumerable<TransactionViewModel> transactions = Enumerable.Empty<TransactionViewModel>();
             if (string.IsNullOrWhiteSpace(fileName))
@@ -62,7 +63,7 @@ namespace WalletManagerSite.Controllers
             try
             {
                 _transactionServices.LoadTransactions(filePath);
-                transactions = GetTransactions();
+                transactions = await GetTransactions();
                 CurrentFilename = fileName;
 
                 return View("Index", transactions);
@@ -74,10 +75,10 @@ namespace WalletManagerSite.Controllers
             return View("Index", transactions);
         }
 
-        private IEnumerable<TransactionViewModel> GetTransactionsViewModel(IEnumerable<Transaction> transactions)
+        private async Task<IEnumerable<TransactionViewModel>> GetTransactionsViewModel(IEnumerable<Transaction> transactions)
         {
             var filePath = Tools.Directory.DirectoryTools.GetCategoryCsvFilePath(_configuration);
-            var categories = _categoryServices.GetCategories(filePath);
+            var categories = await _categoryServices.GetCategories(filePath);
             var categoriesOrderedByName = categories.OrderBy(c => c.Name);
             var transactionViewModels = _mapper.MapToTransactionViewModels(transactions);
             var transactionViewModelList = transactionViewModels.ToList();
@@ -93,13 +94,13 @@ namespace WalletManagerSite.Controllers
             return PartialView("TransactionsTablePartialView", GetTransactions());
         }
 
-        private IEnumerable<TransactionViewModel> GetTransactions()
+        private async Task<IEnumerable<TransactionViewModel>> GetTransactions()
         {
             var transactions = _transactionServices.GetTransactions();
             if (transactions != null && transactions.Any())
             {
                 transactions = transactions.OrderBy(t => t.OperationDate);
-                return GetTransactionsViewModel(transactions);
+                return await GetTransactionsViewModel(transactions);
             }
 
             return new List<TransactionViewModel>();
@@ -160,7 +161,7 @@ namespace WalletManagerSite.Controllers
         }
 
         // GET: Transaction/Details/5
-        public ActionResult Details(string reference)
+        public async Task<ActionResult> Details(string reference)
         {
             var transaction = new TransactionViewModel();
 
@@ -170,7 +171,7 @@ namespace WalletManagerSite.Controllers
                 return View(transaction);
             }
 
-            transaction = GetTransaction(reference);
+            transaction = await GetTransaction(reference);
             if (transaction == null)
             {
                 ViewBag.Error = _localizer["TransactionNotFound"];
@@ -204,7 +205,7 @@ namespace WalletManagerSite.Controllers
         }
 
         // GET: Transaction/Edit/5GX5
-        public ActionResult Edit(string reference)
+        public async Task<ActionResult> Edit(string reference)
         {
             var transaction = new TransactionViewModel();
 
@@ -214,7 +215,7 @@ namespace WalletManagerSite.Controllers
                 return View(transaction);
             }
 
-            transaction = GetTransaction(reference);
+            transaction = await GetTransaction(reference);
             if (transaction == null)
             {
                 ViewBag.Error = _localizer["TransactionNotFound"];
@@ -224,7 +225,7 @@ namespace WalletManagerSite.Controllers
             return View(transaction);
         }
 
-        private TransactionViewModel GetTransaction(string reference)
+        private async Task<TransactionViewModel> GetTransaction(string reference)
         {
             var transaction = _transactionServices.GetTransaction(reference);
             if (transaction != null)
@@ -232,7 +233,7 @@ namespace WalletManagerSite.Controllers
                 var transactionViewModel = _mapper.MapToTransactionViewModel(transaction);
 
                 var filePath = Tools.Directory.DirectoryTools.GetCategoryCsvFilePath(_configuration);
-                var categories = _categoryServices.GetCategories(filePath);
+                var categories = await _categoryServices.GetCategories(filePath);
                 var categoriesOrderedByName = categories.OrderBy(c => c.Name);
 
                 transactionViewModel.Categories = categoriesOrderedByName;
@@ -273,7 +274,7 @@ namespace WalletManagerSite.Controllers
         }
 
         // GET: Transaction/Delete/5
-        public ActionResult Delete(string reference)
+        public async Task<ActionResult> Delete(string reference)
         {
             var transaction = new TransactionViewModel();
 
@@ -283,7 +284,7 @@ namespace WalletManagerSite.Controllers
                 return View(transaction);
             }
 
-            transaction = GetTransaction(reference);
+            transaction = await GetTransaction(reference);
             if (transaction == null)
             {
                 ViewBag.Error = _localizer["TransactionNotFound"];

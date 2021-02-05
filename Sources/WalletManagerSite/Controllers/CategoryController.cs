@@ -8,6 +8,7 @@ using WalletManagerDTO;
 using WalletManagerSite.Tools.Mapper;
 using WalletManagerSite.Models;
 using WalletManagerServices.Category;
+using System.Threading.Tasks;
 
 namespace WalletManagerSite.Controllers
 {
@@ -30,9 +31,9 @@ namespace WalletManagerSite.Controllers
             _localizer = localizer;
         }
         // GET: Index
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var categories = GetCategories();
+            var categories = await GetCategories();
             categories = categories.OrderBy(c => c.Name);
             var categoryViewModels = GetCategoryViewModels(categories);
             return View(categoryViewModels);
@@ -96,10 +97,10 @@ namespace WalletManagerSite.Controllers
             }
         }
 
-        private IEnumerable<Category> GetCategories()
+        private async Task<IEnumerable<Category>> GetCategories()
         {
             var filePath = Tools.Directory.DirectoryTools.GetCategoryCsvFilePath(_configuration);
-            var categories = _categoryServices.GetCategories(filePath);
+            var categories = await _categoryServices.GetCategories(filePath);
             return categories;
         }
 

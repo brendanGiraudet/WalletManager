@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace WalletManagerServices.Category
 {
@@ -6,7 +7,7 @@ namespace WalletManagerServices.Category
     {
         bool SaveCategories(IEnumerable<WalletManagerDTO.Category> categories, string csvPath);
 
-        IEnumerable<WalletManagerDTO.Category> GetCategories(string filePath);
+        Task<IEnumerable<WalletManagerDTO.Category>> GetCategories(string filePath);
         
         WalletManagerDTO.Category GetCategory(string categoryName);
 

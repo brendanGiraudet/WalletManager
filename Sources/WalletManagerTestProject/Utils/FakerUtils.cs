@@ -7,6 +7,12 @@ namespace WalletManagerTestProject.Utils
 {
     public static class FakerUtils
     {
+        private static Faker _faker = new Faker();
+        public static string[] StringArrayFake => new string[] { _faker.Random.String2(2), _faker.Random.String2(2) };
+
+        public static Faker<Response<string[]>> StringResponseFaker => new Faker<Response<string[]>>()
+            .RuleFor(field => field.Content, StringArrayFake);
+
         public static Faker<Transaction> GetTransactionDtoFaker => new Faker<Transaction>()
             .RuleFor(field => field.Amount, faker => faker.Random.Decimal())
             .RuleFor(field => field.Category, faker => CategoryFaker)

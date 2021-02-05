@@ -10,6 +10,7 @@ using WalletManagerSite.Tools.Mapper;
 using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
 using WalletManagerServices.Category;
+using System.Threading.Tasks;
 
 namespace WalletManagerSite.Controllers
 {
@@ -35,7 +36,7 @@ namespace WalletManagerSite.Controllers
             return View(GetCsvList());
         }
 
-        public ActionResult Compare(List<CsvFileViewModel> csvFiles)
+        public async Task<ActionResult> Compare(List<CsvFileViewModel> csvFiles)
         {
             var compareTransactionList = new CompareViewModel();
 
@@ -67,7 +68,7 @@ namespace WalletManagerSite.Controllers
 
                     var transactionViewModels = GetTransactionViewModels(groupedTransactions);
 
-                    transactionViewModels = AppendMissingCategoryTransactions(transactionViewModels);
+                    transactionViewModels = await AppendMissingCategoryTransactions(transactionViewModels);
 
                     var transactionsViewModelOrdered = transactionViewModels.OrderBy(t => t.Category.Name.ToString()).AsEnumerable();
 
@@ -107,9 +108,9 @@ namespace WalletManagerSite.Controllers
             return _mapper.MapToTransactionsViewModel(transactionsViewModel);
         }
 
-        private IEnumerable<TransactionViewModel> AppendMissingCategoryTransactions(IEnumerable<TransactionViewModel> transactions)
+        private async Task<IEnumerable<TransactionViewModel>> AppendMissingCategoryTransactions(IEnumerable<TransactionViewModel> transactions)
         {
-            var categories = GetCategories();
+            var categories = await GetCategories();
             var transactionList = transactions.ToList();
 
             foreach (var category in categories)
@@ -127,10 +128,10 @@ namespace WalletManagerSite.Controllers
             return transactionList;
         }
 
-        private IEnumerable<Category> GetCategories()
+        private async Task<IEnumerable<Category>> GetCategories()
         {
             var filePath = Tools.Directory.DirectoryTools.GetCategoryCsvFilePath(_configuration);
-            var categories = _categoryServices.GetCategories(filePath);
+            var categories = await _categoryServices.GetCategories(filePath);
             return categories;
         }
 
