@@ -21,8 +21,8 @@ namespace WalletManagerTestProject.Serializer
             _contentFile = _contentFile.Append("");
             _contentFile = _contentFile.Append("Solde en fin de période;;;;3480,82");
             _contentFile = _contentFile.Append("Date;Numéro d'opération;Libellé;Débit;Crédit;Détail;");
-            _contentFile = _contentFile.Append("28/10/20;2810202020201028-17.58.04.478319 -;CB L ORIENT PALACE FACT 271020;-12,10;;CB L ORIENT PALACE FACT 271020 ;");
-            _contentFile = _contentFile.Append("27/10/20;2710202020201027-09.25.47.953651 -;CB INTERMARCHE     FACT 261020;-96,31;;CB INTERMARCHE     FACT 261020 ;");
+            _contentFile = _contentFile.Append("28-10-20;2810202020201028-17.58.04.478319 -;CB L ORIENT PALACE FACT 271020;-12,10;;CB L ORIENT PALACE FACT 271020 ;");
+            _contentFile = _contentFile.Append("27-10-20;2710202020201027-09.25.47.953651 -;CB INTERMARCHE     FACT 261020;-96,31;;CB INTERMARCHE     FACT 261020 ;");
         }
 
         #region Deserialize
