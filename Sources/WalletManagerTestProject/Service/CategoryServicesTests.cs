@@ -9,7 +9,7 @@ namespace WalletManagerTestProject.Service
 {
     public class CategoryServicesTests
     {
-        const string csvBasePath = @"/home/runner/work/WalletManager/WalletManager/Sources\WalletManagerTestProject\CategoriesCsv\";
+        const string csvBasePath = @"/home/runner/work/WalletManager/WalletManager/Sources/WalletManagerTestProject/CategoriesCsv/";
         //const string csvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CategoriesCsv\";
         readonly ICategoryServices _categoryServices;
 

@@ -9,7 +9,7 @@ namespace WalletManagerTestProject.Serializer
 {
     public class CategorySerializerTests
     {
-        const string csvBasePath = @"/home/runner/work/WalletManager/WalletManager/Sources\WalletManagerTestProject\CategoriesCsv\";
+        const string csvBasePath = @"/home/runner/work/WalletManager/WalletManager/Sources/WalletManagerTestProject/CategoriesCsv/";
         //const string csvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CategoriesCsv\";
 
         readonly ISerializer<Category> _serializer;

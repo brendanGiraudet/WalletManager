@@ -9,7 +9,7 @@ namespace WalletManagerTestProject.Service
 {
     public class TransactionServicesTests
     {
-        const string csvBasePath = @"/home/runner/work/WalletManager/WalletManager/Sources\WalletManagerTestProject\CSV\";
+        const string csvBasePath = @"/home/runner/work/WalletManager/WalletManager/Sources/WalletManagerTestProject/CSV/";
         //const string csvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CSV\";
         readonly ITransactionServices _transactionServices;
 
