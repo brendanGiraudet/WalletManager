@@ -14,8 +14,8 @@ RUN dotnet publish -c Release -o /app/publish
 FROM base AS final
 ENV ASPNETCORE_URLS=https://+:7501
 ENV ASPNETCORE_HTTPS_PORT=7501
-ENV ASPNETCORE_Kestrel__Certificates__Default__Password="music_playerpass"
-ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/https/music_player.pfx
+ENV ASPNETCORE_Kestrel__Certificates__Default__Password="wallet_managerpass"
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/https/wallet_manager.pfx
 WORKDIR /app
 COPY --from=publish /app/publish .
 CMD ["dotnet", "WalletManagerSite.dll"]
