@@ -26,7 +26,7 @@ namespace WalletManagerTestProject.Service
             var writeResponse = await _fileService.Write(fakeFilePath, fakeContentFile);
 
             // Assert
-            Assert.False(writeResponse.HasError);
+            Assert.True(writeResponse.HasError);
         }
         [Fact]
         public async Task ShouldHaveAnErrorWhenWriteAFileWithEmptyContent()
@@ -40,7 +40,7 @@ namespace WalletManagerTestProject.Service
             var writeResponse = await _fileService.Write(fakeFilePath, fakeContentFile);
 
             // Assert
-            Assert.False(writeResponse.HasError);
+            Assert.True(writeResponse.HasError);
         }
         #endregion
         
