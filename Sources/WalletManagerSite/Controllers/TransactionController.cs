@@ -12,6 +12,7 @@ using WalletManagerServices.Transaction;
 using WalletManagerSite.Models;
 using WalletManagerServices.Category;
 using System.Threading.Tasks;
+using WalletManagerDAL.File;
 
 namespace WalletManagerSite.Controllers
 {
@@ -22,6 +23,7 @@ namespace WalletManagerSite.Controllers
         private readonly IStringLocalizer<TransactionController> _localizer;
         readonly IMapper _mapper;
         readonly ICategoryServices _categoryServices;
+        readonly IFileService _fileService;
         public string CurrentFilename { 
             get
             {
@@ -33,18 +35,25 @@ namespace WalletManagerSite.Controllers
             }
         }
 
-        public TransactionController(ITransactionServices transactionServices, IConfiguration configuration, IStringLocalizer<TransactionController> localizer, IMapper mapper, ICategoryServices categoryServices)
+        public TransactionController(ITransactionServices transactionServices, 
+            IConfiguration configuration, 
+            IStringLocalizer<TransactionController> localizer, 
+            IMapper mapper, 
+            ICategoryServices categoryServices,
+            IFileService fileService)
         {
             _transactionServices = transactionServices;
             _configuration = configuration;
             _localizer = localizer;
             _mapper = mapper;
             _categoryServices = categoryServices;
+            _fileService = fileService;
         }
         // GET: Transaction
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(GetTransactions());
+            var transactions = await GetTransactions();
+            return View(transactions);
         }
 
         // GET: Transaction/123s
@@ -62,7 +71,7 @@ namespace WalletManagerSite.Controllers
 
             try
             {
-                _transactionServices.LoadTransactions(filePath);
+                await _transactionServices.LoadTransactions(filePath);
                 transactions = await GetTransactions();
                 CurrentFilename = fileName;
 
@@ -89,9 +98,9 @@ namespace WalletManagerSite.Controllers
             return transactionViewModelList;
         }
 
-        public ActionResult LoadTransactionsTable()
+        public async Task<ActionResult> LoadTransactionsTable()
         {
-            return PartialView("TransactionsTablePartialView", GetTransactions());
+            return PartialView("TransactionsTablePartialView", await GetTransactions());
         }
 
         private async Task<IEnumerable<TransactionViewModel>> GetTransactions()
@@ -138,11 +147,6 @@ namespace WalletManagerSite.Controllers
             {
                 return Json(ex.Message);
             }
-        }
-
-        private static void DeleteTempFile(string filePath)
-        {
-            System.IO.File.Delete(filePath);
         }
 
         [HttpGet]

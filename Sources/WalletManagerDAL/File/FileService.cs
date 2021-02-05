@@ -6,6 +6,26 @@ namespace WalletManagerDAL.File
 {
     public class FileService : IFileService
     {
+        public async Task<Response<bool>> Delete(string filePath)
+        {
+            var response = new Response<bool>();
+            if (string.IsNullOrEmpty(filePath))
+            {
+                response.ErrorsMessage = "The file path should not be empty";
+                return response;
+            }
+            try
+            {
+                System.IO.File.Delete(filePath);
+            }
+            catch (Exception ex)
+            {
+                response.ErrorsMessage = ex.Message;
+                await Task.CompletedTask;
+            }
+            return response;
+        }
+
         public async Task<Response<string[]>> Read(string filePath)
         {
             var response = new Response<string[]>();

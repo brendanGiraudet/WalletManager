@@ -7,5 +7,6 @@ namespace WalletManagerDAL.File
     {
         Task<Response<bool>> Write(string filePath, string content);
         Task<Response<string[]>> Read(string filePath);
+        Task<Response<bool>> Delete(string filePath);
     }
 }
