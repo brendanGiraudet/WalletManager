@@ -1,6 +1,6 @@
 using Bogus;
 using System.Threading.Tasks;
-using WalletManagerServices.File;
+using WalletManagerDAL.File;
 using Xunit;
 
 namespace WalletManagerTestProject.Service
@@ -43,7 +43,7 @@ namespace WalletManagerTestProject.Service
             Assert.True(writeResponse.HasError);
         }
         #endregion
-        
+
         #region Read
         [Fact]
         public async Task ShouldHaveAnErrorWhenReadAFileWithEmptyFilePath()

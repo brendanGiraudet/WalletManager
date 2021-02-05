@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using WalletManagerDAL.File;
 using WalletManagerDTO;
 
 namespace WalletManagerDAL.Serializer
@@ -22,7 +23,7 @@ namespace WalletManagerDAL.Serializer
             }
             else if(csvLines.Any(csvLine => csvLine.Contains("Compte;Date opération;")))
             {
-                return new TransactionsSerializer();
+                return new TransactionsSerializer(new FileService());
             }
 
             throw new WalletManagerDTO.Exceptions.SerializerException($"Unknow csv format");
@@ -30,7 +31,7 @@ namespace WalletManagerDAL.Serializer
 
         public ISerializer<Transaction> GetSerializer()
         {
-            return new TransactionsSerializer();
+            return new TransactionsSerializer(new FileService());
         }
     }
 }

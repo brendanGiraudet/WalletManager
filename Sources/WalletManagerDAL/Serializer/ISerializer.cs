@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace WalletManagerDAL.Serializer
 {
     public interface ISerializer<T>
     {
-        bool Serialize(IEnumerable<T> objects, string filePath);
+        Task<bool> Serialize(IEnumerable<T> objects, string filePath);
 
         IEnumerable<T> Deserialize(IEnumerable<string> lines);
 

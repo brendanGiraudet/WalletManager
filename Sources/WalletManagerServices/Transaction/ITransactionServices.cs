@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace WalletManagerServices.Transaction
 {
     public interface ITransactionServices
     {
-        void LoadTransactions(string csvPath);
+        Task LoadTransactions(string csvPath);
 
         void LoadTransactions(Stream stream);
 

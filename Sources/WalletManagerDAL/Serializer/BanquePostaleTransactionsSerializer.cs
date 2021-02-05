@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using WalletManagerDTO;
 
 namespace WalletManagerDAL.Serializer
@@ -51,7 +51,7 @@ namespace WalletManagerDAL.Serializer
             return splittedLine.Last().Trim('\r');
         }
 
-        public bool Serialize(IEnumerable<Transaction> objects, string filePath)
+        public Task<bool> Serialize(IEnumerable<Transaction> objects, string filePath)
         {
             throw new NotImplementedException();
         }

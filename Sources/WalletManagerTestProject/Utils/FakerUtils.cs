@@ -12,6 +12,8 @@ namespace WalletManagerTestProject.Utils
 
         public static Faker<Response<string[]>> StringResponseFaker => new Faker<Response<string[]>>()
             .RuleFor(field => field.Content, StringArrayFake);
+        public static Faker<Response<bool>> BoolResponseFaker => new Faker<Response<bool>>()
+            .RuleFor(field => field.Content, true);
 
         public static Faker<Transaction> GetTransactionDtoFaker => new Faker<Transaction>()
             .RuleFor(field => field.Amount, faker => faker.Random.Decimal())

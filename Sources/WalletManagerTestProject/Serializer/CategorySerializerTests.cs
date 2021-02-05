@@ -1,5 +1,10 @@
-﻿using System.IO;
+﻿using Bogus;
+using Moq;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using WalletManagerDAL.File;
 using WalletManagerDAL.Serializer;
 using WalletManagerDTO;
 using WalletManagerTestProject.Utils;
@@ -9,14 +14,23 @@ namespace WalletManagerTestProject.Serializer
 {
     public class CategorySerializerTests
     {
-        const string csvBasePath = @"/home/runner/work/WalletManager/WalletManager/Sources/WalletManagerTestProject/CategoriesCsv/";
-        //const string csvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\CategoriesCsv\";
+        private IEnumerable<string> _contentFile = Enumerable.Empty<string>();
 
         readonly ISerializer<Category> _serializer;
 
         public CategorySerializerTests()
         {
-            _serializer = new CategorySerializer();
+            var fileServiceMock = new Mock<IFileService>();
+            fileServiceMock
+                .Setup(f => f.Write(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(FakerUtils.BoolResponseFaker.Generate())
+                .Verifiable();
+
+            _serializer = new CategorySerializer(fileServiceMock.Object);
+            _contentFile = _contentFile.Append("Name;CreationDate");
+            _contentFile = _contentFile.Append("Course;16-Jun-20 12:36:14 AM");
+            _contentFile = _contentFile.Append("Internet;16-Jun-20 12:36:14 AM");
+            _contentFile = _contentFile.Append("Téléphone;16-Jun-20 12:36:14 AM");
         }
 
         #region Deserialize
@@ -24,11 +38,9 @@ namespace WalletManagerTestProject.Serializer
         public void ShouldDeserializeListOfCategory()
         {
             // Arrange
-            var csvFilePath = Path.Combine(csvBasePath, "deserializeCategories.csv");
-            var lines = File.ReadAllLines(csvFilePath);
 
             // Act
-            var categories = _serializer.Deserialize(lines);
+            var categories = _serializer.Deserialize(_contentFile);
 
             // Assert
             Assert.True(categories.Any());
@@ -37,14 +49,15 @@ namespace WalletManagerTestProject.Serializer
 
         #region Serialize
         [Fact]
-        public void ShouldHavetrueWhenSerializeListOfCategory()
+        public async Task ShouldHavetrueWhenSerializeListOfCategory()
         {
             // Arrange
-            var csvFilePath = Path.Combine(csvBasePath, "serializeCategories.csv");
+            var faker = new Faker();
+            var csvPath = faker.Random.String2(2);
             var categories = FakerUtils.CategoryFaker.Generate(2);
 
             // Act
-            var serializeResponse = _serializer.Serialize(categories, csvFilePath);
+            var serializeResponse = await _serializer.Serialize(categories, csvPath);
 
             // Assert
             Assert.True(serializeResponse);

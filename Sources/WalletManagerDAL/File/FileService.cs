@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using WalletManagerDTO;
 
-namespace WalletManagerServices.File
+namespace WalletManagerDAL.File
 {
     public class FileService : IFileService
     {

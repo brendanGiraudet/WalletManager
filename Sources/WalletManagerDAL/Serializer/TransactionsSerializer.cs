@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using WalletManagerDAL.File;
 using WalletManagerDTO;
 using WalletManagerDTO.Exceptions;
 
@@ -10,8 +12,13 @@ namespace WalletManagerDAL.Serializer
     public class TransactionsSerializer : ISerializer<Transaction>
     {
         readonly char _columnSeparator = ';';
+        private readonly IFileService _fileService;
+        public TransactionsSerializer(IFileService fileService)
+        {
+            _fileService = fileService;
+        }
 
-        bool ISerializer<Transaction>.Serialize(IEnumerable<Transaction> transactions, string filePath)
+        async Task<bool> ISerializer<Transaction>.Serialize(IEnumerable<Transaction> transactions, string filePath)
         {
             if (transactions == null || !transactions.Any()) throw new SerializerException("Impossible to serialize an empty transaction list");
 
@@ -32,8 +39,8 @@ namespace WalletManagerDAL.Serializer
 
             try
             {
-                File.WriteAllText(filePath, stringWriter.ToString());
-                return true;
+                var fileServiceresponse = await _fileService.Write(filePath, stringWriter.ToString());
+                return !fileServiceresponse.HasError;
             }
             catch (Exception ex)
             {

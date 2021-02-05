@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using WalletManagerDAL.File;
 using WalletManagerDAL.Serializer;
 
 namespace WalletManagerServices.Transaction
@@ -10,11 +12,13 @@ namespace WalletManagerServices.Transaction
     {
         TransactionsSerializerFactory _transactionsSerializerFactory;
         private IEnumerable<WalletManagerDTO.Transaction> _transactions;
+        private readonly IFileService _fileService;
 
-        public TransactionServices()
+        public TransactionServices(IFileService fileService)
         {
             _transactions = new List<WalletManagerDTO.Transaction>();
             _transactionsSerializerFactory = new TransactionsSerializerFactory();
+            _fileService = fileService;
         }
 
         public void LoadTransactions(IEnumerable<string> csvLines)
@@ -23,10 +27,11 @@ namespace WalletManagerServices.Transaction
             _transactions = transactionSerializer.Deserialize(csvLines);
         }
 
-        public void LoadTransactions(string csvPath)
+        public async Task LoadTransactions(string csvPath)
         {
-            IEnumerable<string> csvLines = File.ReadAllLines(csvPath);
-            LoadTransactions(csvLines);
+            var fileServiceResponse = await _fileService.Read(csvPath);
+            if (!fileServiceResponse.HasError)
+                LoadTransactions(fileServiceResponse.Content);
         }
 
         public void LoadTransactions(Stream stream)

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Web.Mvc;
+using WalletManagerDAL.File;
 using WalletManagerDTO;
 
 namespace WalletManagerSite
@@ -36,6 +37,7 @@ namespace WalletManagerSite
             services.AddSingleton<WalletManagerServices.Transaction.ITransactionServices, WalletManagerServices.Transaction.TransactionServices>();
             services.AddSingleton<WalletManagerServices.Category.ICategoryServices, WalletManagerServices.Category.CategoryServices>();
             services.AddScoped<Tools.Mapper.IMapper, Tools.Mapper.Mapper>();
+            services.AddTransient<IFileService, FileService>();
 
             services.AddLocalization(opts => { opts.ResourcesPath = "Resource"; });
 

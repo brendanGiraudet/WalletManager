@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WalletManagerServices.File;
+using WalletManagerDAL.File;
 
 namespace WalletManagerServices.Category
 {
@@ -24,7 +24,7 @@ namespace WalletManagerServices.Category
             if (!_categories.Any())
             {
                 var fileServiceResponse = await _fileService.Read(filePath);
-                if(!fileServiceResponse.HasError)
+                if (!fileServiceResponse.HasError)
                     _categories = _serializer.Deserialize(fileServiceResponse.Content);
             }
 

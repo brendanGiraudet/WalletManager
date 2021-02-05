@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using WalletManagerDAL.File;
 using WalletManagerDTO;
 using WalletManagerDTO.Exceptions;
 
@@ -10,8 +12,14 @@ namespace WalletManagerDAL.Serializer
     public class CategorySerializer : ISerializer<Category>
     {
         readonly char _columnSeparator = ';';
+        private readonly IFileService _fileService;
 
-        bool ISerializer<Category>.Serialize(IEnumerable<Category> categories, string filePath)
+        public CategorySerializer(IFileService fileService)
+        {
+            _fileService = fileService;
+        }
+
+        async Task<bool> ISerializer<Category>.Serialize(IEnumerable<Category> categories, string filePath)
         {
             if (categories == null || !categories.Any()) throw new SerializerException("Impossible to serialize an empty category list");
 
@@ -28,8 +36,8 @@ namespace WalletManagerDAL.Serializer
 
             try
             {
-                File.WriteAllText(filePath, stringWriter.ToString());
-                return true;
+                var fileServiceresponse = await _fileService.Write(filePath, stringWriter.ToString());
+                return !fileServiceresponse.HasError;
             }
             catch (Exception ex)
             {

@@ -3,10 +3,10 @@ using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WalletManagerDAL.File;
 using WalletManagerDAL.Serializer;
 using WalletManagerDTO;
 using WalletManagerServices.Category;
-using WalletManagerServices.File;
 using WalletManagerTestProject.Utils;
 using Xunit;
 
@@ -32,7 +32,7 @@ namespace WalletManagerTestProject.Service
                 .Verifiable();
             categorySerializerMock
                 .Setup(c => c.Serialize(It.IsAny<IEnumerable<Category>>(), It.IsAny<string>()))
-                .Returns(true)
+                .ReturnsAsync(true)
                 .Verifiable();
 
             _categoryServices = new CategoryServices(categorySerializerMock.Object, fileServiceMock.Object);

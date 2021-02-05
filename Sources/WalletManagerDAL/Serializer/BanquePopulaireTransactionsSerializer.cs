@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WalletManagerDTO;
 
 namespace WalletManagerDAL.Serializer
 {
     public class BanquePopulaireTransactionsSerializer : ISerializer<Transaction>
     {
-        public bool Serialize(IEnumerable<Transaction> objects, string filePath)
+        public Task<bool> Serialize(IEnumerable<Transaction> objects, string filePath)
         {
             throw new NotImplementedException();
         }
