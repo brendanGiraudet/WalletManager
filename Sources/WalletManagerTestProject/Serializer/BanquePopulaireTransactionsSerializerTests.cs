@@ -1,21 +1,23 @@
-﻿using WalletManagerDAL.Serializer;
-using Xunit;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
+using WalletManagerDAL.Serializer;
 using WalletManagerDTO;
+using Xunit;
 
 namespace WalletManagerTestProject.Serializer
 {
     public class BanquePopulaireTransactionsSerializerTests
     {
-        const string csvBasePath = @"/home/runner/work/WalletManager/WalletManager/Sources/WalletManagerTestProject/BanquePopulaireTransactionsCsv/";
-        //const string csvBasePath = @"D:\document\project\WalletManager\Sources\WalletManagerTestProject\BanquePopulaireTransactionsCsv\";
+        private IEnumerable<string> _contentFile = Enumerable.Empty<string>();
 
         readonly ISerializer<Transaction> _serializer;
 
         public BanquePopulaireTransactionsSerializerTests()
         {
             _serializer = new BanquePopulaireTransactionsSerializer();
+            _contentFile = _contentFile.Append("Compte;Date de comptabilisation;Date opération;Libellé;Référence;Date valeur;Montant");
+            _contentFile = _contentFile.Append("31419185918;31/08/2020;31/08/2020;VIR M BRENDAN GIRAUDET Virement vers BRENDAN GIRAUDET;9896465;31/08/2020;-600,00");
+            _contentFile = _contentFile.Append("31419185918;31/08/2020;31/08/2020;290820 CB****1526 HALLES COIGNIER78COIGNIERES; B870NZD;31/08/2020;-47,07;");
         }
 
         #region Deserialize
@@ -23,11 +25,9 @@ namespace WalletManagerTestProject.Serializer
         public void ShouldDeserializeListOfTransaction()
         {
             // Arrange
-            var csvFilePath = Path.Combine(csvBasePath, "deserializeTransactions.csv");
-            var lines = File.ReadAllLines(csvFilePath);
 
             // Act
-            var transactions = _serializer.Deserialize(lines);
+            var transactions = _serializer.Deserialize(_contentFile);
 
             // Assert
             Assert.True(transactions.Any());
