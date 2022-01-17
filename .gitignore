@@ -36,3 +36,4 @@
 /Sources/WalletManagerTestProject/bin/Release/netcoreapp2.1
 /Sources/WalletManagerSite/Properties/PublishProfiles
 /Sources/WalletManagerSite/BankTransactionsCsv
+/Sources/WalletManagerSite/appsettings.Development.json
